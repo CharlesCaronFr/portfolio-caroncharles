@@ -3,7 +3,7 @@
 
 backend:
   name: github
-  repo: TON-PSEUDO/portfolio-caroncharles
+  repo: CharlesCaronFr/portfolio-caroncharles
   branch: main
   base_url: https://api.netlify.com # Netlify sert de passerelle OAuth (gratuit)
 
