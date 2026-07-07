@@ -1,0 +1,49 @@
+{
+  "projets": [
+    {
+      "emoji": "🎧",
+      "categorie": "Produit digital",
+      "tag": "Side project",
+      "titre": "Zikk — Découverte musicale locale",
+      "description": "Conception d'une app de découverte d'artistes émergents par ville : écoute à l'aveugle façon swipe, carte des concerts, gamification et abonnements créateurs. Design produit & prototypage no-code.",
+      "couleur": "jaune",
+      "lien": ""
+    },
+    {
+      "emoji": "🃏",
+      "categorie": "Création & entrepreneuriat",
+      "tag": "Jeu de cartes",
+      "titre": "Omniscius — Jeu de 54 cartes",
+      "description": "Co-création d'un jeu de 54 cartes au design entièrement revisité. 300 exemplaires vendus au profit de l'association « Les Clowns de l'Espoir », avant le lancement d'une campagne de financement.",
+      "couleur": "rouge",
+      "lien": "https://omniscius.fr"
+    },
+    {
+      "emoji": "📡",
+      "categorie": "Communication interne",
+      "tag": "Entreprise",
+      "titre": "Stratégie de com' d'une nouvelle unité",
+      "description": "Structuration de la communication interne d'une unité opérationnelle nouvellement créée : identité visuelle, communauté Viva Engage, refonte SharePoint et rituels managériaux hebdomadaires.",
+      "couleur": "rouge",
+      "lien": ""
+    },
+    {
+      "emoji": "🧠",
+      "categorie": "IA & outils",
+      "tag": "Expérimentation",
+      "titre": "Workspace IA en local",
+      "description": "Mise en place d'un espace de travail IA auto-hébergé : Docker, modèles locaux via Ollama, exploration des usages IA au quotidien pour la productivité et la création de contenu.",
+      "couleur": "blanc",
+      "lien": ""
+    },
+    {
+      "emoji": "🛒",
+      "categorie": "Concept e-commerce",
+      "tag": "Étude",
+      "titre": "Marketplace de produits régionaux",
+      "description": "Étude d'un concept de marketplace dédiée aux produits du terroir français : analyse concurrentielle, positionnement et feuille de route en trois phases (validation, build, croissance).",
+      "couleur": "jaune",
+      "lien": ""
+    }
+  ]
+}
