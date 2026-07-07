@@ -3,7 +3,7 @@
 
 backend:
   name: github
-  repo: CharlesCaronFr/portfolio-caroncharles
+  repo: TON-PSEUDO/portfolio-caroncharles
   branch: main
   base_url: https://api.netlify.com # Netlify sert de passerelle OAuth (gratuit)
 
@@ -35,7 +35,6 @@ collections:
           - { name: titre_contact, label: "Titre de la section contact", widget: string }
           - { name: email, label: "Adresse email", widget: string }
           - { name: lien_linkedin, label: "Lien LinkedIn", widget: string }
-          - { name: lien_github, label: "Lien GitHub", widget: string }
           - { name: lien_cv, label: "Lien du CV (PDF)", widget: string }
           - { name: footer_gauche, label: "Footer — texte de gauche", widget: string }
           - { name: footer_droite, label: "Footer — texte de droite", widget: string }
@@ -91,3 +90,10 @@ collections:
               - { name: annee, label: "Année(s)", widget: string, hint: "Ex : 2025—26" }
               - { name: titre, label: "Titre", widget: string }
               - { name: description, label: "Description", widget: text }
+              - name: type
+                label: "Type d'étape"
+                widget: select
+                options:
+                  - { label: "🎓 École / formation", value: ecole }
+                  - { label: "💼 Expérience / travail", value: travail }
+                default: ecole
