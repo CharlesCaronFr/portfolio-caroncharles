@@ -144,7 +144,7 @@ nav a:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--encre);backg
   font-size:2.4rem;animation:tourne 14s linear infinite reverse;
 }
 @keyframes tourne{to{transform:rotate(360deg);}}
-@media(max-width:900px){.badge{display:none;}}
+@media(max-width:900px){.hero-photo .badge{width:100px;height:100px;right:-20px;top:-20px;}}
 
 /* ============ SECTIONS ============ */
 section{padding:80px 24px;border-bottom:4px solid var(--encre);}
@@ -404,6 +404,82 @@ footer .clign{animation:clignote 1.2s steps(2) infinite;color:var(--jaune);}
 .tv-contenu .btn-projet:hover{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--encre);}
 .carte{cursor:none;}
 
+/* ============ MIRE TV AU CHARGEMENT ============ */
+#mire{
+  position:fixed;inset:0;z-index:2000;display:flex;flex-direction:column;
+  background:var(--encre);
+}
+#mire.fin{animation:mire-off .45s cubic-bezier(.7,0,.84,0) forwards;}
+@keyframes mire-off{
+  0%{transform:scaleY(1);opacity:1;}
+  60%{transform:scaleY(.006);opacity:1;}
+  100%{transform:scaleY(.002);opacity:0;}
+}
+.mire-barres{flex:1;display:flex;animation:mire-jitter .12s steps(2) infinite;}
+.mire-barres div{flex:1;}
+@keyframes mire-jitter{50%{transform:translateX(1px);}}
+.mire-b1{background:#F1EDE2;}.mire-b2{background:#FFD400;}
+.mire-b3{background:#2318E0;}.mire-b4{background:#FF3B00;}
+.mire-b5{background:#8a8a8a;}.mire-b6{background:#3a3a3a;}
+.mire-b7{background:#141414;}
+.mire-info{
+  height:64px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;color:var(--papier);
+  font-family:'Space Mono';font-weight:700;font-size:.8rem;text-transform:uppercase;
+  border-top:4px solid var(--papier);
+}
+.mire-info .clign{animation:clignote .8s steps(2) infinite;color:var(--jaune);}
+
+/* ============ PHOTO DU HERO ============ */
+.hero-inner{display:flex;gap:56px;align-items:center;}
+.hero-texte{flex:1.25;min-width:0;}
+.hero-photo{flex:.75;position:relative;max-width:380px;}
+.hero-photo img{
+  width:100%;border:4px solid var(--encre);
+  box-shadow:14px 14px 0 var(--klein);
+  transform:rotate(2deg);
+  transition:transform .25s cubic-bezier(.2,.9,.3,1.3),box-shadow .25s;
+}
+.hero-photo img:hover{transform:rotate(0) scale(1.02);box-shadow:8px 8px 0 var(--rouge);}
+@media(max-width:900px){
+  .hero-inner{flex-direction:column;align-items:flex-start;}
+  .hero-photo{max-width:240px;margin-top:36px;}
+}
+
+/* badge : repositionné sur le coin de la photo */
+.hero-photo .badge{position:absolute;right:-34px;top:-34px;width:130px;height:130px;}
+.hero-photo .badge .centre{font-size:2rem;}
+
+/* ============ STATS / COMPTEURS ============ */
+.stats{background:var(--jaune);}
+.stats .titre-section::after{background:var(--rouge);}
+.grille-stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:28px;
+}
+.stat{
+  background:var(--blanc);border:4px solid var(--encre);box-shadow:var(--ombre);
+  padding:28px 20px;text-align:center;
+  transition:transform .15s;
+}
+.stat:hover{transform:rotate(-1.5deg);}
+.stat .stat-num{
+  font-family:'Archivo Black';font-size:clamp(2.6rem,6vw,4rem);line-height:1;
+  color:var(--klein);display:block;
+}
+.stat:nth-child(2n) .stat-num{color:var(--rouge);}
+.stat p{margin-top:10px;font-size:.8rem;font-weight:700;text-transform:uppercase;line-height:1.4;}
+
+/* ============ EASTER EGG : MODE RÉTRO N&B ============ */
+html.retro{filter:grayscale(1) contrast(1.12);}
+#retro-scan{
+  position:fixed;inset:0;z-index:1500;pointer-events:none;display:none;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 2px,transparent 2px 4px);
+}
+#retro-scan.actif{display:block;animation:retro-roule .3s linear infinite;}
+@keyframes retro-roule{from{background-position:0 0;}to{background-position:0 8px;}}
+.badge{cursor:none;}
+.badge:active{transform:scale(.94);}
+
 /* ============ ANIMATION : RÉVÉLATION DES TITRES ============ */
 .titre-section{opacity:0;transform:translateY(26px) rotate(-1deg);
   transition:opacity .5s ease,transform .5s cubic-bezier(.2,.9,.3,1.1);}
@@ -424,6 +500,8 @@ footer .clign{animation:clignote 1.2s steps(2) infinite;color:var(--jaune);}
   .parcours-item{opacity:1;transform:none;}
   .titre-section{opacity:1;transform:none;}
   .titre-section::after{transform:skewX(-12deg) scaleX(1);}
+  #mire{display:none;}
+  .mire-barres,#retro-scan.actif{animation:none;}
   .tv.allume,.tv.eteint{animation:none;}
   .tv-balayage,.tv.allume .tv-ecran::after,.tv-statique{display:none;}
   body{cursor:auto;}
@@ -435,6 +513,23 @@ a:focus-visible,.btn:focus-visible{outline:4px solid var(--rouge);outline-offset
 <body>
 
 <div id="cursor" aria-hidden="true"></div>
+
+<!-- Mire TV de chargement -->
+<div id="mire" aria-hidden="true">
+  <div class="mire-barres">
+    <div class="mire-b1"></div><div class="mire-b2"></div><div class="mire-b3"></div>
+    <div class="mire-b4"></div><div class="mire-b5"></div><div class="mire-b6"></div>
+    <div class="mire-b7"></div>
+  </div>
+  <div class="mire-info">
+    <span>◉ CARON·TV</span>
+    <span class="clign">● Veuillez patienter…</span>
+    <span>CH 00</span>
+  </div>
+</div>
+
+<!-- Overlay de l'easter egg rétro -->
+<div id="retro-scan" aria-hidden="true"></div>
 
 <header>
   <div class="logo">CHARLES <span>CARON</span></div>
@@ -450,26 +545,32 @@ a:focus-visible,.btn:focus-visible{outline:4px solid var(--rouge);outline-offset
 </div>
 
 <section class="hero" id="haut">
-  <span class="eyebrow" id="eyebrow"></span>
-  <h1 id="nom" aria-label="Charles Caron">
-    <span class="ligne"></span>
-    <span class="ligne"></span>
-  </h1>
-  <p class="sous" id="intro"></p>
-  <div class="cta-row">
-    <a class="btn btn-plein" href="#projets">Voir mes projets ↓</a>
-    <a class="btn btn-vide" href="#contact">Me contacter</a>
-  </div>
-
-  <div class="badge" aria-hidden="true">
-    <svg viewBox="0 0 150 150">
-      <defs>
-        <path id="cercle" d="M75,75 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0"/>
-      </defs>
-      <circle cx="75" cy="75" r="72" fill="var(--jaune)" stroke="var(--encre)" stroke-width="4"/>
-      <text><textPath href="#cercle" id="badge-texte"></textPath></text>
-    </svg>
-    <div class="centre">★</div>
+  <div class="hero-inner">
+    <div class="hero-texte">
+      <span class="eyebrow" id="eyebrow"></span>
+      <h1 id="nom" aria-label="Charles Caron">
+        <span class="ligne"></span>
+        <span class="ligne"></span>
+      </h1>
+      <p class="sous" id="intro"></p>
+      <div class="cta-row">
+        <a class="btn btn-plein" href="#projets">Voir mes projets ↓</a>
+        <a class="btn btn-vide" href="#contact">Me contacter</a>
+      </div>
+    </div>
+    <div class="hero-photo" id="hero-photo" style="display:none;">
+      <img id="photo" src="" alt="Portrait de Charles Caron">
+      <div class="badge" id="badge" role="button" tabindex="0" aria-label="Surprise !">
+        <svg viewBox="0 0 150 150">
+          <defs>
+            <path id="cercle" d="M75,75 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0"/>
+          </defs>
+          <circle cx="75" cy="75" r="72" fill="var(--jaune)" stroke="var(--encre)" stroke-width="4"/>
+          <text><textPath href="#cercle" id="badge-texte"></textPath></text>
+        </svg>
+        <div class="centre" id="badge-centre">★</div>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -479,20 +580,26 @@ a:focus-visible,.btn:focus-visible{outline:4px solid var(--rouge);outline-offset
   <div class="grille" id="grille-projets"></div>
 </section>
 
+<section class="stats" id="chiffres">
+  <span class="num">02 / EN CHIFFRES</span>
+  <h2 class="titre-section">Quelques chiffres</h2>
+  <div class="grille-stats" id="grille-stats"></div>
+</section>
+
 <section class="competences" id="competences">
-  <span class="num">02 / COMPÉTENCES</span>
+  <span class="num">03 / COMPÉTENCES</span>
   <h2 class="titre-section">Boîte à outils</h2>
   <div class="grille-comp" id="grille-comp"></div>
 </section>
 
 <section class="parcours" id="parcours">
-  <span class="num">03 / PARCOURS</span>
+  <span class="num">04 / PARCOURS</span>
   <h2 class="titre-section">Parcours</h2>
   <div id="liste-parcours"></div>
 </section>
 
 <section class="contact" id="contact">
-  <span class="num" style="color:var(--jaune);">04 / CONTACT</span>
+  <span class="num" style="color:var(--jaune);">05 / CONTACT</span>
   <h2 class="titre-section" id="titre-contact"></h2>
   <div><a class="mail" id="mail" href="#"></a></div>
   <div class="reseaux">
@@ -601,6 +708,21 @@ async function charger() {
         <div><h3>${esc(p.titre)}</h3><p>${esc(p.description)}</p></div>
       </div>`;
     }).join('');
+
+  /* --- Photo du hero --- */
+  if (site.photo) {
+    document.getElementById('photo').src = site.photo;
+    document.getElementById('hero-photo').style.display = '';
+  }
+
+  /* --- Stats --- */
+  const stats = site.stats || [];
+  document.getElementById('grille-stats').innerHTML = stats.map(s => `
+    <div class="stat">
+      <span class="stat-num" data-cible="${Number(s.valeur) || 0}">0${esc(s.suffixe || '')}</span>
+      <p>${esc(s.label)}</p>
+    </div>`).join('');
+  if (!stats.length) document.getElementById('chiffres').style.display = 'none';
 
   /* --- Contact & footer --- */
   document.getElementById('titre-contact').textContent = site.titre_contact;
@@ -772,7 +894,89 @@ addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
   requestAnimationFrame(boucle);
 })();
 
-charger();
+/* ===== Mire TV : masquage à la fin du chargement ===== */
+const mireT0 = Date.now();
+function cacherMire() {
+  const mire = document.getElementById('mire');
+  if (!mire) return;
+  const attente = Math.max(0, 700 - (Date.now() - mireT0)); // mire visible au moins 700 ms
+  setTimeout(() => {
+    mire.classList.add('fin');
+    setTimeout(() => mire.remove(), 500);
+  }, attente);
+}
+
+/* ===== Compteurs animés ===== */
+function initCompteurs() {
+  const nums = document.querySelectorAll('.stat-num');
+  if (!nums.length) return;
+  const reduit = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const obsNum = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      obsNum.unobserve(e.target);
+      const cible = +e.target.dataset.cible;
+      const suffixe = e.target.textContent.replace(/^0/, '');
+      if (reduit) { e.target.textContent = cible + suffixe; return; }
+      const t0 = performance.now(), duree = 1000;
+      (function tick(t) {
+        const p = Math.min(1, (t - t0) / duree);
+        const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+        e.target.textContent = Math.round(cible * eased) + suffixe;
+        if (p < 1) requestAnimationFrame(tick);
+      })(t0);
+    });
+  }, { threshold: 0.5 });
+  nums.forEach(n => obsNum.observe(n));
+}
+
+/* ===== Boutons magnétiques ===== */
+function initMagnetisme() {
+  if (!matchMedia('(hover: hover)').matches ||
+      matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.querySelectorAll('.btn, nav a, .contact .mail').forEach(el => {
+    el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2);
+      const dy = e.clientY - (r.top + r.height / 2);
+      el.style.transform = `translate(${dx * 0.18}px, ${dy * 0.28}px)`;
+    });
+    el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+  });
+}
+
+/* ===== Easter egg : mode rétro noir & blanc ===== */
+let retroEnCours = false;
+function modeRetro() {
+  if (retroEnCours) return;
+  retroEnCours = true;
+  const scan = document.getElementById('retro-scan');
+  const centre = document.getElementById('badge-centre');
+  document.documentElement.classList.add('retro');
+  scan.classList.add('actif');
+  if (centre) centre.textContent = '📼';
+  setTimeout(() => {
+    document.documentElement.classList.remove('retro');
+    scan.classList.remove('actif');
+    if (centre) centre.textContent = '★';
+    retroEnCours = false;
+  }, 1400);
+}
+
+const badge = document.getElementById('badge');
+if (badge) {
+  badge.addEventListener('click', modeRetro);
+  badge.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); modeRetro(); }
+  });
+  badge.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+  badge.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+}
+
+charger()
+  .then(() => { initCompteurs(); initMagnetisme(); })
+  .catch(err => console.error('Erreur de chargement des contenus :', err))
+  .finally(cacherMire);
 </script>
 </body>
 </html>
