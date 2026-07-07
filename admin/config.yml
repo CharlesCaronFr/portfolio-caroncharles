@@ -1,4 +1,4 @@
-# Configuration Sveltia CMS — portfolio caroncharles.fr
+# Configuration Sveltia CMS, portfolio caroncharles.fr
 # ⚠️ À MODIFIER : remplace "TON-PSEUDO/portfolio-caroncharles" par ton dépôt GitHub
 
 backend:
@@ -23,15 +23,15 @@ collections:
         label: "🏠 Infos générales (hero, contact, footer)"
         file: content/site.json
         fields:
-          - { name: nom_ligne1, label: "Nom — ligne 1", widget: string }
-          - { name: nom_ligne2, label: "Nom — ligne 2", widget: string }
+          - { name: nom_ligne1, label: "Nom, ligne 1", widget: string }
+          - { name: nom_ligne2, label: "Nom, ligne 2", widget: string }
           - { name: photo, label: "Photo du hero", widget: image, required: false, hint: "Portrait affiché à côté du nom. Laisse vide pour masquer." }
           - name: stats
             label: "Chiffres clés (section En chiffres)"
             label_singular: "chiffre"
             widget: list
             required: false
-            summary: "{{fields.valeur}} — {{fields.label}}"
+            summary: "{{fields.valeur}}, {{fields.label}}"
             fields:
               - { name: valeur, label: "Valeur (nombre)", widget: number, value_type: int }
               - { name: suffixe, label: "Suffixe (ex : +, %, k)", widget: string, required: false }
@@ -47,8 +47,8 @@ collections:
           - { name: email, label: "Adresse email", widget: string }
           - { name: lien_linkedin, label: "Lien LinkedIn", widget: string }
           - { name: lien_cv, label: "Lien du CV (PDF)", widget: string }
-          - { name: footer_gauche, label: "Footer — texte de gauche", widget: string }
-          - { name: footer_droite, label: "Footer — texte de droite", widget: string }
+          - { name: footer_gauche, label: "Footer, texte de gauche", widget: string }
+          - { name: footer_droite, label: "Footer, texte de droite", widget: string }
 
       # ---------- PROJETS ----------
       - name: projets
@@ -96,9 +96,9 @@ collections:
             label: "Étapes du parcours"
             label_singular: "étape"
             widget: list
-            summary: "{{fields.annee}} — {{fields.titre}}"
+            summary: "{{fields.annee}}, {{fields.titre}}"
             fields:
-              - { name: annee, label: "Année(s)", widget: string, hint: "Ex : 2025—26" }
+              - { name: annee, label: "Année(s)", widget: string, hint: "Ex : 2025-26" }
               - { name: titre, label: "Titre", widget: string }
               - { name: description, label: "Description", widget: text }
               - name: type

@@ -3,13 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CHARLES CARON — Chef de projet digital</title>
+<title>CHARLES CARON, Chef de projet digital</title>
 <link rel="canonical" href="https://caroncharles.fr/">
-<meta name="description" content="Portfolio de Charles Caron, chef de projet digital à Lille — communication interne, product design, no-code & IA.">
-<meta property="og:title" content="Charles Caron — Chef de projet digital">
+<meta name="description" content="Portfolio de Charles Caron, chef de projet digital à Lille, communication interne, product design, no-code & IA.">
+<meta property="og:title" content="Charles Caron, Chef de projet digital">
 <meta property="og:description" content="Portfolio brutaliste néo-rétro : projets, compétences et parcours.">
 <meta property="og:url" content="https://caroncharles.fr/">
 <meta property="og:type" content="website">
+<meta property="og:image" content="https://caroncharles.fr/images/photo-charles.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23FFD400'/%3E%3Crect x='6' y='6' width='88' height='88' fill='none' stroke='%23141414' stroke-width='10'/%3E%3Ctext x='50' y='72' font-size='60' text-anchor='middle'%3E%E2%98%85%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -480,6 +483,30 @@ html.retro{filter:grayscale(1) contrast(1.12);}
 .badge{cursor:none;}
 .badge:active{transform:scale(.94);}
 
+/* ============ CHAÎNE SECRÈTE : ARCADE ============ */
+#tv-arcade{position:relative;background:#0d0d0d;}
+.arcade-tete{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 16px;border-bottom:3px solid var(--jaune);
+  color:var(--jaune);font-weight:700;font-size:.75rem;text-transform:uppercase;
+}
+#arcade-canvas{display:block;width:100%;touch-action:none;cursor:none;}
+.arcade-msg{
+  position:absolute;left:0;right:0;top:44px;bottom:0;
+  display:grid;place-items:center;text-align:center;padding:20px;
+  color:var(--jaune);font-weight:700;font-size:.95rem;text-transform:uppercase;
+  animation:clignote 1s steps(2) infinite;pointer-events:none;
+  text-shadow:2px 2px 0 var(--rouge);
+}
+.arcade-msg.cache{display:none;}
+.footer-arcade{
+  background:none;border:none;color:var(--papier);
+  font-family:'Space Mono';font-weight:700;font-size:.75rem;text-transform:uppercase;
+  cursor:none;padding:0;letter-spacing:.03em;
+  transition:color .15s,transform .15s;
+}
+.footer-arcade:hover{color:var(--jaune);transform:rotate(-2deg);}
+
 /* ============ ANIMATION : RÉVÉLATION DES TITRES ============ */
 .titre-section{opacity:0;transform:translateY(26px) rotate(-1deg);
   transition:opacity .5s ease,transform .5s cubic-bezier(.2,.9,.3,1.1);}
@@ -632,6 +659,11 @@ a:focus-visible,.btn:focus-visible{outline:4px solid var(--rouge);outline-offset
         <p id="tv-description"></p>
         <div class="tv-actions"><a class="btn-projet" id="tv-lien" href="#" target="_blank" rel="noopener">Voir le projet ↗</a></div>
       </div>
+      <div id="tv-arcade" style="display:none;">
+        <div class="arcade-tete"><span>🕹 CARON·TV ARCADE</span><span id="arcade-score">SCORE 000</span></div>
+        <canvas id="arcade-canvas"></canvas>
+        <div class="arcade-msg" id="arcade-msg">Touche ou clique<br>pour jouer</div>
+      </div>
     </div>
   </div>
 </div>
@@ -639,6 +671,7 @@ a:focus-visible,.btn:focus-visible{outline:4px solid var(--rouge);outline-offset
 <footer>
   <span id="footer-gauche"></span>
   <span class="clign">● Disponible</span>
+  <button class="footer-arcade" id="footer-arcade" aria-label="Ouvrir la chaîne arcade">🕹 CH 00</button>
   <span id="footer-droite"></span>
 </footer>
 
@@ -815,6 +848,8 @@ const statique = document.getElementById('tv-statique');
 let derniereCarte = null;
 
 function remplirTV(index) {
+  if (index === -1) { afficherArcade(); return; }
+  masquerArcade();
   const p = listeProjets[index];
   if (!p) return;
   canalCourant = index;
@@ -833,6 +868,21 @@ function remplirTV(index) {
   else { lien.style.display = 'none'; }
 }
 
+/* --- Chaîne secrète CH 00 : arcade --- */
+function afficherArcade() {
+  canalCourant = -1;
+  document.getElementById('tv-canal').textContent = 'CH 00';
+  document.querySelector('.tv-contenu').style.display = 'none';
+  document.getElementById('tv-arcade').style.display = '';
+  arcade.start();
+}
+function masquerArcade() {
+  if (document.getElementById('tv-arcade').style.display === 'none') return;
+  arcade.stop();
+  document.getElementById('tv-arcade').style.display = 'none';
+  document.querySelector('.tv-contenu').style.display = '';
+}
+
 function ouvrirTV(index, carte) {
   derniereCarte = carte || null;
   remplirTV(index);
@@ -844,6 +894,7 @@ function ouvrirTV(index, carte) {
 }
 
 function fermerTV() {
+  masquerArcade();
   tv.classList.remove('allume');
   tv.classList.add('eteint');
   setTimeout(() => {
@@ -858,8 +909,9 @@ let zapEnCours = false;
 function changerCanal(delta) {
   if (zapEnCours || !listeProjets.length) return;
   zapEnCours = true;
-  const n = listeProjets.length;
-  const cible = (canalCourant + delta + n) % n;
+  const total = listeProjets.length + 1;              // + la chaîne arcade
+  const v = (canalCourant + 1 + delta + total) % total; // 0 = arcade, 1..n = projets
+  const cible = v - 1;
   const reduit = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   if (reduit) { remplirTV(cible); zapEnCours = false; return; }
@@ -878,10 +930,155 @@ document.getElementById('tv-suiv').addEventListener('click', () => changerCanal(
 overlay.addEventListener('click', e => { if (e.target === overlay) fermerTV(); });
 addEventListener('keydown', e => {
   if (!overlay.classList.contains('ouvert')) return;
-  if (e.key === 'Escape') fermerTV();
+  if (e.key === 'Escape') { fermerTV(); return; }
+  if (canalCourant === -1 && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+    e.preventDefault();
+    arcade.clavier(e.key === 'ArrowLeft' ? -1 : 1); // sur CH 00, les flèches pilotent la raquette
+    return;
+  }
   if (e.key === 'ArrowLeft') changerCanal(-1);
   if (e.key === 'ArrowRight') changerCanal(1);
 });
+
+/* Indice du footer → ouvre directement CH 00 */
+document.getElementById('footer-arcade').addEventListener('click', () => ouvrirTV(-1));
+
+/* ===== CH 00 : casse-briques ===== */
+const arcade = (() => {
+  const canvas = document.getElementById('arcade-canvas');
+  const ctx = canvas.getContext('2d');
+  const scoreEl = document.getElementById('arcade-score');
+  const msgEl = document.getElementById('arcade-msg');
+  const COULEURS = ['#FFD400', '#FF3B00', '#2318E0', '#F1EDE2', '#8a8a8a'];
+
+  let raf = null, actif = false, etat = 'attente'; // attente | jeu | fin
+  let W, H, dpr, balle, raquette, briques, score;
+
+  function dimensionner() {
+    const larg = canvas.parentElement.clientWidth;
+    const haut = Math.round(Math.min(420, larg * 0.68));
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    canvas.width = larg * dpr; canvas.height = haut * dpr;
+    canvas.style.height = haut + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    W = larg; H = haut;
+  }
+
+  function reinitialiser() {
+    score = 0;
+    scoreEl.textContent = 'SCORE 000';
+    raquette = { w: W * 0.2, h: 10, x: W / 2 };
+    balle = { x: W / 2, y: H - 40, r: 6, vx: W * 0.005, vy: -W * 0.006 };
+    briques = [];
+    const cols = 8, lignes = 5, marge = 4, top = 14;
+    const bw = (W - marge * (cols + 1)) / cols, bh = 16;
+    for (let l = 0; l < lignes; l++)
+      for (let c = 0; c < cols; c++)
+        briques.push({ x: marge + c * (bw + marge), y: top + l * (bh + marge),
+                       w: bw, h: bh, couleur: COULEURS[l % COULEURS.length], vivante: true });
+  }
+
+  function dessiner() {
+    ctx.fillStyle = '#0d0d0d';
+    ctx.fillRect(0, 0, W, H);
+    briques.forEach(b => {
+      if (!b.vivante) return;
+      ctx.fillStyle = b.couleur;
+      ctx.fillRect(b.x, b.y, b.w, b.h);
+      ctx.strokeStyle = '#0d0d0d'; ctx.lineWidth = 2;
+      ctx.strokeRect(b.x, b.y, b.w, b.h);
+    });
+    ctx.fillStyle = '#F1EDE2';
+    ctx.fillRect(raquette.x - raquette.w / 2, H - 20, raquette.w, raquette.h);
+    ctx.fillStyle = '#FFD400';
+    ctx.fillRect(balle.x - balle.r, balle.y - balle.r, balle.r * 2, balle.r * 2); // balle carrée, pixel oblige
+  }
+
+  function avancer() {
+    balle.x += balle.vx; balle.y += balle.vy;
+    if (balle.x < balle.r || balle.x > W - balle.r) balle.vx *= -1;
+    if (balle.y < balle.r) balle.vy *= -1;
+
+    /* raquette */
+    const ry = H - 20;
+    if (balle.vy > 0 && balle.y + balle.r >= ry && balle.y + balle.r <= ry + raquette.h + 8 &&
+        balle.x > raquette.x - raquette.w / 2 - balle.r && balle.x < raquette.x + raquette.w / 2 + balle.r) {
+      balle.vy = -Math.abs(balle.vy);
+      const decal = (balle.x - raquette.x) / (raquette.w / 2);   // -1 à 1
+      balle.vx = decal * W * 0.007;
+    }
+
+    /* briques */
+    for (const b of briques) {
+      if (!b.vivante) continue;
+      if (balle.x > b.x - balle.r && balle.x < b.x + b.w + balle.r &&
+          balle.y > b.y - balle.r && balle.y < b.y + b.h + balle.r) {
+        b.vivante = false;
+        balle.vy *= -1;
+        score++;
+        scoreEl.textContent = 'SCORE ' + String(score).padStart(3, '0');
+        break;
+      }
+    }
+
+    if (briques.every(b => !b.vivante)) finir(true);
+    else if (balle.y > H + balle.r * 2) finir(false);
+  }
+
+  function finir(gagne) {
+    etat = 'fin';
+    msgEl.innerHTML = (gagne ? '★ Gagné ! ★' : 'Game over') +
+      '<br>Score : ' + score + '<br><small>Touche pour rejouer</small>';
+    msgEl.classList.remove('cache');
+  }
+
+  function boucle() {
+    if (!actif) return;
+    if (etat === 'jeu') { avancer(); }
+    dessiner();
+    raf = requestAnimationFrame(boucle);
+  }
+
+  function jouer() {
+    if (etat === 'jeu') return;
+    reinitialiser();
+    etat = 'jeu';
+    msgEl.classList.add('cache');
+  }
+
+  function bougerVers(clientX) {
+    const r = canvas.getBoundingClientRect();
+    raquette.x = Math.max(raquette.w / 2, Math.min(W - raquette.w / 2, clientX - r.left));
+  }
+
+  canvas.addEventListener('pointermove', e => { if (actif && etat === 'jeu') bougerVers(e.clientX); });
+  canvas.addEventListener('pointerdown', e => {
+    if (!actif) return;
+    if (etat !== 'jeu') jouer();
+    else bougerVers(e.clientX);
+  });
+
+  return {
+    start() {
+      if (actif) return;
+      actif = true; etat = 'attente';
+      msgEl.innerHTML = 'Touche ou clique<br>pour jouer';
+      msgEl.classList.remove('cache');
+      requestAnimationFrame(() => { dimensionner(); reinitialiser(); dessiner(); boucle(); });
+      addEventListener('resize', this._r = () => { if (actif) { dimensionner(); reinitialiser(); etat = 'attente'; msgEl.classList.remove('cache'); } });
+    },
+    stop() {
+      actif = false;
+      if (raf) cancelAnimationFrame(raf);
+      if (this._r) removeEventListener('resize', this._r);
+    },
+    clavier(dir) {
+      if (!actif) return;
+      if (etat !== 'jeu') { jouer(); return; }
+      raquette.x = Math.max(raquette.w / 2, Math.min(W - raquette.w / 2, raquette.x + dir * W * 0.06));
+    }
+  };
+})();
 
 /* ===== Curseur custom ===== */
 const cursor = document.getElementById('cursor');
