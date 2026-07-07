@@ -2,10 +2,10 @@
   "projets": [
     {
       "emoji": "🎧",
-      "categorie": "Produit digital",
-      "tag": "Side project",
-      "titre": "Zikk — Découverte musicale locale",
-      "description": "Conception d'une app de découverte d'artistes émergents par ville : écoute à l'aveugle façon swipe, carte des concerts, gamification et abonnements créateurs. Design produit & prototypage no-code.",
+      "categorie": "Projet créatif",
+      "tag": "Création",
+      "titre": "Omniscius - Le jeu de cartes au design unique",
+      "description": "Création d'un jeu de 54 cartes au design unique. Revenus du jeu reversés aux \"Clowns de l'Espoir\"",
       "couleur": "jaune"
     },
     {
