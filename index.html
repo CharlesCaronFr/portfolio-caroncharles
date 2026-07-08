@@ -1,0 +1,1978 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CHARLES CARON, Chef de projet digital</title>
+<link rel="canonical" href="https://caroncharles.fr/">
+<meta name="description" content="Portfolio de Charles Caron, chef de projet digital à Lille, communication interne, product design, no-code & IA.">
+<meta property="og:title" content="Charles Caron, Chef de projet digital">
+<meta property="og:description" content="Portfolio brutaliste néo-rétro : projets, compétences et parcours.">
+<meta property="og:url" content="https://caroncharles.fr/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://caroncharles.fr/images/photo-charles.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23FFD400'/%3E%3Crect x='6' y='6' width='88' height='88' fill='none' stroke='%23141414' stroke-width='10'/%3E%3Ctext x='50' y='72' font-size='60' text-anchor='middle'%3E%E2%98%85%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --papier:#F1EDE2;
+  --encre:#141414;
+  --klein:#2318E0;
+  --jaune:#FFD400;
+  --rouge:#FF3B00;
+  --blanc:#FFFFFF;
+  --ombre:8px 8px 0 var(--encre);
+  --ombre-sm:5px 5px 0 var(--encre);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+::selection{background:var(--jaune);color:var(--encre);}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--papier);
+  color:var(--encre);
+  font-family:'Space Mono',monospace;
+  overflow-x:hidden;
+  cursor:none;
+  background-image:
+    linear-gradient(rgba(20,20,20,.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(20,20,20,.06) 1px, transparent 1px);
+  background-size:48px 48px;
+}
+h1,h2,h3,.display{font-family:'Archivo Black',sans-serif;text-transform:uppercase;line-height:.92;}
+a{color:inherit;}
+img{max-width:100%;display:block;}
+
+/* ============ CURSEUR CUSTOM ============ */
+#cursor{
+  position:fixed;top:0;left:0;width:18px;height:18px;
+  background:var(--jaune);border:2px solid var(--encre);
+  pointer-events:none;z-index:9999;
+  transform:translate(-50%,-50%);
+  transition:width .15s,height .15s,background .15s,border-radius .15s;
+}
+#cursor.hover{width:44px;height:44px;background:var(--rouge);border-radius:50%;}
+#cursor.hover::after{
+  content:'→';position:absolute;inset:0;display:grid;place-items:center;
+  color:var(--blanc);font-family:'Space Mono',monospace;font-weight:700;font-size:18px;
+}
+@media (hover:none){#cursor{display:none;} body{cursor:auto;}}
+
+/* ============ BARRE HAUTE ============ */
+header{
+  position:sticky;top:0;z-index:100;
+  display:flex;justify-content:space-between;align-items:center;
+  background:var(--papier);
+  border-bottom:4px solid var(--encre);
+  padding:14px 24px;
+}
+.logo{font-family:'Archivo Black';font-size:1.2rem;letter-spacing:-.02em;}
+.logo span{background:var(--klein);color:var(--blanc);padding:2px 8px;display:inline-block;transform:rotate(-2deg);}
+nav{display:flex;gap:8px;}
+nav a{
+  text-decoration:none;font-weight:700;font-size:.8rem;text-transform:uppercase;
+  border:3px solid var(--encre);background:var(--blanc);padding:8px 14px;
+  box-shadow:4px 4px 0 var(--encre);
+  transition:transform .12s,box-shadow .12s,background .12s;
+}
+nav a:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--encre);background:var(--jaune);}
+#son-toggle{
+  font-family:'Space Mono';font-weight:700;font-size:.8rem;text-transform:uppercase;
+  border:3px solid var(--encre);background:var(--jaune);padding:8px 14px;
+  box-shadow:4px 4px 0 var(--encre);cursor:none;
+  transition:transform .12s,box-shadow .12s,background .12s;
+}
+#son-toggle:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--encre);}
+#son-toggle.coupe{background:var(--blanc);color:#8a8a8a;text-decoration:line-through;}
+@media(max-width:640px){nav a:nth-child(2){display:none;}}
+
+/* ============ TICKER ============ */
+.ticker{
+  background:var(--encre);color:var(--papier);
+  border-bottom:4px solid var(--encre);
+  overflow:hidden;white-space:nowrap;
+  padding:10px 0;font-weight:700;text-transform:uppercase;font-size:.85rem;
+}
+.ticker-inner{display:inline-block;animation:defile 22s linear infinite;}
+.ticker-inner span{margin:0 24px;}
+.ticker-inner .dot{color:var(--jaune);}
+@keyframes defile{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* ============ HERO ============ */
+.hero{
+  min-height:82vh;display:flex;flex-direction:column;justify-content:center;
+  padding:64px 24px 48px;position:relative;border-bottom:4px solid var(--encre);
+}
+.hero .eyebrow{
+  display:inline-block;background:var(--rouge);color:var(--blanc);
+  border:3px solid var(--encre);box-shadow:var(--ombre-sm);
+  padding:6px 14px;font-weight:700;text-transform:uppercase;font-size:.8rem;
+  width:max-content;transform:rotate(-1.5deg);margin-bottom:28px;
+}
+.hero h1{
+  font-size:clamp(3rem,12vw,10rem);
+  letter-spacing:-.03em;
+}
+.hero h1 .ligne{display:block;overflow:hidden;}
+.hero h1 .lettre{
+  display:inline-block;
+  transform:translateY(110%);
+  animation:monte .6s cubic-bezier(.2,.9,.3,1.1) forwards;
+  transition:transform .18s,color .18s;
+}
+.hero h1 .lettre:hover{transform:translateY(-8%) rotate(-4deg);color:var(--klein);}
+.hero h1 .ligne:nth-child(2) .lettre{color:transparent;-webkit-text-stroke:3px var(--encre);}
+.hero h1 .ligne:nth-child(2) .lettre:hover{color:var(--jaune);-webkit-text-stroke:3px var(--encre);}
+@keyframes monte{to{transform:translateY(0);}}
+.hero .sous{
+  margin-top:32px;max-width:560px;font-size:1rem;line-height:1.6;
+  background:var(--blanc);border:3px solid var(--encre);box-shadow:var(--ombre);
+  padding:20px 24px;
+}
+.hero .sous strong{background:var(--jaune);padding:0 4px;}
+.hero .cta-row{display:flex;gap:16px;margin-top:32px;flex-wrap:wrap;}
+.btn{
+  font-family:'Space Mono';font-weight:700;text-transform:uppercase;font-size:.9rem;
+  text-decoration:none;padding:16px 28px;border:3px solid var(--encre);
+  box-shadow:var(--ombre-sm);display:inline-block;
+  transition:transform .12s,box-shadow .12s;
+}
+.btn:hover{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--encre);}
+.btn-plein{background:var(--klein);color:var(--blanc);}
+.btn-vide{background:var(--blanc);}
+
+/* badge rotatif */
+.badge{
+  position:absolute;right:6vw;top:16vh;width:150px;height:150px;
+  animation:tourne 14s linear infinite;
+}
+.badge svg{width:100%;height:100%;overflow:visible;}
+.badge text{font-family:'Space Mono';font-weight:700;font-size:11.5px;letter-spacing:2px;fill:var(--encre);text-transform:uppercase;}
+.badge .centre{
+  position:absolute;inset:0;display:grid;place-items:center;
+  font-size:2.4rem;animation:tourne 14s linear infinite reverse;
+}
+@keyframes tourne{to{transform:rotate(360deg);}}
+@media(max-width:900px){.hero-photo .badge{width:100px;height:100px;right:-20px;top:-20px;}}
+
+/* ============ SECTIONS ============ */
+section{padding:80px 24px;border-bottom:4px solid var(--encre);}
+.titre-section{
+  font-size:clamp(2rem,6vw,4.5rem);margin-bottom:48px;position:relative;
+  display:inline-block;
+}
+.titre-section::after{
+  content:'';position:absolute;left:0;bottom:-8px;height:14px;width:100%;
+  background:var(--jaune);z-index:-1;transform:skewX(-12deg);
+}
+.num{font-size:.9rem;font-weight:700;color:var(--rouge);display:block;margin-bottom:8px;font-family:'Space Mono';}
+
+/* ============ PROJETS ============ */
+.projets{background:var(--klein);}
+.projets .titre-section{color:var(--blanc);}
+.projets .titre-section::after{background:var(--rouge);}
+.projets .num{color:var(--jaune);}
+.grille{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:32px;
+}
+.carte{
+  background:var(--papier);border:4px solid var(--encre);
+  box-shadow:var(--ombre);padding:0;
+  transition:transform .18s,box-shadow .18s;
+  opacity:0;transform:translateY(40px);
+}
+.carte.visible{animation:apparait .55s cubic-bezier(.2,.9,.3,1.1) forwards;}
+@keyframes apparait{to{opacity:1;transform:translateY(0);}}
+.carte:hover{transform:translate(-4px,-4px) rotate(-.6deg);box-shadow:14px 14px 0 var(--encre);}
+.carte-tete{
+  border-bottom:4px solid var(--encre);padding:14px 18px;
+  display:flex;justify-content:space-between;align-items:center;
+  font-weight:700;font-size:.75rem;text-transform:uppercase;
+}
+.carte-tete .tag{border:2px solid var(--encre);padding:2px 8px;background:var(--jaune);}
+.carte h3{font-size:1.5rem;padding:20px 18px 8px;}
+.carte p{padding:0 18px 20px;font-size:.88rem;line-height:1.55;}
+.carte .visuel{
+  height:120px;border-bottom:4px solid var(--encre);
+  display:grid;place-items:center;font-size:3rem;
+  overflow:hidden;position:relative;
+}
+.carte .visuel::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(45deg,transparent 0 14px,rgba(20,20,20,.07) 14px 28px);
+}
+.visuel.jaune{background:var(--jaune);}
+.visuel.rouge{background:var(--rouge);}
+.visuel.blanc{background:var(--blanc);}
+
+/* ============ COMPETENCES ============ */
+.competences .grille-comp{display:flex;flex-wrap:wrap;gap:16px;}
+.pastille{
+  border:3px solid var(--encre);background:var(--blanc);
+  padding:12px 20px;font-weight:700;text-transform:uppercase;font-size:.85rem;
+  box-shadow:var(--ombre-sm);
+  transition:transform .15s,background .15s,box-shadow .15s;
+}
+.pastille:hover{
+  transform:translate(2px,2px) rotate(-1.5deg);
+  box-shadow:1px 1px 0 var(--encre);
+}
+.pastille:nth-child(3n)::before{content:'★ ';color:var(--rouge);}
+.pastille:hover:nth-child(odd){background:var(--jaune);}
+.pastille:hover:nth-child(even){background:var(--klein);color:var(--blanc);}
+
+/* ============ PARCOURS ============ */
+.parcours-item{
+  display:grid;grid-template-columns:120px 1fr;gap:24px;
+  border:3px solid var(--encre);background:var(--blanc);
+  box-shadow:var(--ombre-sm);padding:24px;margin-bottom:20px;max-width:820px;
+  transition:transform .15s;
+  border-left:12px solid var(--klein);
+  opacity:0;transform:translateX(-50px);
+}
+.parcours-item.visible{animation:glisse .55s cubic-bezier(.2,.9,.3,1.1) forwards;}
+@keyframes glisse{to{opacity:1;transform:translateX(0);}}
+.parcours-item:hover{transform:translateX(8px);}
+.parcours-item.travail{border-left-color:var(--rouge);}
+.parcours-item .annee{
+  font-family:'Archivo Black';font-size:1.3rem;color:var(--klein);
+}
+.parcours-item.travail .annee{color:var(--rouge);}
+.type-badge{
+  display:inline-block;margin-top:8px;
+  border:2px solid var(--encre);padding:3px 8px;
+  font-size:.65rem;font-weight:700;text-transform:uppercase;
+  background:var(--klein);color:var(--blanc);
+  transform:rotate(-2deg);
+}
+.parcours-item.travail .type-badge{background:var(--rouge);}
+.parcours-item h3{font-size:1.05rem;margin-bottom:6px;}
+.parcours-item p{font-size:.85rem;line-height:1.5;}
+@media(max-width:560px){.parcours-item{grid-template-columns:1fr;gap:8px;}}
+
+/* ============ PARCOURS : LIGNE DE TRAIN ============ */
+.voie-wrap{position:relative;max-width:906px;padding-left:86px;}
+.voie{position:absolute;left:16px;top:0;bottom:0;width:34px;}
+.voie::before{
+  content:'';position:absolute;inset:0;
+  background:
+    linear-gradient(90deg,transparent 16%,var(--encre) 16% 28%,transparent 28% 72%,var(--encre) 72% 84%,transparent 84%),
+    repeating-linear-gradient(180deg,var(--encre) 0 6px,transparent 6px 26px);
+}
+.gare-node{
+  position:absolute;left:50%;width:20px;height:20px;margin-left:-10px;
+  background:var(--blanc);border:4px solid var(--encre);z-index:2;
+}
+.gare-node.travail{background:var(--rouge);}
+.gare-node.desservie{background:var(--jaune);}
+.gare-node.flash{animation:gare-flash .45s steps(2) 3;}
+@keyframes gare-flash{50%{background:var(--jaune);box-shadow:0 0 0 6px rgba(255,212,0,.55);}}
+#train{
+  position:absolute;left:50%;top:0;width:56px;height:104px;margin-left:-28px;
+  z-index:3;cursor:pointer;will-change:transform;
+  filter:drop-shadow(4px 4px 0 rgba(20,20,20,.85));
+}
+.fumee{
+  position:absolute;left:50%;z-index:4;width:16px;height:16px;margin-left:-8px;
+  background:var(--blanc);border:3px solid var(--encre);border-radius:50%;
+  pointer-events:none;opacity:.9;
+  animation:fumee-monte 1.3s ease-out forwards;
+}
+@keyframes fumee-monte{
+  to{transform:translate(var(--dx,10px),var(--dy,-70px)) scale(2.6);opacity:0;}
+}
+#toast-train{
+  position:fixed;left:50%;bottom:26px;transform:translate(-50%,220%);
+  background:var(--encre);color:var(--jaune);border:3px solid var(--jaune);
+  padding:12px 20px;max-width:min(92vw,540px);
+  font-size:.8rem;font-weight:700;z-index:1200;
+  transition:transform .35s cubic-bezier(.2,.9,.3,1.2);
+}
+#toast-train.visible{transform:translate(-50%,0);}
+@media(max-width:560px){
+  .voie-wrap{padding-left:54px;}
+  .voie{left:2px;width:28px;}
+  #train{width:44px;height:82px;margin-left:-22px;}
+}
+
+/* Desktop : voie au centre, etapes en zigzag sur toute la largeur */
+@media(min-width:761px){
+  .voie-wrap{padding-left:0;max-width:1500px;margin:0 auto;}
+  .voie{left:50%;margin-left:-17px;}
+  .parcours-item{
+    position:relative;width:calc(50% - 56px);max-width:none;
+    grid-template-columns:110px 1fr;margin-bottom:34px;
+  }
+  .parcours-item.gauche{margin-right:auto;}
+  .parcours-item.droite{
+    margin-left:auto;transform:translateX(50px);
+    border-left:3px solid var(--encre);border-right:12px solid var(--klein);
+  }
+  .parcours-item.droite.travail{border-right-color:var(--rouge);}
+  .parcours-item.gauche::after,.parcours-item.droite::after{
+    content:'';position:absolute;top:50%;width:40px;height:4px;
+    background:var(--encre);margin-top:-2px;
+  }
+  .parcours-item.gauche::after{right:-43px;}
+  .parcours-item.droite::after{left:-43px;}
+}
+
+/* ============ CONTACT ============ */
+.contact{background:var(--encre);color:var(--papier);text-align:center;padding:100px 24px;}
+.contact .titre-section{color:var(--papier);}
+.contact .titre-section::after{background:var(--rouge);}
+.contact .mail{
+  display:inline-block;font-family:'Archivo Black';
+  font-size:clamp(1.2rem,4.5vw,3rem);color:var(--papier);
+  text-decoration:none;border:4px solid var(--papier);
+  padding:20px 32px;margin-top:16px;box-shadow:10px 10px 0 var(--rouge);
+  transition:transform .15s,box-shadow .15s,background .15s,color .15s;
+  word-break:break-all;
+}
+.contact .mail:hover{
+  transform:translate(5px,5px);box-shadow:2px 2px 0 var(--rouge);
+  background:var(--jaune);color:var(--encre);border-color:var(--encre);
+}
+.contact .reseaux{margin-top:40px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;}
+.contact .reseaux a{
+  text-decoration:none;font-weight:700;text-transform:uppercase;font-size:.85rem;
+  border:3px solid var(--papier);padding:10px 18px;
+  transition:background .15s,color .15s,transform .15s;
+}
+.contact .reseaux a:hover{background:var(--papier);color:var(--encre);transform:rotate(-2deg);}
+
+/* ============ FOOTER ============ */
+footer{
+  background:var(--encre);color:var(--papier);
+  display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;
+  padding:18px 24px;font-size:.75rem;text-transform:uppercase;font-weight:700;
+  border-top:4px solid var(--papier);
+}
+footer .clign{animation:clignote 1.2s steps(2) infinite;color:var(--jaune);}
+@keyframes clignote{50%{opacity:0;}}
+
+/* ============ FENÊTRE TV CATHODIQUE ============ */
+.tv-overlay{
+  position:fixed;inset:0;z-index:500;
+  background:rgba(10,10,10,.82);
+  display:none;place-items:center;padding:20px;
+}
+.tv-overlay.ouvert{display:grid;}
+.tv{
+  width:min(760px,100%);
+  background:var(--encre);
+  border:6px solid var(--encre);
+  box-shadow:0 0 0 4px var(--papier),18px 18px 0 rgba(0,0,0,.5);
+  position:relative;
+  padding:22px 22px 16px;
+  transform-origin:center;
+}
+.tv.allume{animation:tv-on .55s cubic-bezier(.23,1,.32,1) forwards;}
+.tv.eteint{animation:tv-off .4s cubic-bezier(.7,0,.84,0) forwards;}
+@keyframes tv-on{
+  0%{transform:scale(0,.004);opacity:1;}
+  35%{transform:scale(1,.004);}
+  60%{transform:scale(1,.02);}
+  100%{transform:scale(1,1);}
+}
+@keyframes tv-off{
+  0%{transform:scale(1,1);}
+  45%{transform:scale(1,.01);}
+  75%{transform:scale(.4,.004);}
+  100%{transform:scale(0,.002);opacity:0;}
+}
+.tv-barre{
+  display:flex;justify-content:space-between;align-items:center;
+  color:var(--papier);font-weight:700;font-size:.75rem;text-transform:uppercase;
+  margin-bottom:14px;
+}
+.tv-barre .canal{color:var(--jaune);animation:clignote 1.6s steps(2) infinite;}
+.tv-fermer{
+  background:var(--rouge);color:var(--blanc);border:3px solid var(--papier);
+  font-family:'Space Mono';font-weight:700;font-size:.8rem;text-transform:uppercase;
+  padding:6px 12px;cursor:none;box-shadow:3px 3px 0 rgba(0,0,0,.5);
+  transition:transform .12s,box-shadow .12s;
+}
+.tv-fermer:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(0,0,0,.5);}
+.tv-zap{display:flex;gap:8px;align-items:center;}
+.tv-canal-btn{
+  background:var(--encre);color:var(--papier);border:2px solid var(--papier);
+  font-family:'Space Mono';font-weight:700;font-size:.75rem;text-transform:uppercase;
+  padding:5px 10px;cursor:none;
+  transition:background .12s,color .12s,transform .12s;
+}
+.tv-canal-btn:hover{background:var(--jaune);color:var(--encre);transform:translateY(1px);}
+/* neige de changement de chaîne */
+.tv-statique{
+  position:absolute;inset:0;z-index:7;pointer-events:none;
+  opacity:0;
+  background:
+    repeating-linear-gradient(0deg,#0a0a0a 0 1px,#5a5a5a 1px 2px,#1c1c1c 2px 3px,#777 3px 4px,#2e2e2e 4px 5px),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 2px,transparent 2px 5px);
+}
+.tv-statique.actif{opacity:1;animation:neige .07s steps(2) infinite;}
+@keyframes neige{
+  0%{background-position:0 0,0 0;}
+  50%{background-position:0 -7px,4px 0;}
+  100%{background-position:0 5px,-3px 0;}
+}
+.tv-ecran{
+  position:relative;background:var(--papier);
+  border:4px solid #000;overflow:hidden;
+}
+/* flash d'allumage */
+.tv.allume .tv-ecran::after{
+  content:'';position:absolute;inset:0;background:#fff;
+  animation:flash .5s ease-out .3s forwards;pointer-events:none;z-index:6;
+}
+@keyframes flash{from{opacity:.95;}to{opacity:0;}}
+/* scanlines fixes */
+.tv-scanlines{
+  position:absolute;inset:0;pointer-events:none;z-index:4;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.13) 0 2px,transparent 2px 4px);
+  mix-blend-mode:multiply;
+}
+/* barre de balayage qui descend */
+.tv-balayage{
+  position:absolute;left:0;right:0;height:70px;pointer-events:none;z-index:5;
+  background:linear-gradient(180deg,transparent,rgba(255,255,255,.22),transparent);
+  animation:balaye 4.5s linear infinite;
+}
+@keyframes balaye{from{top:-80px;}to{top:100%;}}
+/* vignettage des coins */
+.tv-vignette{
+  position:absolute;inset:0;pointer-events:none;z-index:3;
+  box-shadow:inset 0 0 90px rgba(0,0,0,.35);
+}
+/* scintillement du contenu */
+.tv-contenu{position:relative;z-index:1;animation:scintille 3.5s steps(12) infinite;}
+@keyframes scintille{
+  0%,100%{opacity:1;}
+  92%{opacity:1;}
+  94%{opacity:.88;}
+  96%{opacity:1;}
+  98%{opacity:.93;}
+}
+.tv-contenu .visuel{
+  height:150px;border-bottom:4px solid var(--encre);
+  display:grid;place-items:center;font-size:4.2rem;position:relative;
+}
+.tv-contenu .visuel::before{
+  content:'';position:absolute;inset:0;
+  background:repeating-linear-gradient(45deg,transparent 0 14px,rgba(20,20,20,.07) 14px 28px);
+}
+.tv-contenu .tv-meta{
+  display:flex;justify-content:space-between;align-items:center;
+  border-bottom:3px solid var(--encre);padding:12px 20px;
+  font-weight:700;font-size:.75rem;text-transform:uppercase;
+}
+.tv-contenu .tv-meta .tag{border:2px solid var(--encre);padding:2px 8px;background:var(--jaune);}
+.tv-contenu h3{font-size:clamp(1.4rem,4vw,2.2rem);padding:22px 20px 10px;}
+.tv-contenu p{padding:0 20px 22px;font-size:.95rem;line-height:1.6;}
+.tv-contenu .tv-actions{padding:0 20px 24px;}
+.tv-contenu .btn-projet{
+  display:inline-block;background:var(--klein);color:var(--blanc);
+  border:3px solid var(--encre);box-shadow:var(--ombre-sm);
+  font-weight:700;text-transform:uppercase;font-size:.9rem;
+  text-decoration:none;padding:14px 24px;
+  transition:transform .12s,box-shadow .12s;
+}
+.tv-contenu .btn-projet:hover{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--encre);}
+.carte{cursor:none;}
+
+/* ============ OTIS, LA MASCOTTE (statique) ============ */
+/* 1. hero : dans le grand espace vide entre le texte et la photo */
+.hero-inner{position:relative;}
+.otis-hero{
+  position:absolute;right:450px;top:54%;width:190px;
+  transform:translateY(-50%) rotate(-4deg);
+  filter:drop-shadow(5px 5px 0 rgba(20,20,20,.15));
+}
+@media(max-width:1250px){.otis-hero{display:none;}}
+/* 2. competences : a droite du titre Boite a outils */
+.competences{position:relative;}
+.otis-comp{
+  position:absolute;top:70px;right:12%;width:150px;
+  transform:rotate(4deg);
+  filter:drop-shadow(4px 4px 0 rgba(20,20,20,.15));
+}
+@media(max-width:1000px){.otis-comp{display:none;}}
+/* 3. parcours : le creneau vide du zigzag, en bas a droite */
+.parcours{position:relative;}
+.otis-parcours{
+  position:absolute;bottom:110px;right:11%;width:180px;
+  transform:rotate(-3deg);
+  filter:drop-shadow(4px 4px 0 rgba(20,20,20,.15));
+}
+@media(max-width:1000px){.otis-parcours{display:none;}}
+
+/* ============ MIRE TV AU CHARGEMENT ============ */
+#mire{
+  position:fixed;inset:0;z-index:2000;display:flex;flex-direction:column;
+  background:var(--encre);
+}
+#mire.fin{animation:mire-off .45s cubic-bezier(.7,0,.84,0) forwards;}
+@keyframes mire-off{
+  0%{transform:scaleY(1);opacity:1;}
+  60%{transform:scaleY(.006);opacity:1;}
+  100%{transform:scaleY(.002);opacity:0;}
+}
+.mire-barres{flex:1;display:flex;animation:mire-jitter .12s steps(2) infinite;}
+.mire-barres div{flex:1;}
+@keyframes mire-jitter{50%{transform:translateX(1px);}}
+.mire-b1{background:#F1EDE2;}.mire-b2{background:#FFD400;}
+.mire-b3{background:#2318E0;}.mire-b4{background:#FF3B00;}
+.mire-b5{background:#8a8a8a;}.mire-b6{background:#3a3a3a;}
+.mire-b7{background:#141414;}
+.mire-info{
+  height:64px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;color:var(--papier);
+  font-family:'Space Mono';font-weight:700;font-size:.8rem;text-transform:uppercase;
+  border-top:4px solid var(--papier);
+}
+.mire-info .clign{animation:clignote .8s steps(2) infinite;color:var(--jaune);}
+
+/* ============ PHOTO DU HERO ============ */
+.hero-inner{display:flex;gap:56px;align-items:center;}
+.hero-texte{flex:1.25;min-width:0;}
+.hero-photo{flex:.75;position:relative;max-width:380px;}
+.hero-photo img{
+  width:100%;border:4px solid var(--encre);
+  box-shadow:14px 14px 0 var(--klein);
+  transform:rotate(2deg);
+  transition:transform .25s cubic-bezier(.2,.9,.3,1.3),box-shadow .25s;
+}
+.hero-photo img:hover{transform:rotate(0) scale(1.02);box-shadow:8px 8px 0 var(--rouge);}
+@media(max-width:900px){
+  .hero-inner{flex-direction:column;align-items:flex-start;}
+  .hero-photo{max-width:240px;margin-top:36px;}
+}
+
+/* badge : repositionné sur le coin de la photo */
+.hero-photo .badge{position:absolute;right:-34px;top:-34px;width:130px;height:130px;}
+.hero-photo .badge .centre{font-size:2rem;}
+
+/* ============ STATS / COMPTEURS ============ */
+.stats{background:var(--jaune);}
+.stats .titre-section::after{background:var(--rouge);}
+.grille-stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:28px;
+}
+.stat{
+  background:var(--blanc);border:4px solid var(--encre);box-shadow:var(--ombre);
+  padding:28px 20px;text-align:center;
+  transition:transform .15s;
+}
+.stat:hover{transform:rotate(-1.5deg);}
+.stat .stat-num{
+  font-family:'Archivo Black';font-size:clamp(2.6rem,6vw,4rem);line-height:1;
+  color:var(--klein);display:block;
+}
+.stat:nth-child(2n) .stat-num{color:var(--rouge);}
+.stat p{margin-top:10px;font-size:.8rem;font-weight:700;text-transform:uppercase;line-height:1.4;}
+
+/* ============ EASTER EGG : MODE RÉTRO N&B ============ */
+html.retro{filter:grayscale(1) contrast(1.12);}
+#retro-scan{
+  position:fixed;inset:0;z-index:1500;pointer-events:none;display:none;
+  background:repeating-linear-gradient(0deg,rgba(0,0,0,.16) 0 2px,transparent 2px 4px);
+}
+#retro-scan.actif{display:block;animation:retro-roule .3s linear infinite;}
+@keyframes retro-roule{from{background-position:0 0;}to{background-position:0 8px;}}
+.badge{cursor:none;}
+.badge:active{transform:scale(.94);}
+
+/* ============ CHAÎNE SECRÈTE : ARCADE ============ */
+#tv-arcade{position:relative;background:#0d0d0d;}
+.arcade-tete{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:10px 16px;border-bottom:3px solid var(--jaune);
+  color:var(--jaune);font-weight:700;font-size:.75rem;text-transform:uppercase;
+}
+#arcade-canvas{display:block;width:100%;touch-action:none;cursor:none;}
+.arcade-msg{
+  position:absolute;left:0;right:0;top:44px;bottom:0;
+  display:grid;place-items:center;text-align:center;padding:20px;
+  color:var(--jaune);font-weight:700;font-size:.95rem;text-transform:uppercase;
+  animation:clignote 1s steps(2) infinite;pointer-events:none;
+  text-shadow:2px 2px 0 var(--rouge);
+}
+.arcade-msg.cache{display:none;}
+
+/* ============ CHAÎNE SECRÈTE : CH 64 ÉCHECS ============ */
+.pastille-echecs::after{content:' ♟';}
+#tv-echecs{position:relative;background:var(--papier);padding:14px 14px 18px;}
+.echecs-tete{
+  display:flex;justify-content:space-between;align-items:center;gap:10px;
+  background:var(--encre);color:var(--papier);
+  font-weight:700;font-size:.72rem;text-transform:uppercase;
+  padding:10px 14px;margin:-14px -14px 14px;
+}
+.echecs-tete #echecs-statut{color:var(--jaune);text-align:right;}
+.echecs-plateau{
+  display:grid;grid-template-columns:repeat(8,1fr);grid-template-rows:repeat(8,1fr);
+  width:min(100%,380px);margin:0 auto;aspect-ratio:1/1;
+  border:4px solid var(--encre);box-shadow:var(--ombre-sm);
+  background:var(--blanc);user-select:none;
+}
+.case{position:relative;display:grid;place-items:center;line-height:1;
+  min-width:0;min-height:0;overflow:hidden;
+  font-size:clamp(1.15rem,5vw,1.8rem);}
+.case.sombre{background:#d9d1b6;}
+.case .piece-blanc{color:var(--blanc);
+  text-shadow:-1.5px -1.5px 0 var(--encre),1.5px -1.5px 0 var(--encre),
+  -1.5px 1.5px 0 var(--encre),1.5px 1.5px 0 var(--encre);}
+.case .piece-noir{color:var(--encre);}
+.case.sel{background:var(--klein);}
+.case.dernier{box-shadow:inset 0 0 0 3px var(--jaune);}
+.case.cible::after{content:'';position:absolute;width:26%;height:26%;
+  background:var(--jaune);border:2px solid var(--encre);border-radius:50%;}
+.case.prise{box-shadow:inset 0 0 0 3px var(--rouge);}
+.case.roi-echec{background:var(--rouge);}
+.echecs-pied{display:flex;justify-content:space-between;align-items:center;
+  width:min(100%,380px);margin:12px auto 0;
+  font-weight:700;font-size:.75rem;text-transform:uppercase;}
+.echecs-btn{
+  background:var(--encre);color:var(--papier);border:2px solid var(--encre);
+  font-family:'Space Mono';font-weight:700;font-size:.72rem;text-transform:uppercase;
+  padding:6px 12px;cursor:none;transition:background .12s,color .12s,transform .12s;
+}
+.echecs-btn:hover{background:var(--jaune);color:var(--encre);transform:translateY(1px);}
+.footer-arcade{
+  background:none;border:none;color:var(--papier);
+  font-family:'Space Mono';font-weight:700;font-size:.75rem;text-transform:uppercase;
+  cursor:none;padding:0;letter-spacing:.03em;
+  transition:color .15s,transform .15s;
+}
+.footer-arcade:hover{color:var(--jaune);transform:rotate(-2deg);}
+
+/* ============ ANIMATION : RÉVÉLATION DES TITRES ============ */
+.titre-section{opacity:0;transform:translateY(26px) rotate(-1deg);
+  transition:opacity .5s ease,transform .5s cubic-bezier(.2,.9,.3,1.1);}
+.titre-section::after{transform:skewX(-12deg) scaleX(0);transform-origin:left;
+  transition:transform .55s cubic-bezier(.2,.9,.3,1) .25s;}
+.titre-section.vu{opacity:1;transform:translateY(0) rotate(0);}
+.titre-section.vu::after{transform:skewX(-12deg) scaleX(1);}
+
+/* ============ ANIMATION : VAGUE SUR LE NOM ============ */
+.hero h1 .lettre.vague{transform:translateY(-10%) rotate(-3deg);color:var(--rouge);}
+.hero h1 .ligne:nth-child(2) .lettre.vague{color:var(--rouge);-webkit-text-stroke:3px var(--encre);}
+
+/* accessibilité : mouvement réduit */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;}
+  .hero h1 .lettre{transform:none;}
+  .carte{opacity:1;transform:none;}
+  .parcours-item{opacity:1;transform:none;}
+  .titre-section{opacity:1;transform:none;}
+  .titre-section::after{transform:skewX(-12deg) scaleX(1);}
+  #mire{display:none;}
+  .mire-barres,#retro-scan.actif{animation:none;}
+  .tv.allume,.tv.eteint{animation:none;}
+  .tv-balayage,.tv.allume .tv-ecran::after,.tv-statique{display:none;}
+  body{cursor:auto;}
+  #cursor{display:none;}
+}
+a:focus-visible,.btn:focus-visible{outline:4px solid var(--rouge);outline-offset:3px;}
+</style>
+</head>
+<body>
+
+<div id="cursor" aria-hidden="true"></div>
+
+<!-- Mire TV de chargement -->
+<div id="mire" aria-hidden="true">
+  <div class="mire-barres">
+    <div class="mire-b1"></div><div class="mire-b2"></div><div class="mire-b3"></div>
+    <div class="mire-b4"></div><div class="mire-b5"></div><div class="mire-b6"></div>
+    <div class="mire-b7"></div>
+  </div>
+  <div class="mire-info">
+    <span>◉ CARON·TV</span>
+    <span class="clign">● Veuillez patienter…</span>
+    <span>CH 00</span>
+  </div>
+</div>
+
+<!-- Overlay de l'easter egg rétro -->
+<div id="retro-scan" aria-hidden="true"></div>
+
+<header>
+  <div class="logo">CHARLES <span>CARON</span></div>
+  <nav>
+    <a href="#projets">Projets</a>
+    <a href="#competences">Compétences</a>
+    <a href="#contact">Contact</a>
+    <button id="son-toggle" aria-pressed="true" aria-label="Activer ou couper le son">♪ ON</button>
+  </nav>
+</header>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
+
+<section class="hero" id="haut">
+  <div class="hero-inner">
+    <img class="otis-hero" src="images/otis/salue.svg" alt="Otis, la mascotte, salue" width="190" height="238">
+    <div class="hero-texte">
+      <span class="eyebrow" id="eyebrow"></span>
+      <h1 id="nom" aria-label="Charles Caron">
+        <span class="ligne"></span>
+        <span class="ligne"></span>
+      </h1>
+      <p class="sous" id="intro"></p>
+      <div class="cta-row">
+        <a class="btn btn-plein" href="#projets">Voir mes projets ↓</a>
+        <a class="btn btn-vide" href="#contact">Me contacter</a>
+      </div>
+    </div>
+    <div class="hero-photo" id="hero-photo" style="display:none;">
+      <img id="photo" src="" alt="Portrait de Charles Caron">
+      <div class="badge" id="badge" role="button" tabindex="0" aria-label="Surprise !">
+        <svg viewBox="0 0 150 150">
+          <defs>
+            <path id="cercle" d="M75,75 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0"/>
+          </defs>
+          <circle cx="75" cy="75" r="72" fill="var(--jaune)" stroke="var(--encre)" stroke-width="4"/>
+          <text><textPath href="#cercle" id="badge-texte"></textPath></text>
+        </svg>
+        <div class="centre" id="badge-centre">★</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="projets" id="projets">
+  <span class="num">01 / PROJETS</span>
+  <h2 class="titre-section">Projets sélectionnés</h2>
+  <div class="grille" id="grille-projets"></div>
+</section>
+
+<section class="stats" id="chiffres">
+  <span class="num">02 / EN CHIFFRES</span>
+  <h2 class="titre-section">Quelques chiffres</h2>
+  <div class="grille-stats" id="grille-stats"></div>
+</section>
+
+<section class="competences" id="competences">
+  <img class="otis-comp" src="images/otis/jongle.svg" alt="Otis jongle avec les compétences" width="150" height="184">
+  <span class="num">03 / COMPÉTENCES</span>
+  <h2 class="titre-section">Boîte à outils</h2>
+  <div class="grille-comp" id="grille-comp"></div>
+</section>
+
+<section class="parcours" id="parcours">
+  <img class="otis-parcours" src="images/otis/lit.svg" alt="Otis lit une histoire" width="180" height="195">
+  <span class="num">04 / PARCOURS</span>
+  <h2 class="titre-section">Parcours</h2>
+  <div class="voie-wrap" id="voie-wrap">
+    <div class="voie" id="voie" aria-hidden="true"></div>
+    <div id="liste-parcours"></div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <span class="num" style="color:var(--jaune);">05 / CONTACT</span>
+  <h2 class="titre-section" id="titre-contact"></h2>
+  <div><a class="mail" id="mail" href="#"></a></div>
+  <div class="reseaux">
+    <a id="lien-linkedin" href="#" target="_blank" rel="noopener">LinkedIn ↗</a>
+    <a id="lien-cv" href="#">Télécharger le CV ↓</a>
+  </div>
+</section>
+
+<!-- Fenêtre TV cathodique -->
+<div class="tv-overlay" id="tv-overlay">
+  <div class="tv" id="tv" role="dialog" aria-modal="true" aria-labelledby="tv-titre">
+    <div class="tv-barre">
+      <div class="tv-zap">
+        <button class="tv-canal-btn" id="tv-prec" aria-label="Projet précédent">‹ CH</button>
+        <span class="canal" id="tv-canal">CH 01</span>
+        <button class="tv-canal-btn" id="tv-suiv" aria-label="Projet suivant">CH ›</button>
+      </div>
+      <span>◉ CARON·TV</span>
+      <button class="tv-fermer" id="tv-fermer" aria-label="Fermer">Éteindre ✕</button>
+    </div>
+    <div class="tv-ecran">
+      <div class="tv-scanlines" aria-hidden="true"></div>
+      <div class="tv-balayage" aria-hidden="true"></div>
+      <div class="tv-vignette" aria-hidden="true"></div>
+      <div class="tv-statique" id="tv-statique" aria-hidden="true"></div>
+      <div class="tv-contenu">
+        <div class="visuel" id="tv-visuel"></div>
+        <div class="tv-meta"><span id="tv-categorie"></span><span class="tag" id="tv-tag"></span></div>
+        <h3 id="tv-titre"></h3>
+        <p id="tv-description"></p>
+        <div class="tv-actions"><a class="btn-projet" id="tv-lien" href="#" target="_blank" rel="noopener">Voir le projet ↗</a></div>
+      </div>
+      <div id="tv-arcade" style="display:none;">
+        <div class="arcade-tete"><span>🕹 CARON·TV ARCADE</span><span id="arcade-score">SCORE 000</span></div>
+        <canvas id="arcade-canvas"></canvas>
+        <div class="arcade-msg" id="arcade-msg">Touche ou clique<br>pour jouer</div>
+      </div>
+      <div id="tv-echecs" style="display:none;">
+        <div class="echecs-tete"><span>♟ CARON·CHESS</span><span id="echecs-statut">À toi de jouer (blancs)</span></div>
+        <div class="echecs-plateau" id="echecs-plateau" aria-label="Échiquier, tu joues les blancs contre l'IA"></div>
+        <div class="echecs-pied">
+          <span id="echecs-coups">COUP 001</span>
+          <button class="echecs-btn" id="echecs-reset">↺ Nouvelle partie</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span id="footer-gauche"></span>
+  <span class="clign">● Disponible</span>
+  <button class="footer-arcade" id="footer-arcade" aria-label="Ouvrir la chaîne arcade">🕹 CH 00</button>
+  <span id="footer-droite"></span>
+</footer>
+
+<script>
+/* ===== Utilitaire : échapper le HTML des contenus ===== */
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c =>
+  ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+/* ===== Chargement des contenus ===== */
+async function charger() {
+  const [site, projets, competences, parcours] = await Promise.all([
+    fetch('content/site.json').then(r => r.json()),
+    fetch('content/projets.json').then(r => r.json()),
+    fetch('content/competences.json').then(r => r.json()),
+    fetch('content/parcours.json').then(r => r.json())
+  ]);
+
+  /* --- Hero --- */
+  document.getElementById('eyebrow').textContent = site.eyebrow;
+  document.getElementById('intro').innerHTML = site.intro; // HTML autorisé (strong)
+  document.getElementById('badge-texte').textContent = site.badge_texte;
+
+  const lignes = document.querySelectorAll('#nom .ligne');
+  [site.nom_ligne1, site.nom_ligne2].forEach((txt, li) => {
+    [...(txt || '')].forEach((c, i) => {
+      const s = document.createElement('span');
+      s.className = 'lettre';
+      s.textContent = c;
+      s.style.animationDelay = (li * 0.35 + i * 0.06) + 's';
+      lignes[li].appendChild(s);
+    });
+  });
+
+  /* --- Ticker --- */
+  const ticker = document.getElementById('ticker');
+  const items = site.ticker.map(t =>
+    `<span>${esc(t)}</span><span class="dot">●</span>`).join('');
+  ticker.innerHTML = items + items; // dupliqué pour la boucle
+
+  /* --- Projets --- */
+  listeProjets = projets.projets;
+  const grille = document.getElementById('grille-projets');
+  grille.innerHTML = listeProjets.map((p, i) => `
+    <article class="carte" data-index="${i}" tabindex="0" role="button"
+             aria-label="Ouvrir le projet ${esc(p.titre)}">
+      <div class="visuel ${esc(p.couleur)}">${esc(p.emoji)}</div>
+      <div class="carte-tete"><span>${esc(p.categorie)}</span><span class="tag">${esc(p.tag)}</span></div>
+      <h3>${esc(p.titre)}</h3>
+      <p>${esc(p.description)}</p>
+    </article>`).join('');
+
+  /* --- Compétences --- */
+  document.getElementById('grille-comp').innerHTML =
+    competences.competences.map(c => `<span class="pastille">${esc(c)}</span>`).join('');
+
+  /* Easter egg : la pastille Échecs ouvre la chaîne CH 64 */
+  document.querySelectorAll('#grille-comp .pastille').forEach(p => {
+    const t = p.textContent.toLowerCase();
+    if (!t.includes('échecs') && !t.includes('echecs')) return;
+    p.classList.add('pastille-echecs');
+    p.setAttribute('tabindex', '0');
+    p.setAttribute('role', 'button');
+    p.setAttribute('aria-label', "Jouer aux échecs contre l'IA");
+    p.addEventListener('click', () => ouvrirTV(-2, p));
+    p.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ouvrirTV(-2, p); }
+    });
+  });
+
+  /* --- Parcours --- */
+  document.getElementById('liste-parcours').innerHTML =
+    parcours.parcours.map((p, i) => {
+      const type = p.type === 'travail' ? 'travail' : 'ecole';
+      const cote = i % 2 ? 'droite' : 'gauche';
+      const badge = type === 'travail' ? '💼 Expérience' : '🎓 École';
+      return `
+      <div class="parcours-item ${type} ${cote}">
+        <div>
+          <div class="annee">${esc(p.annee)}</div>
+          <span class="type-badge">${badge}</span>
+        </div>
+        <div><h3>${esc(p.titre)}</h3><p>${esc(p.description)}</p></div>
+      </div>`;
+    }).join('');
+  initTrain();
+
+  /* --- Photo du hero --- */
+  if (site.photo) {
+    document.getElementById('photo').src = site.photo;
+    document.getElementById('hero-photo').style.display = '';
+  }
+
+  /* --- Stats --- */
+  const stats = site.stats || [];
+  document.getElementById('grille-stats').innerHTML = stats.map(s => `
+    <div class="stat">
+      <span class="stat-num" data-cible="${Number(s.valeur) || 0}">0${esc(s.suffixe || '')}</span>
+      <p>${esc(s.label)}</p>
+    </div>`).join('');
+  if (!stats.length) document.getElementById('chiffres').style.display = 'none';
+
+  /* --- Contact & footer --- */
+  document.getElementById('titre-contact').textContent = site.titre_contact;
+  const mail = document.getElementById('mail');
+  mail.textContent = site.email;
+  mail.href = 'mailto:' + site.email;
+  document.getElementById('lien-linkedin').href = site.lien_linkedin;
+  document.getElementById('lien-cv').href = site.lien_cv;
+  document.getElementById('footer-gauche').textContent = site.footer_gauche;
+  document.getElementById('footer-droite').textContent = site.footer_droite;
+
+  initAnimations();
+}
+
+/* ===== Animations ===== */
+function initAnimations() {
+  /* Apparition des cartes au scroll */
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        e.target.style.animationDelay = (i * 0.1) + 's';
+        e.target.classList.add('visible');
+        obs.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.carte').forEach(c => obs.observe(c));
+
+  /* Apparition du parcours au scroll (glissé depuis la gauche) */
+  const obsParcours = new IntersectionObserver(entries => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        e.target.style.animationDelay = (i * 0.12) + 's';
+        e.target.classList.add('visible');
+        obsParcours.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.parcours-item').forEach(p => obsParcours.observe(p));
+
+  /* Curseur : survols */
+  document.querySelectorAll('a, .btn, .pastille, .carte, .tv-fermer, .tv-canal-btn').forEach(el => {
+    el.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  });
+  document.querySelectorAll('.carte, .btn').forEach(el => {
+    el.addEventListener('mouseenter', () => sons.survol());
+  });
+  document.querySelectorAll('.btn, nav a').forEach(el => {
+    el.addEventListener('click', () => sons.clic());
+  });
+
+  /* Clic sur une carte → ouvrir la TV */
+  document.querySelectorAll('.carte').forEach(c => {
+    c.addEventListener('click', () => ouvrirTV(+c.dataset.index, c));
+    c.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); ouvrirTV(+c.dataset.index, c); }
+    });
+  });
+
+  /* Révélation des titres de section au scroll */
+  const obsTitres = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('vu'); obsTitres.unobserve(e.target); }
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('.titre-section').forEach(t => obsTitres.observe(t));
+
+  /* Vague périodique sur les lettres du nom */
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    setInterval(() => {
+      const lettres = document.querySelectorAll('#nom .lettre');
+      lettres.forEach((l, i) => {
+        setTimeout(() => l.classList.add('vague'), i * 45);
+        setTimeout(() => l.classList.remove('vague'), i * 45 + 320);
+      });
+    }, 7000);
+  }
+
+  /* Glitch du nom au survol du logo */
+  document.querySelector('.logo').addEventListener('mouseenter', () => {
+    document.querySelectorAll('#nom .lettre').forEach(l => {
+      l.style.transition = 'transform .15s';
+      l.style.transform = `translate(${(Math.random()*8-4)}px, ${(Math.random()*8-4)}px) rotate(${(Math.random()*10-5)}deg)`;
+      setTimeout(() => { l.style.transform = ''; }, 350);
+    });
+  });
+}
+
+/* ===== Fenêtre TV cathodique ===== */
+let listeProjets = [];
+let canalCourant = 0;
+const overlay = document.getElementById('tv-overlay');
+const tv = document.getElementById('tv');
+const statique = document.getElementById('tv-statique');
+let derniereCarte = null;
+
+function remplirTV(index) {
+  if (index === -1) { afficherArcade(); return; }
+  if (index === -2) { afficherEchecs(); return; }
+  masquerArcade();
+  masquerEchecs();
+  const p = listeProjets[index];
+  if (!p) return;
+  canalCourant = index;
+
+  document.getElementById('tv-canal').textContent = 'CH ' + String(index + 1).padStart(2, '0');
+  const visuel = document.getElementById('tv-visuel');
+  visuel.className = 'visuel ' + (p.couleur || 'jaune');
+  visuel.textContent = p.emoji || '★';
+  document.getElementById('tv-categorie').textContent = p.categorie || '';
+  document.getElementById('tv-tag').textContent = p.tag || '';
+  document.getElementById('tv-titre').textContent = p.titre || '';
+  document.getElementById('tv-description').textContent = p.description || '';
+
+  const lien = document.getElementById('tv-lien');
+  if (p.lien && p.lien !== '#') { lien.href = p.lien; lien.style.display = 'inline-block'; }
+  else { lien.style.display = 'none'; }
+}
+
+/* --- Chaîne secrète CH 00 : arcade --- */
+function afficherArcade() {
+  masquerEchecs();
+  canalCourant = -1;
+  document.getElementById('tv-canal').textContent = 'CH 00';
+  document.querySelector('.tv-contenu').style.display = 'none';
+  document.getElementById('tv-arcade').style.display = '';
+  arcade.start();
+}
+function masquerArcade() {
+  if (document.getElementById('tv-arcade').style.display === 'none') return;
+  arcade.stop();
+  document.getElementById('tv-arcade').style.display = 'none';
+  document.querySelector('.tv-contenu').style.display = '';
+}
+
+function ouvrirTV(index, carte) {
+  derniereCarte = carte || null;
+  remplirTV(index);
+  sons.tvOn();
+  overlay.classList.add('ouvert');
+  tv.classList.remove('eteint');
+  tv.classList.add('allume');
+  document.body.style.overflow = 'hidden';
+  document.getElementById('tv-fermer').focus();
+}
+
+function fermerTV() {
+  sons.tvOff();
+  masquerArcade();
+  masquerEchecs();
+  tv.classList.remove('allume');
+  tv.classList.add('eteint');
+  setTimeout(() => {
+    overlay.classList.remove('ouvert');
+    tv.classList.remove('eteint');
+    document.body.style.overflow = '';
+    if (derniereCarte) derniereCarte.focus();
+  }, 380);
+}
+
+let zapEnCours = false;
+function changerCanal(delta) {
+  if (zapEnCours || !listeProjets.length) return;
+  zapEnCours = true;
+  const total = listeProjets.length + 1;              // + la chaîne arcade
+  const v = (canalCourant + 1 + delta + total) % total; // 0 = arcade, 1..n = projets
+  const cible = v - 1;
+  const reduit = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (reduit) { remplirTV(cible); zapEnCours = false; return; }
+
+  sons.zap();
+  statique.classList.add('actif');           // neige !
+  setTimeout(() => remplirTV(cible), 140);    // on change de chaîne sous la neige
+  setTimeout(() => {
+    statique.classList.remove('actif');
+    zapEnCours = false;
+  }, 320);
+}
+
+document.getElementById('tv-fermer').addEventListener('click', fermerTV);
+document.getElementById('tv-prec').addEventListener('click', () => changerCanal(-1));
+document.getElementById('tv-suiv').addEventListener('click', () => changerCanal(1));
+overlay.addEventListener('click', e => { if (e.target === overlay) fermerTV(); });
+addEventListener('keydown', e => {
+  if (!overlay.classList.contains('ouvert')) return;
+  if (e.key === 'Escape') { fermerTV(); return; }
+  if (canalCourant === -1 && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
+    e.preventDefault();
+    arcade.clavier(e.key === 'ArrowLeft' ? -1 : 1); // sur CH 00, les flèches pilotent la raquette
+    return;
+  }
+  if (e.key === 'ArrowLeft') changerCanal(-1);
+  if (e.key === 'ArrowRight') changerCanal(1);
+});
+
+/* Indice du footer → ouvre directement CH 00 */
+document.getElementById('footer-arcade').addEventListener('click', () => ouvrirTV(-1));
+
+/* ===== CH 00 : casse-briques ===== */
+const arcade = (() => {
+  const canvas = document.getElementById('arcade-canvas');
+  const ctx = canvas.getContext('2d');
+  const scoreEl = document.getElementById('arcade-score');
+  const msgEl = document.getElementById('arcade-msg');
+  const COULEURS = ['#FFD400', '#FF3B00', '#2318E0', '#F1EDE2', '#8a8a8a'];
+
+  let raf = null, actif = false, etat = 'attente'; // attente | jeu | fin
+  let W, H, dpr, balle, raquette, briques, score;
+
+  function dimensionner() {
+    const larg = canvas.parentElement.clientWidth;
+    const haut = Math.round(Math.min(420, larg * 0.68));
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    canvas.width = larg * dpr; canvas.height = haut * dpr;
+    canvas.style.height = haut + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    W = larg; H = haut;
+  }
+
+  function reinitialiser() {
+    score = 0;
+    scoreEl.textContent = 'SCORE 000';
+    raquette = { w: W * 0.2, h: 10, x: W / 2 };
+    balle = { x: W / 2, y: H - 40, r: 6, vx: W * 0.005, vy: -W * 0.006 };
+    briques = [];
+    const cols = 8, lignes = 5, marge = 4, top = 14;
+    const bw = (W - marge * (cols + 1)) / cols, bh = 16;
+    for (let l = 0; l < lignes; l++)
+      for (let c = 0; c < cols; c++)
+        briques.push({ x: marge + c * (bw + marge), y: top + l * (bh + marge),
+                       w: bw, h: bh, couleur: COULEURS[l % COULEURS.length], vivante: true });
+  }
+
+  function dessiner() {
+    ctx.fillStyle = '#0d0d0d';
+    ctx.fillRect(0, 0, W, H);
+    briques.forEach(b => {
+      if (!b.vivante) return;
+      ctx.fillStyle = b.couleur;
+      ctx.fillRect(b.x, b.y, b.w, b.h);
+      ctx.strokeStyle = '#0d0d0d'; ctx.lineWidth = 2;
+      ctx.strokeRect(b.x, b.y, b.w, b.h);
+    });
+    ctx.fillStyle = '#F1EDE2';
+    ctx.fillRect(raquette.x - raquette.w / 2, H - 20, raquette.w, raquette.h);
+    ctx.fillStyle = '#FFD400';
+    ctx.fillRect(balle.x - balle.r, balle.y - balle.r, balle.r * 2, balle.r * 2); // balle carrée, pixel oblige
+  }
+
+  function avancer() {
+    balle.x += balle.vx; balle.y += balle.vy;
+    if (balle.x < balle.r || balle.x > W - balle.r) balle.vx *= -1;
+    if (balle.y < balle.r) balle.vy *= -1;
+
+    /* raquette */
+    const ry = H - 20;
+    if (balle.vy > 0 && balle.y + balle.r >= ry && balle.y + balle.r <= ry + raquette.h + 8 &&
+        balle.x > raquette.x - raquette.w / 2 - balle.r && balle.x < raquette.x + raquette.w / 2 + balle.r) {
+      balle.vy = -Math.abs(balle.vy);
+      sons.raquette();
+      const decal = (balle.x - raquette.x) / (raquette.w / 2);   // -1 à 1
+      balle.vx = decal * W * 0.007;
+    }
+
+    /* briques */
+    for (const b of briques) {
+      if (!b.vivante) continue;
+      if (balle.x > b.x - balle.r && balle.x < b.x + b.w + balle.r &&
+          balle.y > b.y - balle.r && balle.y < b.y + b.h + balle.r) {
+        b.vivante = false;
+        balle.vy *= -1;
+        sons.brique(Math.round(900 - b.y * 4));
+        score++;
+        scoreEl.textContent = 'SCORE ' + String(score).padStart(3, '0');
+        break;
+      }
+    }
+
+    if (briques.every(b => !b.vivante)) finir(true);
+    else if (balle.y > H + balle.r * 2) finir(false);
+  }
+
+  function finir(gagne) {
+    etat = 'fin';
+    if (gagne) sons.gagne(); else sons.perdu();
+    msgEl.innerHTML = (gagne ? '★ Gagné ! ★' : 'Game over') +
+      '<br>Score : ' + score + '<br><small>Touche pour rejouer</small>';
+    msgEl.classList.remove('cache');
+  }
+
+  function boucle() {
+    if (!actif) return;
+    if (etat === 'jeu') { avancer(); }
+    dessiner();
+    raf = requestAnimationFrame(boucle);
+  }
+
+  function jouer() {
+    if (etat === 'jeu') return;
+    reinitialiser();
+    etat = 'jeu';
+    sons.demarrer();
+    msgEl.classList.add('cache');
+  }
+
+  function bougerVers(clientX) {
+    const r = canvas.getBoundingClientRect();
+    raquette.x = Math.max(raquette.w / 2, Math.min(W - raquette.w / 2, clientX - r.left));
+  }
+
+  canvas.addEventListener('pointermove', e => { if (actif && etat === 'jeu') bougerVers(e.clientX); });
+  canvas.addEventListener('pointerdown', e => {
+    if (!actif) return;
+    if (etat !== 'jeu') jouer();
+    else bougerVers(e.clientX);
+  });
+
+  return {
+    start() {
+      if (actif) return;
+      actif = true; etat = 'attente';
+      msgEl.innerHTML = 'Touche ou clique<br>pour jouer';
+      msgEl.classList.remove('cache');
+      requestAnimationFrame(() => { dimensionner(); reinitialiser(); dessiner(); boucle(); });
+      addEventListener('resize', this._r = () => { if (actif) { dimensionner(); reinitialiser(); etat = 'attente'; msgEl.classList.remove('cache'); } });
+    },
+    stop() {
+      actif = false;
+      if (raf) cancelAnimationFrame(raf);
+      if (this._r) removeEventListener('resize', this._r);
+    },
+    clavier(dir) {
+      if (!actif) return;
+      if (etat !== 'jeu') { jouer(); return; }
+      raquette.x = Math.max(raquette.w / 2, Math.min(W - raquette.w / 2, raquette.x + dir * W * 0.06));
+    }
+  };
+})();
+
+/* ===== Curseur custom ===== */
+const cursor = document.getElementById('cursor');
+let cx = innerWidth/2, cy = innerHeight/2, tx = cx, ty = cy;
+addEventListener('mousemove', e => { tx = e.clientX; ty = e.clientY; });
+(function boucle(){
+  cx += (tx - cx) * 0.2;
+  cy += (ty - cy) * 0.2;
+  cursor.style.transform = `translate(${cx}px,${cy}px) translate(-50%,-50%)`;
+  requestAnimationFrame(boucle);
+})();
+
+/* ===== CH 64 : echecs contre l'IA (moteur maison, zero librairie) ===== */
+const echecs = (() => {
+  /* --- Plateau "mailbox" 10x12 : cases valides de 21 a 98 --- */
+  const VIDE = '.', HORS = 'x', PROF = 3;
+  const DIRS = {
+    N: [-21, -19, -12, -8, 8, 12, 19, 21],
+    B: [-11, -9, 9, 11],
+    R: [-10, -1, 1, 10],
+    K: [-11, -10, -9, -1, 1, 9, 10, 11]
+  };
+  const VAL = { P: 100, N: 320, B: 330, R: 500, Q: 900, K: 20000 };
+  /* tables de position (vues cote blanc, rangee 8 en haut) */
+  const PST_P = [
+    0,0,0,0,0,0,0,0, 50,50,50,50,50,50,50,50, 10,10,20,30,30,20,10,10,
+    5,5,10,25,25,10,5,5, 0,0,0,20,20,0,0,0, 5,-5,-10,0,0,-10,-5,5,
+    5,10,10,-20,-20,10,10,5, 0,0,0,0,0,0,0,0];
+  const PST_N = [
+    -50,-40,-30,-30,-30,-30,-40,-50, -40,-20,0,0,0,0,-20,-40,
+    -30,0,10,15,15,10,0,-30, -30,5,15,20,20,15,5,-30,
+    -30,0,15,20,20,15,0,-30, -30,5,10,15,15,10,5,-30,
+    -40,-20,0,5,5,0,-20,-40, -50,-40,-30,-30,-30,-30,-40,-50];
+  const PST_K = [
+    -30,-40,-40,-50,-50,-40,-40,-30, -30,-40,-40,-50,-50,-40,-40,-30,
+    -30,-40,-40,-50,-50,-40,-40,-30, -30,-40,-40,-50,-50,-40,-40,-30,
+    -20,-30,-30,-40,-40,-30,-30,-20, -10,-20,-20,-20,-20,-20,-20,-10,
+    20,20,0,0,0,0,20,20, 20,30,10,0,0,10,30,20];
+
+  let b, trait, roque, ep, nbCoups, fini;
+
+  function nouvelle() {
+    b = Array(120).fill(HORS);
+    for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) b[21 + r * 10 + c] = VIDE;
+    const fond = 'rnbqkbnr';
+    for (let c = 0; c < 8; c++) {
+      b[21 + c] = fond[c]; b[31 + c] = 'p';
+      b[81 + c] = 'P'; b[91 + c] = fond[c].toUpperCase();
+    }
+    trait = 'w'; roque = { K: true, Q: true, k: true, q: true };
+    ep = 0; nbCoups = 1; fini = null;
+  }
+
+  const blanc  = p => p !== VIDE && p !== HORS && p === p.toUpperCase();
+  const noir   = p => p !== VIDE && p !== HORS && p === p.toLowerCase();
+  const allie  = (p, cl) => cl === 'w' ? blanc(p) : noir(p);
+  const ennemi = (p, cl) => cl === 'w' ? noir(p) : blanc(p);
+
+  /* la case m est-elle attaquee par la couleur "par" ? */
+  function attaque(m, par) {
+    for (const d of (par === 'w' ? [9, 11] : [-9, -11]))
+      if (b[m + d] === (par === 'w' ? 'P' : 'p')) return true;
+    for (const d of DIRS.N) if (b[m + d] === (par === 'w' ? 'N' : 'n')) return true;
+    for (const d of DIRS.K) if (b[m + d] === (par === 'w' ? 'K' : 'k')) return true;
+    for (const d of DIRS.B) {
+      let s = m + d; while (b[s] === VIDE) s += d;
+      const p = b[s];
+      if (par === 'w' ? (p === 'B' || p === 'Q') : (p === 'b' || p === 'q')) return true;
+    }
+    for (const d of DIRS.R) {
+      let s = m + d; while (b[s] === VIDE) s += d;
+      const p = b[s];
+      if (par === 'w' ? (p === 'R' || p === 'Q') : (p === 'r' || p === 'q')) return true;
+    }
+    return false;
+  }
+  function roi(cl) {
+    const k = cl === 'w' ? 'K' : 'k';
+    for (let m = 21; m < 99; m++) if (b[m] === k) return m;
+    return -1;
+  }
+
+  /* generation des coups pseudo-legaux */
+  function pseudo(cl) {
+    const L = [];
+    const aj = (de, a, extra) => L.push(Object.assign({ de, a, piece: b[de], prise: b[a] }, extra));
+    for (let m = 21; m < 99; m++) {
+      const p = b[m]; if (!allie(p, cl)) continue;
+      const t = p.toUpperCase();
+      if (t === 'P') {
+        const av = cl === 'w' ? -10 : 10;
+        const dep = cl === 'w' ? (m >= 81 && m <= 88) : (m >= 31 && m <= 38);
+        const promo = cl === 'w' ? (m + av <= 28) : (m + av >= 91);
+        if (b[m + av] === VIDE) {
+          aj(m, m + av, promo ? { promo: cl === 'w' ? 'Q' : 'q' } : {});
+          if (dep && b[m + 2 * av] === VIDE) aj(m, m + 2 * av, { double: true });
+        }
+        for (const d of [av - 1, av + 1]) {
+          if (ennemi(b[m + d], cl)) aj(m, m + d, promo ? { promo: cl === 'w' ? 'Q' : 'q' } : {});
+          else if (ep && m + d === ep) aj(m, m + d, { enPassant: true });
+        }
+      } else if (t === 'N' || t === 'K') {
+        for (const d of DIRS[t]) {
+          const c = b[m + d];
+          if (c === VIDE || ennemi(c, cl)) aj(m, m + d, {});
+        }
+        if (t === 'K') {
+          if (cl === 'w' && m === 95) {
+            if (roque.K && b[96] === VIDE && b[97] === VIDE && b[98] === 'R' &&
+                !attaque(95, 'b') && !attaque(96, 'b') && !attaque(97, 'b')) aj(95, 97, { roque: 'K' });
+            if (roque.Q && b[94] === VIDE && b[93] === VIDE && b[92] === VIDE && b[91] === 'R' &&
+                !attaque(95, 'b') && !attaque(94, 'b') && !attaque(93, 'b')) aj(95, 93, { roque: 'Q' });
+          }
+          if (cl === 'b' && m === 25) {
+            if (roque.k && b[26] === VIDE && b[27] === VIDE && b[28] === 'r' &&
+                !attaque(25, 'w') && !attaque(26, 'w') && !attaque(27, 'w')) aj(25, 27, { roque: 'k' });
+            if (roque.q && b[24] === VIDE && b[23] === VIDE && b[22] === VIDE && b[21] === 'r' &&
+                !attaque(25, 'w') && !attaque(24, 'w') && !attaque(23, 'w')) aj(25, 23, { roque: 'q' });
+          }
+        }
+      } else {
+        const dirs = t === 'B' ? DIRS.B : t === 'R' ? DIRS.R : DIRS.K;
+        for (const d of dirs) {
+          let s = m + d;
+          while (b[s] === VIDE) { aj(m, s, {}); s += d; }
+          if (ennemi(b[s], cl)) aj(m, s, {});
+        }
+      }
+    }
+    return L;
+  }
+
+  function jouer(mv) {
+    mv.avRoque = { K: roque.K, Q: roque.Q, k: roque.k, q: roque.q };
+    mv.avEp = ep;
+    b[mv.a] = mv.promo || mv.piece;
+    b[mv.de] = VIDE;
+    ep = mv.double ? (mv.de + mv.a) / 2 : 0;
+    if (mv.enPassant) {
+      mv.pionPris = trait === 'w' ? mv.a + 10 : mv.a - 10;
+      mv.prisePion = b[mv.pionPris];
+      b[mv.pionPris] = VIDE;
+    }
+    if (mv.roque === 'K') { b[96] = 'R'; b[98] = VIDE; }
+    if (mv.roque === 'Q') { b[94] = 'R'; b[91] = VIDE; }
+    if (mv.roque === 'k') { b[26] = 'r'; b[28] = VIDE; }
+    if (mv.roque === 'q') { b[24] = 'r'; b[21] = VIDE; }
+    if (mv.piece === 'K') { roque.K = roque.Q = false; }
+    if (mv.piece === 'k') { roque.k = roque.q = false; }
+    if (mv.de === 91 || mv.a === 91) roque.Q = false;
+    if (mv.de === 98 || mv.a === 98) roque.K = false;
+    if (mv.de === 21 || mv.a === 21) roque.q = false;
+    if (mv.de === 28 || mv.a === 28) roque.k = false;
+    trait = trait === 'w' ? 'b' : 'w';
+  }
+  function dejouer(mv) {
+    trait = trait === 'w' ? 'b' : 'w';
+    b[mv.de] = mv.piece; b[mv.a] = mv.prise;
+    if (mv.enPassant) { b[mv.pionPris] = mv.prisePion; b[mv.a] = VIDE; }
+    if (mv.roque === 'K') { b[98] = 'R'; b[96] = VIDE; }
+    if (mv.roque === 'Q') { b[91] = 'R'; b[94] = VIDE; }
+    if (mv.roque === 'k') { b[28] = 'r'; b[26] = VIDE; }
+    if (mv.roque === 'q') { b[21] = 'r'; b[24] = VIDE; }
+    roque = mv.avRoque; ep = mv.avEp;
+  }
+
+  function legaux(cl) {
+    return pseudo(cl).filter(mv => {
+      jouer(mv);
+      const ok = !attaque(roi(cl), cl === 'w' ? 'b' : 'w');
+      dejouer(mv);
+      return ok;
+    });
+  }
+  const enEchec = cl => attaque(roi(cl), cl === 'w' ? 'b' : 'w');
+
+  /* evaluation (positif = avantage blanc) */
+  function evaluer() {
+    let s = 0;
+    for (let m = 21; m < 99; m++) {
+      const p = b[m]; if (p === VIDE || p === HORS) continue;
+      const t = p.toUpperCase(), w = blanc(p);
+      const r = ((m / 10) | 0) - 2, c = m % 10 - 1;
+      const i = w ? r * 8 + c : (7 - r) * 8 + c;
+      let v = VAL[t];
+      if (t === 'P') v += PST_P[i];
+      else if (t === 'N') v += PST_N[i];
+      else if (t === 'B') v += (PST_N[i] / 2) | 0;
+      else if (t === 'K') v += PST_K[i];
+      s += w ? v : -v;
+    }
+    return s;
+  }
+
+  const INFINI = 1e9;
+  const valPrise = mv => mv.prise !== VIDE ? VAL[mv.prise.toUpperCase()] : (mv.enPassant ? 100 : 0);
+
+  function negamax(prof, alpha, beta, ply) {
+    if (prof === 0) return (trait === 'w' ? 1 : -1) * evaluer();
+    const L = legaux(trait);
+    if (!L.length) return enEchec(trait) ? -100000 + ply : 0;
+    L.sort((a, c) => valPrise(c) - valPrise(a));
+    for (const mv of L) {
+      jouer(mv);
+      const v = -negamax(prof - 1, -beta, -alpha, ply + 1);
+      dejouer(mv);
+      if (v >= beta) return beta;
+      if (v > alpha) alpha = v;
+    }
+    return alpha;
+  }
+
+  function meilleurCoup() {
+    const L = legaux(trait);
+    if (!L.length) return null;
+    /* petit melange pour varier les parties, puis captures en tete */
+    for (let i = L.length - 1; i > 0; i--) {
+      const j = (Math.random() * (i + 1)) | 0;
+      [L[i], L[j]] = [L[j], L[i]];
+    }
+    L.sort((a, c) => valPrise(c) - valPrise(a));
+    let best = null, bestV = -INFINI, alpha = -INFINI;
+    for (const mv of L) {
+      jouer(mv);
+      const v = -negamax(PROF - 1, -INFINI, -alpha, 1);
+      dejouer(mv);
+      if (v > bestV) { bestV = v; best = mv; if (v > alpha) alpha = v; }
+    }
+    return best;
+  }
+
+  /* --- Interface --- */
+  const plateau = document.getElementById('echecs-plateau');
+  const statutEl = document.getElementById('echecs-statut');
+  const coupsEl = document.getElementById('echecs-coups');
+  const GLYPHE = { P: '\u265F', N: '\u265E', B: '\u265D', R: '\u265C', Q: '\u265B', K: '\u265A' };
+  let selection = null, ciblesSel = [], dernier = null, reflexion = false;
+
+  const statut = t => { statutEl.textContent = t; };
+
+  function dessiner() {
+    const caseEchec = enEchec(trait) ? roi(trait) : -1;
+    plateau.innerHTML = '';
+    for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) {
+      const m = 21 + r * 10 + c, p = b[m];
+      const d = document.createElement('div');
+      d.className = 'case' + ((r + c) % 2 ? ' sombre' : '');
+      if (selection === m) d.classList.add('sel');
+      if (dernier && (dernier.de === m || dernier.a === m)) d.classList.add('dernier');
+      const cible = ciblesSel.find(mv => mv.a === m);
+      if (cible) d.classList.add(cible.prise !== VIDE || cible.enPassant ? 'prise' : 'cible');
+      if (m === caseEchec) d.classList.add('roi-echec');
+      if (p !== VIDE) {
+        const s = document.createElement('span');
+        s.className = blanc(p) ? 'piece-blanc' : 'piece-noir';
+        s.textContent = GLYPHE[p.toUpperCase()];
+        d.appendChild(s);
+      }
+      d.addEventListener('click', () => clicCase(m));
+      plateau.appendChild(d);
+    }
+    coupsEl.textContent = 'COUP ' + String(nbCoups).padStart(3, '0');
+  }
+
+  function majStatut() {
+    if (fini === 'mat') {
+      if (trait === 'w') statut('Echec et mat, l\u2019IA gagne');
+      else statut('Echec et mat, tu gagnes ! \uD83C\uDFC6');
+    } else if (fini === 'pat') statut('Pat : match nul');
+    else if (reflexion) statut('L\u2019IA r\u00E9fl\u00E9chit...');
+    else if (enEchec('w')) statut('\u00C9chec ! \u00C0 toi de jouer');
+    else statut('\u00C0 toi de jouer (blancs)');
+  }
+
+  function verifierFin() {
+    if (!legaux(trait).length) {
+      fini = enEchec(trait) ? 'mat' : 'pat';
+      if (fini === 'mat') (trait === 'w' ? sons.perdu() : sons.gagne());
+    }
+  }
+
+  function appliquer(mv) {
+    jouer(mv);
+    dernier = mv;
+    if (trait === 'w') nbCoups++;
+    selection = null; ciblesSel = [];
+    if (mv.prise !== VIDE || mv.enPassant) sons.brique(300 + Math.random() * 200);
+    else if (mv.roque) sons.gare();
+    else sons.clic();
+    verifierFin();
+    if (!fini && enEchec(trait)) sons.retard();
+    dessiner();
+    majStatut();
+  }
+
+  function clicCase(m) {
+    if (fini || reflexion || trait !== 'w') return;
+    const cible = ciblesSel.find(mv => mv.a === m);
+    if (selection !== null && cible) {
+      appliquer(cible);
+      if (fini) return;
+      reflexion = true;
+      majStatut();
+      setTimeout(() => {
+        const rep = meilleurCoup();
+        reflexion = false;
+        if (rep) appliquer(rep); else { verifierFin(); dessiner(); majStatut(); }
+      }, 350 + Math.random() * 400);
+      return;
+    }
+    if (allie(b[m], 'w')) {
+      selection = m;
+      ciblesSel = legaux('w').filter(mv => mv.de === m);
+      sons.survol();
+    } else { selection = null; ciblesSel = []; }
+    dessiner();
+  }
+
+  document.getElementById('echecs-reset').addEventListener('click', () => {
+    nouvelle();
+    selection = null; ciblesSel = []; dernier = null; reflexion = false;
+    sons.demarrer();
+    dessiner(); majStatut();
+  });
+
+  nouvelle();
+  return {
+    afficher() { dessiner(); majStatut(); },
+    _dev: { legaux: cl => legaux(cl), jouer, dejouer, nouvelle, meilleurCoup, enEchec, etat: () => ({ trait, fini, ep, roque }) }
+  };
+})();
+
+/* --- Chaine secrete CH 64 : echecs --- */
+function afficherEchecs() {
+  masquerArcade();
+  canalCourant = -2;
+  document.getElementById('tv-canal').textContent = 'CH 64';
+  document.querySelector('.tv-contenu').style.display = 'none';
+  document.getElementById('tv-echecs').style.display = '';
+  echecs.afficher();
+}
+function masquerEchecs() {
+  if (document.getElementById('tv-echecs').style.display === 'none') return;
+  document.getElementById('tv-echecs').style.display = 'none';
+  document.querySelector('.tv-contenu').style.display = '';
+}
+
+/* ===== Sound design : chiptune synthétisé (Web Audio, zéro fichier) ===== */
+const sons = (() => {
+  let ctx = null, master = null, bufBruit = null;
+  let actif = localStorage.getItem('caron-son') !== 'off';
+
+  function init() {
+    if (ctx) return;
+    ctx = new (window.AudioContext || window.webkitAudioContext)();
+    master = ctx.createGain();
+    master.gain.value = 0.16;
+    master.connect(ctx.destination);
+    const n = ctx.sampleRate * 0.5;
+    bufBruit = ctx.createBuffer(1, n, ctx.sampleRate);
+    const d = bufBruit.getChannelData(0);
+    for (let i = 0; i < n; i++) d[i] = Math.random() * 2 - 1;
+  }
+  /* déverrouillage au premier geste (politique des navigateurs) */
+  const unlock = () => { init(); if (ctx.state === 'suspended') ctx.resume(); };
+  addEventListener('pointerdown', unlock, { once: true });
+  addEventListener('keydown', unlock, { once: true });
+  addEventListener('touchend', unlock, { once: true });
+
+  function blip(freq, duree = 0.07, type = 'square', vol = 1, glisse = null) {
+    if (!actif || !ctx || ctx.state !== 'running') return;
+    const o = ctx.createOscillator(), g = ctx.createGain(), t = ctx.currentTime;
+    o.type = type;
+    o.frequency.setValueAtTime(freq, t);
+    if (glisse) o.frequency.exponentialRampToValueAtTime(glisse, t + duree);
+    g.gain.setValueAtTime(0.6 * vol, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + duree);
+    o.connect(g); g.connect(master);
+    o.start(t); o.stop(t + duree + 0.02);
+  }
+  function bruit(duree = 0.2, vol = 1) {
+    if (!actif || !ctx || ctx.state !== 'running') return;
+    const s = ctx.createBufferSource(), g = ctx.createGain(), t = ctx.currentTime;
+    s.buffer = bufBruit; s.loop = true;
+    g.gain.setValueAtTime(0.35 * vol, t);
+    g.gain.exponentialRampToValueAtTime(0.001, t + duree);
+    s.connect(g); g.connect(master);
+    s.start(t); s.stop(t + duree + 0.02);
+  }
+  function arp(freqs, pas = 0.09, type = 'square') {
+    freqs.forEach((f, i) => setTimeout(() => blip(f, pas * 0.95, type), i * pas * 1000));
+  }
+
+  return {
+    get actif() { return actif; },
+    basculer() {
+      actif = !actif;
+      localStorage.setItem('caron-son', actif ? 'on' : 'off');
+      if (actif) { unlock(); blip(880, 0.08); }
+      return actif;
+    },
+    survol()   { blip(1800, 0.02, 'square', 0.18); },
+    clic()     { blip(660, 0.05); },
+    tvOn()     { bruit(0.12, 0.6); blip(120, 0.3, 'sine', 1, 760); },
+    tvOff()    { blip(620, 0.28, 'sine', 1, 70); },
+    zap()      { bruit(0.26); },
+    demarrer() { arp([880, 1320], 0.08); },
+    raquette() { blip(210, 0.04, 'square', 0.7); },
+    brique(f)  { blip(f, 0.05, 'square', 0.8); },
+    gagne()    { arp([523, 659, 784, 1047], 0.1); },
+    perdu()    { arp([392, 294, 220, 131], 0.12); },
+    flap()     { blip(1400 + Math.random() * 800, 0.016, 'square', 0.12); },
+    vapeur()   { bruit(0.06, 0.5); blip(95, 0.05, 'triangle', 0.5); },
+    sifflet()  { blip(740, 0.5, 'triangle', 0.5, 690); blip(1109, 0.5, 'triangle', 0.3, 1035); },
+    gare()     { arp([988, 1319, 1760], 0.07); },
+    retard()   { arp([494, 415, 349], 0.14, 'triangle'); },
+    retro()    { bruit(0.3, 0.5); blip(320, 0.5, 'sine', 1, 70); }
+  };
+})();
+
+/* ===== Mire TV : masquage à la fin du chargement ===== */
+const mireT0 = Date.now();
+function cacherMire() {
+  const mire = document.getElementById('mire');
+  if (!mire) return;
+  const attente = Math.max(0, 700 - (Date.now() - mireT0)); // mire visible au moins 700 ms
+  setTimeout(() => {
+    mire.classList.add('fin');
+    setTimeout(() => mire.remove(), 500);
+  }, attente);
+}
+
+/* ===== Compteurs animés ===== */
+function initCompteurs() {
+  const nums = document.querySelectorAll('.stat-num');
+  if (!nums.length) return;
+  const reduit = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const obsNum = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      obsNum.unobserve(e.target);
+      const cible = +e.target.dataset.cible;
+      const suffixe = e.target.textContent.replace(/^0/, '');
+      if (reduit) { e.target.textContent = cible + suffixe; return; }
+      const t0 = performance.now(), duree = 1000;
+      (function tick(t) {
+        const p = Math.min(1, (t - t0) / duree);
+        const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+        e.target.textContent = Math.round(cible * eased) + suffixe;
+        if (p < 1) requestAnimationFrame(tick);
+      })(t0);
+    });
+  }, { threshold: 0.5 });
+  nums.forEach(n => obsNum.observe(n));
+}
+
+/* ===== Boutons magnétiques ===== */
+function initMagnetisme() {
+  if (!matchMedia('(hover: hover)').matches ||
+      matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  document.querySelectorAll('.btn, nav a, .contact .mail').forEach(el => {
+    el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width / 2);
+      const dy = e.clientY - (r.top + r.height / 2);
+      el.style.transform = `translate(${dx * 0.18}px, ${dy * 0.28}px)`;
+    });
+    el.addEventListener('mouseleave', () => { el.style.transform = ''; });
+  });
+}
+
+/* ===== Easter egg : mode rétro noir & blanc ===== */
+let retroEnCours = false;
+function modeRetro() {
+  if (retroEnCours) return;
+  retroEnCours = true;
+  sons.retro();
+  const scan = document.getElementById('retro-scan');
+  const centre = document.getElementById('badge-centre');
+  document.documentElement.classList.add('retro');
+  scan.classList.add('actif');
+  if (centre) centre.textContent = '📼';
+  setTimeout(() => {
+    document.documentElement.classList.remove('retro');
+    scan.classList.remove('actif');
+    if (centre) centre.textContent = '★';
+    retroEnCours = false;
+  }, 1400);
+}
+
+const badge = document.getElementById('badge');
+if (badge) {
+  badge.addEventListener('click', modeRetro);
+  badge.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); modeRetro(); }
+  });
+  badge.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+  badge.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+}
+
+/* ===== Section parcours : la ligne de train ===== */
+const TRAIN_SVG = `
+<svg id="train" viewBox="0 0 60 110" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+  <!-- tender a charbon (arriere) -->
+  <rect x="12" y="3" width="36" height="26" rx="4" fill="var(--encre)"/>
+  <rect x="18" y="8" width="6" height="6" fill="var(--papier)" opacity=".35"/>
+  <rect x="30" y="14" width="6" height="6" fill="var(--papier)" opacity=".35"/>
+  <rect x="22" y="20" width="6" height="5" fill="var(--papier)" opacity=".35"/>
+  <!-- cabine du mecanicien -->
+  <rect x="8" y="31" width="44" height="22" rx="3" fill="var(--rouge)" stroke="var(--encre)" stroke-width="4"/>
+  <rect x="19" y="37" width="22" height="10" fill="var(--papier)" stroke="var(--encre)" stroke-width="3"/>
+  <!-- chaudiere -->
+  <rect x="13" y="53" width="34" height="46" rx="13" fill="var(--encre)"/>
+  <rect x="15" y="64" width="30" height="4" fill="var(--jaune)"/>
+  <rect x="15" y="80" width="30" height="4" fill="var(--jaune)"/>
+  <!-- dome de vapeur -->
+  <circle cx="30" cy="72" r="6" fill="var(--jaune)" stroke="var(--encre)" stroke-width="3"/>
+  <!-- cheminee (avant) -->
+  <circle cx="30" cy="92" r="7.5" fill="var(--encre)" stroke="var(--papier)" stroke-width="3"/>
+  <circle cx="30" cy="92" r="2.5" fill="var(--papier)"/>
+  <!-- traverse avant et tampons -->
+  <rect x="10" y="101" width="40" height="7" fill="var(--rouge)" stroke="var(--encre)" stroke-width="3"/>
+  <circle cx="17" cy="108" r="2" fill="var(--encre)"/>
+  <circle cx="43" cy="108" r="2" fill="var(--encre)"/>
+</svg>`;
+
+const FLAP_CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-';
+const mouvementReduit = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Effet panneau a palettes (split-flap) : les lettres defilent puis se calent */
+function splitFlap(el) {
+  const fin = el.textContent;
+  if (mouvementReduit || !fin.trim() || el.dataset.flap) return;
+  el.dataset.flap = '1';
+  const chars = [...fin];
+  const affiche = chars.map(c => /\s/.test(c) ? c : FLAP_CHARS[Math.random() * FLAP_CHARS.length | 0]);
+  const tours = chars.map((c, i) => /\s/.test(c) ? 0 : 3 + Math.min(i, 16) + (Math.random() * 3 | 0));
+  el.textContent = affiche.join('');
+  let tic = 0;
+  const iv = setInterval(() => {
+    let fini = true;
+    chars.forEach((c, i) => {
+      if (tours[i] > 0) {
+        tours[i]--; fini = false;
+        affiche[i] = tours[i] === 0 ? c : FLAP_CHARS[Math.random() * FLAP_CHARS.length | 0];
+      }
+    });
+    el.textContent = affiche.join('');
+    if (tic++ % 2 === 0) sons.flap();
+    if (fini) clearInterval(iv);
+  }, 42);
+}
+
+function initTrain() {
+  const wrap = document.getElementById('voie-wrap');
+  const voie = document.getElementById('voie');
+  if (!wrap || !voie || voie.dataset.pret) return;
+  voie.dataset.pret = '1';
+
+  const items = [...wrap.querySelectorAll('.parcours-item')];
+  if (!items.length) return;
+
+  /* Une gare par etape du parcours */
+  const nodes = items.map(it => {
+    const n = document.createElement('div');
+    n.className = 'gare-node' + (it.classList.contains('travail') ? ' travail' : '');
+    voie.appendChild(n);
+    return n;
+  });
+  let gares = [];
+  function mesurer() {
+    const top = voie.getBoundingClientRect().top + scrollY;
+    gares = items.map((it, i) => {
+      const r = it.getBoundingClientRect();
+      const y = r.top + scrollY - top + r.height / 2;
+      nodes[i].style.top = (y - 10) + 'px';
+      return y;
+    });
+  }
+  mesurer();
+  addEventListener('resize', mesurer);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(mesurer);
+
+  /* Split-flap quand chaque etape entre a l'ecran */
+  const obsFlap = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      const an = e.target.querySelector('.annee');
+      const h3 = e.target.querySelector('h3');
+      if (an) splitFlap(an);
+      if (h3) setTimeout(() => splitFlap(h3), 120);
+      obsFlap.unobserve(e.target);
+    });
+  }, { threshold: 0.3 });
+  items.forEach(it => obsFlap.observe(it));
+
+  /* Le train */
+  voie.insertAdjacentHTML('beforeend', TRAIN_SVG);
+  const train = document.getElementById('train');
+  const hTrain = () => train.getBoundingClientRect().height || 90;
+
+  /* Easter egg : 3 clics sur le train = info trafic */
+  let clics = 0, chrono = null;
+  train.addEventListener('click', () => {
+    sons.clic();
+    clearTimeout(chrono);
+    chrono = setTimeout(() => clics = 0, 1400);
+    if (++clics >= 3) {
+      clics = 0;
+      afficherToastTrain('\u25c9 INFO TRAFIC : votre parcours arrive avec un retard estim\u00e9 de 15 min. Merci de votre compr\u00e9hension.');
+      sons.retard();
+    }
+  });
+  if (typeof cursor !== 'undefined' && cursor) {
+    train.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    train.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  }
+
+  if (mouvementReduit) { train.style.transform = 'translateY(0)'; return; }
+
+  /* Avancee au scroll, lissee, avec clac-clac et arrivees en gare */
+  let y = 0, cible = 0, distSon = 0, derniereFumee = 0, dernierSifflet = -1e9, enMouvement = false;
+  const desservies = new Set();
+
+  function calcCible() {
+    const r = voie.getBoundingClientRect();
+    const prog = Math.min(1, Math.max(0, (innerHeight * 0.55 - r.top) / r.height));
+    cible = prog * Math.max(0, r.height - hTrain());
+  }
+  addEventListener('scroll', calcCible, { passive: true });
+  calcCible();
+
+  (function roule() {
+    const avant = y;
+    y += (cible - y) * 0.085;
+    const v = y - avant;
+    const vAbs = Math.abs(v);
+    if (vAbs > 0.05) {
+      const balancement = Math.sin(y / 14) * Math.min(2.5, vAbs * 0.6);
+      train.style.transform = `translateY(${y}px) translateX(${balancement}px)`;
+      const maintenant = performance.now();
+      /* sifflet au depart */
+      if (!enMouvement && vAbs > 1.5 && maintenant - dernierSifflet > 6000) {
+        dernierSifflet = maintenant;
+        sons.sifflet();
+      }
+      /* souffle de vapeur rythme */
+      distSon += vAbs;
+      if (distSon > 110) { distSon = 0; sons.vapeur(); }
+      /* panaches de fumee depuis la cheminee */
+      if (vAbs > 0.4 && maintenant - derniereFumee > 110) {
+        derniereFumee = maintenant;
+        const f = document.createElement('div');
+        f.className = 'fumee';
+        f.style.top = (y + hTrain() - 16) + 'px';
+        f.style.setProperty('--dx', (Math.random() * 40 - 20).toFixed(0) + 'px');
+        f.style.setProperty('--dy', ((v > 0 ? -1 : 1) * (55 + Math.random() * 45)).toFixed(0) + 'px');
+        voie.appendChild(f);
+        setTimeout(() => f.remove(), 1400);
+      }
+      const centre = y + hTrain() / 2;
+      gares.forEach((g, i) => {
+        if (!desservies.has(i) && Math.abs(centre - g) < 26) {
+          desservies.add(i);
+          nodes[i].classList.add('desservie', 'flash');
+          sons.gare();
+        }
+      });
+    }
+    enMouvement = vAbs > 0.3;
+    requestAnimationFrame(roule);
+  })();
+}
+
+let toastTrainChrono = null;
+function afficherToastTrain(msg) {
+  let t = document.getElementById('toast-train');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast-train';
+    t.setAttribute('role', 'status');
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  requestAnimationFrame(() => t.classList.add('visible'));
+  clearTimeout(toastTrainChrono);
+  toastTrainChrono = setTimeout(() => t.classList.remove('visible'), 4200);
+}
+
+/* ===== Bouton son ON/OFF ===== */
+const sonToggle = document.getElementById('son-toggle');
+function majSonToggle() {
+  sonToggle.textContent = sons.actif ? '♪ ON' : '♪ OFF';
+  sonToggle.classList.toggle('coupe', !sons.actif);
+  sonToggle.setAttribute('aria-pressed', sons.actif);
+}
+sonToggle.addEventListener('click', () => { sons.basculer(); majSonToggle(); });
+sonToggle.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+sonToggle.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+majSonToggle();
+
+charger()
+  .then(() => { initCompteurs(); initMagnetisme(); })
+  .catch(err => console.error('Erreur de chargement des contenus :', err))
+  .finally(cacherMire);
+</script>
+</body>
+</html>
