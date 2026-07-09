@@ -104,7 +104,10 @@ async function charger() {
             <div class="annee">${esc(p.annee)}</div>
             <span class="type-badge">${badge}</span>
           </div>
-          <div><h3>${esc(p.titre)}</h3><p>${esc(p.description)}</p></div>
+          <div>
+            <h3>${esc(p.titre)}</h3><p>${esc(p.description)}</p>
+            ${(p.faits && p.faits.length) ? `<ul class="faits">${p.faits.map(f => `<li>${esc(f)}</li>`).join('')}</ul>` : ''}
+          </div>
         </div>`;
       }).join('');
     initTrain();
@@ -243,6 +246,17 @@ function remplirTV(index) {
   document.getElementById('tv-tag').textContent = p.tag || '';
   document.getElementById('tv-titre').textContent = p.titre || '';
   document.getElementById('tv-description').textContent = p.description || '';
+
+  /* fiche rôle / outils / résultat (masquée si le projet n'en a pas) */
+  const fiche = document.getElementById('tv-fiche');
+  if (fiche) {
+    document.getElementById('tv-role').textContent = p.role || '';
+    document.getElementById('tv-outils').textContent = p.outils || '';
+    document.getElementById('tv-resultat').textContent = p.resultat || '';
+    fiche.classList.toggle('vide', !(p.role || p.outils || p.resultat));
+    fiche.querySelectorAll('div').forEach(l =>
+      l.style.display = l.querySelector('dd').textContent ? '' : 'none');
+  }
 
   const lien = document.getElementById('tv-lien');
   if (p.lien && p.lien !== '#') { lien.href = p.lien; lien.style.display = 'inline-block'; }
@@ -1248,6 +1262,13 @@ function initGareBoard(etapes) {
   obsBoard.observe(board);
 }
 
+/* ===== Page contact : FAQ ===== */
+document.querySelectorAll('.faq-item summary').forEach(s => {
+  s.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+  s.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+  s.addEventListener('click', () => { try { sons.clic(); } catch (e) {} });
+});
+
 /* ===== Page contact : formulaire Netlify en AJAX ===== */
 (function initFormulaire() {
   const form = document.getElementById('formulaire');
@@ -1410,6 +1431,55 @@ const pxTransition = (() => {
       e.preventDefault();
       pxTransition.partir(a.href, a.dataset.page);
     });
+  });
+})();
+
+
+/* ===== Code secret global : haut haut bas gauche droite ===== */
+(function initCodeSecret() {
+  const canvas = document.getElementById('px-canvas');
+  if (!canvas) return;
+  const SUITE = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+  const COULEURS = ['#FFD400', '#FF3B00', '#2318E0', '#F1EDE2'];
+  let position = 0, enCours = false;
+
+  function pluie() {
+    if (enCours || canvas.classList.contains('actif')) return;   // jamais pendant une transition
+    enCours = true;
+    try { sons.gagne(); } catch (e) {}
+    afficherToastTrain('◉ CODE SECRET ACCEPTÉ : pluie de pixels offerte par la régie');
+    const ctx = canvas.getContext('2d');
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    const W = innerWidth, H = innerHeight;
+    canvas.width = W * dpr; canvas.height = H * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    canvas.classList.add('actif');
+    const t = Math.max(18, Math.round(W / 44));                  // taille d'un pixel
+    const gouttes = Array.from({ length: Math.round(W / t) * 2 }, () => ({
+      x: (Math.random() * W / t | 0) * t,
+      y: -Math.random() * H,
+      v: 4 + Math.random() * 7,
+      c: COULEURS[Math.random() * COULEURS.length | 0]
+    }));
+    const fin = performance.now() + 2200;
+    (function tombe(now) {
+      ctx.clearRect(0, 0, W, H);
+      const restant = fin - now;
+      gouttes.forEach(g => {
+        g.y += g.v;
+        if (g.y > H && restant > 600) { g.y = -t * (1 + Math.random() * 8); }
+        ctx.fillStyle = g.c;
+        ctx.fillRect(g.x, (g.y / t | 0) * t, t - 2, t - 2);      // chute crantée, pixel oblige
+      });
+      if (restant > 0 || gouttes.some(g => g.y < H)) requestAnimationFrame(tombe);
+      else { ctx.clearRect(0, 0, W, H); canvas.classList.remove('actif'); enCours = false; }
+    })(performance.now());
+  }
+
+  addEventListener('keydown', e => {
+    if (overlay.classList.contains('ouvert')) return;            // pas pendant la TV (flèches = zapping)
+    position = e.key === SUITE[position] ? position + 1 : (e.key === SUITE[0] ? 1 : 0);
+    if (position === SUITE.length) { position = 0; pluie(); }
   });
 })();
 

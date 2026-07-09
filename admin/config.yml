@@ -66,6 +66,9 @@ collections:
               - { name: tag, label: "Étiquette (coin droit)", widget: string }
               - { name: titre, label: "Titre du projet", widget: string }
               - { name: description, label: "Description", widget: text }
+              - { name: role, label: "Rôle (fiche TV)", widget: string, required: false, hint: "Ex : Design produit et prototypage" }
+              - { name: outils, label: "Outils (fiche TV)", widget: string, required: false, hint: "Ex : Lovable, Supabase, Figma" }
+              - { name: resultat, label: "Résultat (fiche TV)", widget: string, required: false, hint: "Un résultat concret, chiffré si possible" }
               - { name: lien, label: "Lien vers la page du projet", widget: string, required: false, hint: "URL complète (https://…). Laisse vide pour masquer le bouton dans la fenêtre." }
               - name: couleur
                 label: "Couleur du visuel"
@@ -101,6 +104,12 @@ collections:
               - { name: annee, label: "Année(s)", widget: string, hint: "Ex : 2025-26" }
               - { name: titre, label: "Titre", widget: string }
               - { name: description, label: "Description", widget: text }
+              - name: faits
+                label: "Faits concrets (pastilles sous l'étape)"
+                label_singular: "fait"
+                widget: list
+                required: false
+                field: { name: item, label: "Fait", widget: string }
               - name: type
                 label: "Type d'étape"
                 widget: select

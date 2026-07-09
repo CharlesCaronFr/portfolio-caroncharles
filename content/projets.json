@@ -7,7 +7,10 @@
       "titre": "Zikk : Découverte musicale locale",
       "description": "Conception d'une app de découverte d'artistes émergents par ville : écoute à l'aveugle façon swipe, carte des concerts, gamification et abonnements créateurs. Design produit & prototypage no-code.",
       "couleur": "jaune",
-      "lien": ""
+      "lien": "",
+      "role": "Design produit et prototypage",
+      "outils": "Lovable, Supabase, Stripe, Figma",
+      "resultat": "MVP fonctionnel : écoute à l'aveugle, carte des concerts et trois offres d'abonnement artistes"
     },
     {
       "emoji": "🃏",
@@ -16,7 +19,10 @@
       "titre": "Omniscius : Jeu de 54 cartes",
       "description": "Co-création d'un jeu de 54 cartes au design entièrement revisité. 300 exemplaires vendus au profit de l'association « Les Clowns de l'Espoir », avant le lancement d'une campagne de financement.",
       "couleur": "rouge",
-      "lien": "https://omniscius.fr"
+      "lien": "https://omniscius.fr",
+      "role": "Co-création, production et vente",
+      "outils": "Illustrator, chaîne d'impression, omniscius.fr",
+      "resultat": "300 exemplaires vendus au profit de l'association Les Clowns de l'Espoir"
     },
     {
       "emoji": "📡",
@@ -25,7 +31,10 @@
       "titre": "Stratégie de com' d'une nouvelle unité",
       "description": "Structuration de la communication interne d'une unité opérationnelle nouvellement créée : identité visuelle, communauté Viva Engage, refonte SharePoint et rituels managériaux hebdomadaires.",
       "couleur": "rouge",
-      "lien": ""
+      "lien": "",
+      "role": "Chargé de communication interne",
+      "outils": "Canva Pro, Viva Engage, SharePoint",
+      "resultat": "Identité visuelle, communauté interne active et rituel hebdomadaire installés en moins d'un an"
     },
     {
       "emoji": "🧠",
@@ -34,7 +43,10 @@
       "titre": "Workspace IA en local",
       "description": "Mise en place d'un espace de travail IA auto-hébergé : Docker, modèles locaux via Ollama, exploration des usages IA au quotidien pour la productivité et la création de contenu.",
       "couleur": "blanc",
-      "lien": ""
+      "lien": "",
+      "role": "Installation et administration",
+      "outils": "Docker, Ollama, modèles open source",
+      "resultat": "Assistant IA 100 % local : aucune donnée n'en sort, usage quotidien pour produire plus vite"
     },
     {
       "emoji": "🛒",
@@ -43,7 +55,10 @@
       "titre": "Marketplace de produits régionaux",
       "description": "Étude d'un concept de marketplace dédiée aux produits du terroir français : analyse concurrentielle, positionnement et feuille de route en trois phases (validation, build, croissance).",
       "couleur": "jaune",
-      "lien": ""
+      "lien": "",
+      "role": "Étude de marché et cadrage",
+      "outils": "Analyse concurrentielle, business model canvas",
+      "resultat": "Feuille de route en trois phases : validation, build, croissance"
     }
   ]
 }

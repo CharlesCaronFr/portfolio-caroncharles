@@ -4,31 +4,57 @@
       "annee": "2025-26",
       "titre": "Bachelor Chef de Projet digital, CESI Arras",
       "description": "Formation en alternance : pilotage de projets digitaux, stratégie de communication, gestion d'équipe et conduite du changement.",
-      "type": "ecole"
+      "type": "ecole",
+      "faits": [
+        "Pilotage et qualité de projet",
+        "Cas clients en conditions réelles",
+        "Soutenances et livrables notés"
+      ]
     },
     {
       "annee": "2023-26",
       "titre": "Chargé de communication interne, SNCF Voyageurs",
       "description": "Au sein de l'Axe TGV Nord puis de l'équipe trains : fluidifier l'information, renforcer la cohésion et valoriser les initiatives via un journal interne mensuel (l'Actu d'Axe), un site intranet et une communauté Viva Engage.",
-      "type": "travail"
+      "type": "travail",
+      "faits": [
+        "Journal interne mensuel : l'Actu d'Axe",
+        "Site intranet SharePoint",
+        "Communauté Viva Engage",
+        "Rituel hebdo de Management Visuel"
+      ]
     },
     {
       "annee": "2024-25",
       "titre": "Co-créateur d'Omniscius",
       "description": "Création d'un jeu de 54 cartes au design entièrement revisité, avec 300 exemplaires vendus au profit de l'association « Les Clowns de l'Espoir » avant le lancement d'une campagne de financement.",
-      "type": "travail"
+      "type": "travail",
+      "faits": [
+        "Direction artistique des 54 cartes",
+        "Production et logistique",
+        "300 exemplaires vendus"
+      ]
     },
     {
       "annee": "2023-25",
       "titre": "Développeur Web option communication (bac +2), CESI Arras",
       "description": "Développement web, intégration et communication digitale : les fondations techniques derrière mes projets.",
-      "type": "ecole"
+      "type": "ecole",
+      "faits": [
+        "HTML, CSS, JS et intégration",
+        "Bases de données",
+        "Communication digitale"
+      ]
     },
     {
       "annee": "2022-23",
       "titre": "Graduate Graphiste multimédia (bac +2), Studi",
       "description": "Design graphique et multimédia : identité visuelle, mise en page et création de contenus.",
-      "type": "ecole"
+      "type": "ecole",
+      "faits": [
+        "Identité visuelle",
+        "Mise en page print et web",
+        "Création multimédia"
+      ]
     }
   ]
 }
