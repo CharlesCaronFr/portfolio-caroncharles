@@ -60,6 +60,27 @@ try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-i
     <a id="lien-linkedin" href="#" target="_blank" rel="noopener">LinkedIn ↗</a>
     <a id="lien-cv" href="#">Télécharger le CV ↓</a>
   </div>
+
+  <form class="formulaire" id="formulaire" name="contact" method="POST" action="/" data-netlify="true" netlify-honeypot="champ-piege">
+    <p class="cache-piege"><label>Ne pas remplir : <input name="champ-piege"></label></p>
+    <input type="hidden" name="form-name" value="contact">
+    <div class="form-rang">
+      <label>Nom
+        <input type="text" name="nom" required autocomplete="name" placeholder="Ton nom">
+      </label>
+      <label>Email
+        <input type="email" name="email" required autocomplete="email" placeholder="ton@email.fr">
+      </label>
+    </div>
+    <label>Message
+      <textarea name="message" rows="5" required placeholder="Un projet, une alternance, une partie d'échecs..."></textarea>
+    </label>
+    <div class="form-pied">
+      <button type="submit" class="btn btn-plein form-envoi" id="form-envoi">Envoyer le message ►</button>
+      <span class="form-note">Réponse sous 24h · Lille, FR-59</span>
+    </div>
+    <p class="form-statut" id="form-statut" role="status" aria-live="polite"></p>
+  </form>
 </section>
 
 <!-- Fenêtre TV cathodique (disponible sur toutes les pages : projets, CH 00 arcade, CH 64 échecs) -->

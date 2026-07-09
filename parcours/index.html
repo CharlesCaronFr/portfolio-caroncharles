@@ -55,10 +55,24 @@ try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-i
 <section class="parcours" id="parcours">
   <span class="num">01 / PARCOURS</span>
   <h2 class="titre-section">Parcours</h2>
+  <div class="gare-board" id="gare-board" aria-label="Panneau d'affichage du parcours">
+    <div class="gare-ligne"><span class="gare-cle">Départ</span><span class="gare-val" id="gare-depart">----</span></div>
+    <div class="gare-ligne"><span class="gare-cle">Arrivée</span><span class="gare-val" id="gare-arrivee">----</span></div>
+    <div class="gare-ligne"><span class="gare-cle">Voie</span><span class="gare-val" id="gare-voie">59</span></div>
+    <div class="gare-ligne"><span class="gare-cle">État</span><span class="gare-val gare-ok" id="gare-etat">A L'HEURE</span></div>
+  </div>
   <div class="voie-wrap" id="voie-wrap">
     <div class="voie" id="voie" aria-hidden="true"></div>
     <div id="liste-parcours"></div>
   </div>
+  <aside class="prochaine-dest" aria-label="Prochaine destination">
+    <span class="dest-node" aria-hidden="true"></span>
+    <div>
+      <span class="dest-cle">Prochaine destination</span>
+      <h3>CDI Chef de projet digital</h3>
+      <p>Diplômé mi-2026, en quête du prochain terminus : pilotage de projets digitaux, communication et produit. <a href="/contact/" data-page="Contact">Réserver un billet →</a></p>
+    </div>
+  </aside>
 </section>
 
 <!-- Fenêtre TV cathodique (disponible sur toutes les pages : projets, CH 00 arcade, CH 64 échecs) -->

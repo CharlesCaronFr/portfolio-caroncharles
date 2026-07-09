@@ -664,3 +664,102 @@ html.px-in #mire{display:none;}
   #px-canvas{display:none!important;}
   #px-cover{display:none!important;}
 }
+
+
+/* ============ ACCUEIL : TEASER PROJETS ============ */
+.teaser-cta{margin-top:40px;}
+.teaser-cta .btn{background:var(--jaune);}
+
+/* ============ PROJETS : GUIDE TV + FILTRES ============ */
+.guide-tv{
+  color:var(--jaune);font-weight:700;font-size:.85rem;text-transform:uppercase;
+  margin:-28px 0 24px;letter-spacing:.03em;
+}
+.guide-tv .clign{color:var(--papier);}
+.filtres{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:36px;}
+.filtre{
+  font-family:'Space Mono';font-weight:700;font-size:.78rem;text-transform:uppercase;
+  border:3px solid var(--encre);background:var(--papier);padding:8px 14px;
+  box-shadow:var(--ombre-sm);cursor:none;
+  transition:transform .12s,box-shadow .12s,background .12s,color .12s;
+}
+.filtre:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--encre);}
+.filtre.actif{background:var(--jaune);transform:translate(2px,2px);box-shadow:1px 1px 0 var(--encre);}
+.carte.filtre-off{display:none;}
+.grille.zappe{animation:grille-zap .18s steps(3);}
+@keyframes grille-zap{
+  0%{opacity:.25;transform:translateX(-2px);}
+  50%{opacity:.7;transform:translateX(2px);}
+  100%{opacity:1;transform:none;}
+}
+
+/* ============ PARCOURS : PANNEAU DE GARE ============ */
+.gare-board{
+  background:var(--encre);color:var(--papier);
+  border:4px solid var(--encre);box-shadow:var(--ombre);
+  max-width:560px;margin:0 auto 56px;padding:20px 24px;
+  display:grid;gap:10px;
+}
+.gare-ligne{
+  display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+  border-bottom:2px dashed rgba(241,237,226,.25);padding-bottom:8px;
+}
+.gare-ligne:last-child{border-bottom:none;padding-bottom:0;}
+.gare-cle{font-weight:700;font-size:.75rem;text-transform:uppercase;color:#8a8a8a;}
+.gare-val{
+  font-family:'Archivo Black';font-size:clamp(1.1rem,3.4vw,1.6rem);
+  color:var(--jaune);letter-spacing:.06em;text-transform:uppercase;
+}
+.gare-val.gare-ok{color:#3ddc65;}
+
+/* ============ PARCOURS : PROCHAINE DESTINATION ============ */
+.prochaine-dest{
+  display:flex;gap:20px;align-items:flex-start;
+  max-width:640px;margin:56px auto 0;
+  background:var(--blanc);border:3px solid var(--encre);
+  border-left:12px solid var(--jaune);
+  box-shadow:var(--ombre);padding:24px;
+}
+.dest-node{
+  flex:none;width:20px;height:20px;margin-top:4px;
+  background:var(--jaune);border:4px solid var(--encre);
+  animation:clignote 1.1s steps(2) infinite;
+}
+.dest-cle{
+  display:inline-block;font-weight:700;font-size:.7rem;text-transform:uppercase;
+  background:var(--encre);color:var(--jaune);padding:3px 8px;margin-bottom:10px;
+  transform:rotate(-1.5deg);
+}
+.prochaine-dest h3{font-size:1.2rem;margin-bottom:8px;}
+.prochaine-dest p{font-size:.85rem;line-height:1.55;}
+.prochaine-dest a{font-weight:700;}
+
+/* ============ CONTACT : FORMULAIRE ============ */
+.formulaire{
+  max-width:640px;margin:56px auto 0;text-align:left;
+  background:var(--papier);color:var(--encre);
+  border:4px solid var(--papier);box-shadow:12px 12px 0 var(--rouge);
+  padding:28px;display:grid;gap:18px;
+}
+.cache-piege{position:absolute;left:-9999px;}
+.form-rang{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+@media(max-width:560px){.form-rang{grid-template-columns:1fr;}}
+.formulaire label{
+  display:grid;gap:8px;
+  font-weight:700;font-size:.75rem;text-transform:uppercase;
+}
+.formulaire input,.formulaire textarea{
+  font-family:'Space Mono';font-size:.95rem;
+  border:3px solid var(--encre);background:var(--blanc);
+  padding:12px 14px;resize:vertical;
+}
+.formulaire input:focus,.formulaire textarea:focus{
+  outline:none;box-shadow:4px 4px 0 var(--klein);
+}
+.form-pied{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.form-envoi{font-family:'Space Mono';cursor:none;}
+.form-envoi[disabled]{opacity:.55;transform:none;}
+.form-note{font-size:.72rem;font-weight:700;text-transform:uppercase;color:#666;}
+.form-statut{display:none;font-weight:700;font-size:.85rem;padding:12px 14px;border:3px solid var(--encre);}
+.form-statut.ok{display:block;background:var(--jaune);}
+.form-statut.ko{display:block;background:var(--rouge);color:var(--blanc);}

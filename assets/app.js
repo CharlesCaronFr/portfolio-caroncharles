@@ -54,17 +54,22 @@ async function charger() {
 
   /* --- Projets --- */
   listeProjets = projets.projets;
+  const carteHTML = (p, i) => `
+    <article class="carte" data-index="${i}" tabindex="0" role="button"
+             aria-label="Ouvrir le projet ${esc(p.titre)}">
+      <div class="visuel ${esc(p.couleur)}">${esc(p.emoji)}</div>
+      <div class="carte-tete"><span>${esc(p.categorie)}</span><span class="tag">${esc(p.tag)}</span></div>
+      <h3>${esc(p.titre)}</h3>
+      <p>${esc(p.description)}</p>
+    </article>`;
   if (besoin.projets) {
-    const grille = document.getElementById('grille-projets');
-    grille.innerHTML = listeProjets.map((p, i) => `
-      <article class="carte" data-index="${i}" tabindex="0" role="button"
-               aria-label="Ouvrir le projet ${esc(p.titre)}">
-        <div class="visuel ${esc(p.couleur)}">${esc(p.emoji)}</div>
-        <div class="carte-tete"><span>${esc(p.categorie)}</span><span class="tag">${esc(p.tag)}</span></div>
-        <h3>${esc(p.titre)}</h3>
-        <p>${esc(p.description)}</p>
-      </article>`).join('');
+    document.getElementById('grille-projets').innerHTML = listeProjets.map(carteHTML).join('');
+    initFiltres();
   }
+
+  /* --- Accueil : teaser "à la une" (3 premiers projets, cliquables vers la TV) --- */
+  const teaser = document.getElementById('grille-teaser');
+  if (teaser) teaser.innerHTML = listeProjets.slice(0, 3).map(carteHTML).join('');
 
   /* --- Compétences --- */
   if (besoin.competences) {
@@ -103,6 +108,7 @@ async function charger() {
         </div>`;
       }).join('');
     initTrain();
+    initGareBoard(parcours.parcours);
   }
 
   /* --- Stats --- */
@@ -1177,6 +1183,106 @@ function afficherToastTrain(msg) {
   toastTrainChrono = setTimeout(() => t.classList.remove('visible'), 4200);
 }
 
+
+
+/* ===== Page projets : guide TV + filtres par catégorie ===== */
+function initFiltres() {
+  const zone = document.getElementById('filtres-projets');
+  const guide = document.getElementById('guide-tv');
+  if (guide) {
+    const n = listeProjets.length;
+    guide.innerHTML = '◉ CH 01 à CH ' + String(n).padStart(2, '0') +
+      ' en antenne <span class="clign">●</span> 2 chaînes secrètes à trouver';
+  }
+  if (!zone) return;
+  const cartes = [...document.querySelectorAll('#grille-projets .carte')];
+  const grille = document.getElementById('grille-projets');
+  const categories = ['Tout', ...new Set(listeProjets.map(p => p.categorie).filter(Boolean))];
+
+  zone.innerHTML = categories.map((c, i) =>
+    `<button class="filtre${i === 0 ? ' actif' : ''}" data-cat="${esc(c)}" aria-pressed="${i === 0}">${esc(c)}</button>`
+  ).join('');
+
+  zone.querySelectorAll('.filtre').forEach(btn => {
+    btn.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    btn.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('actif')) return;
+      zone.querySelectorAll('.filtre').forEach(b => {
+        b.classList.toggle('actif', b === btn);
+        b.setAttribute('aria-pressed', b === btn);
+      });
+      const cat = btn.dataset.cat;
+      sons.zap();
+      grille.classList.remove('zappe');
+      void grille.offsetWidth;                       // relance l'animation
+      grille.classList.add('zappe');
+      setTimeout(() => {
+        cartes.forEach(c => {
+          const p = listeProjets[+c.dataset.index];
+          c.classList.toggle('filtre-off', cat !== 'Tout' && (!p || p.categorie !== cat));
+        });
+      }, 90);                                        // le changement se fait sous la neige
+    });
+  });
+}
+
+/* ===== Page parcours : panneau d'affichage de gare ===== */
+function initGareBoard(etapes) {
+  const board = document.getElementById('gare-board');
+  if (!board || !etapes || !etapes.length) return;
+  const annees = etapes.map(e => String(e.annee || '').match(/\d{4}/g) || []).flat().map(Number);
+  const depart = annees.length ? Math.min(...annees) : '';
+  const arriveeCourt = etapes.map(e => (String(e.annee || '').match(/-(\d{2})\b/) || [])[1]).filter(Boolean).map(n => 2000 + +n);
+  const arrivee = Math.max(...annees, ...(arriveeCourt.length ? arriveeCourt : [0])) || '';
+  document.getElementById('gare-depart').textContent = depart;
+  document.getElementById('gare-arrivee').textContent = arrivee;
+
+  const obsBoard = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      obsBoard.unobserve(e.target);
+      board.querySelectorAll('.gare-val').forEach((v, i) => setTimeout(() => splitFlap(v), i * 140));
+    });
+  }, { threshold: 0.4 });
+  obsBoard.observe(board);
+}
+
+/* ===== Page contact : formulaire Netlify en AJAX ===== */
+(function initFormulaire() {
+  const form = document.getElementById('formulaire');
+  if (!form) return;
+  const statut = document.getElementById('form-statut');
+  const bouton = document.getElementById('form-envoi');
+  form.querySelectorAll('input, textarea').forEach(el => {
+    el.addEventListener('focus', () => { try { sons.survol(); } catch (e) {} });
+  });
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    bouton.disabled = true;
+    bouton.textContent = 'Transmission...';
+    statut.className = 'form-statut';
+    fetch('/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams(new FormData(form)).toString()
+    }).then(r => {
+      if (!r.ok) throw new Error(r.status);
+      form.reset();
+      statut.textContent = '◉ Message reçu 5/5. Réponse sous 24h !';
+      statut.classList.add('ok');
+      try { sons.gagne(); } catch (e) {}
+      bouton.textContent = 'Envoyer le message ►';
+      bouton.disabled = false;
+    }).catch(() => {
+      statut.textContent = '✕ Interférences sur la ligne. Réessaie, ou écris-moi directement par mail.';
+      statut.classList.add('ko');
+      try { sons.perdu(); } catch (e) {}
+      bouton.textContent = 'Envoyer le message ►';
+      bouton.disabled = false;
+    });
+  });
+})();
 
 /* ===== Transition 8-bit entre les pages : dissolution en pixels ===== */
 const pxTransition = (() => {
