@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CHARLES CARON, Chef de projet digital</title>
-<link rel="canonical" href="https://caroncharles.fr/">
-<meta name="description" content="Portfolio de Charles Caron, chef de projet digital à Lille, communication interne, product design, no-code & IA.">
-<meta property="og:title" content="CHARLES CARON, Chef de projet digital">
-<meta property="og:description" content="Portfolio de Charles Caron, chef de projet digital à Lille, communication interne, product design, no-code & IA.">
-<meta property="og:url" content="https://caroncharles.fr/">
+<title>Parcours — Charles Caron</title>
+<link rel="canonical" href="https://caroncharles.fr/parcours/">
+<meta name="description" content="Le parcours de Charles Caron, gare après gare : formations et expériences.">
+<meta property="og:title" content="Parcours — Charles Caron">
+<meta property="og:description" content="Le parcours de Charles Caron, gare après gare : formations et expériences.">
+<meta property="og:url" content="https://caroncharles.fr/parcours/">
 <meta property="og:type" content="website">
 <meta property="og:image" content="https://caroncharles.fr/images/photo-charles.jpg">
 <meta name="twitter:card" content="summary">
@@ -52,46 +52,13 @@ try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-i
   <div class="ticker-inner" id="ticker"></div>
 </div>
 
-<section class="hero" id="haut">
-  <div class="hero-inner">
-    <div class="hero-texte">
-      <span class="eyebrow" id="eyebrow"></span>
-      <h1 id="nom" aria-label="Charles Caron">
-        <span class="ligne"></span>
-        <span class="ligne"></span>
-      </h1>
-      <p class="sous" id="intro"></p>
-      <div class="cta-row">
-        <a class="btn btn-plein" href="/projets/" data-page="Projets">Voir mes projets →</a>
-        <a class="btn btn-vide" href="/contact/" data-page="Contact">Me contacter</a>
-      </div>
-    </div>
-    <div class="hero-photo" id="hero-photo" style="display:none;">
-      <img id="photo" src="" alt="Portrait de Charles Caron">
-      <div class="badge" id="badge" role="button" tabindex="0" aria-label="Surprise !">
-        <svg viewBox="0 0 150 150">
-          <defs>
-            <path id="cercle" d="M75,75 m-58,0 a58,58 0 1,1 116,0 a58,58 0 1,1 -116,0"/>
-          </defs>
-          <circle cx="75" cy="75" r="72" fill="var(--jaune)" stroke="var(--encre)" stroke-width="4"/>
-          <text><textPath href="#cercle" id="badge-texte"></textPath></text>
-        </svg>
-        <div class="centre" id="badge-centre">★</div>
-      </div>
-    </div>
+<section class="parcours" id="parcours">
+  <span class="num">01 / PARCOURS</span>
+  <h2 class="titre-section">Parcours</h2>
+  <div class="voie-wrap" id="voie-wrap">
+    <div class="voie" id="voie" aria-hidden="true"></div>
+    <div id="liste-parcours"></div>
   </div>
-</section>
-
-<section class="stats" id="chiffres">
-  <span class="num">01 / EN CHIFFRES</span>
-  <h2 class="titre-section">Quelques chiffres</h2>
-  <div class="grille-stats" id="grille-stats"></div>
-</section>
-
-<section class="competences" id="competences">
-  <span class="num">02 / COMPÉTENCES</span>
-  <h2 class="titre-section">Boîte à outils</h2>
-  <div class="grille-comp" id="grille-comp"></div>
 </section>
 
 <!-- Fenêtre TV cathodique (disponible sur toutes les pages : projets, CH 00 arcade, CH 64 échecs) -->
