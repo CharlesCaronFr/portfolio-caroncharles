@@ -978,7 +978,9 @@ function masquerEchecs() {
 /* ===== Sound design : chiptune synthétisé (Web Audio, zéro fichier) ===== */
 const sons = (() => {
   let ctx = null, master = null, bufBruit = null;
-  let actif = localStorage.getItem('caron-son') !== 'off';
+  /* clé v2 : les anciens réglages OFF oubliés dans le navigateur repartent à ON */
+  let actif = true;
+  try { actif = localStorage.getItem('caron-son-v2') !== 'off'; } catch (e) {}
 
   function init() {
     if (ctx) return;
@@ -1045,9 +1047,10 @@ const sons = (() => {
 
   return {
     get actif() { return actif; },
+    etat() { return ctx ? ctx.state : 'non initialisé'; },
     basculer() {
       actif = !actif;
-      localStorage.setItem('caron-son', actif ? 'on' : 'off');
+      try { localStorage.setItem('caron-son-v2', actif ? 'on' : 'off'); } catch (e) {}
       if (actif) { unlock(); arp([523, 659, 880], 0.07); }
       return actif;
     },
@@ -1751,7 +1754,14 @@ function majSonToggle() {
 sonToggle.addEventListener('click', () => {
   const on = sons.basculer();
   majSonToggle();
-  afficherToastTrain(on ? '\u266a Son activ\u00e9 : bienvenue sur CARON\u00b7TV' : '\u266a Son coup\u00e9');
+  if (!on) { afficherToastTrain('\u266a Son coup\u00e9'); return; }
+  /* diagnostic : on annonce l'état réel du moteur audio, pas une promesse */
+  setTimeout(() => {
+    const etat = sons.etat();
+    afficherToastTrain(etat === 'running'
+      ? '\u266a Son activ\u00e9 : bienvenue sur CARON\u00b7TV'
+      : '\u26a0 Audio bloqu\u00e9 par le navigateur (' + etat + '). V\u00e9rifie le volume syst\u00e8me ou l\u2019onglet muet.');
+  }, 250);
 });
 sonToggle.addEventListener('mouseenter', () => cursor.classList.add('hover'));
 sonToggle.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
