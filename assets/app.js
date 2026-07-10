@@ -485,7 +485,8 @@ addEventListener('keydown', e => {
 });
 
 /* Indice du footer → ouvre directement CH 00 */
-document.getElementById('footer-arcade').addEventListener('click', () => ouvrirTV(-1));
+const footerArcade = document.getElementById('footer-arcade');
+if (footerArcade) footerArcade.addEventListener('click', () => ouvrirTV(-1));
 
 /* ===== CH 00 : casse-briques ===== */
 const arcade = (() => {
@@ -984,7 +985,7 @@ const sons = (() => {
     if (navigator.audioSession) { try { navigator.audioSession.type = 'transient'; } catch (e) {} }
     ctx = new (window.AudioContext || window.webkitAudioContext)();
     master = ctx.createGain();
-    master.gain.value = 0.16;
+    master.gain.value = 0.34;
     master.connect(ctx.destination);
     const n = ctx.sampleRate * 0.5;
     bufBruit = ctx.createBuffer(1, n, ctx.sampleRate);
@@ -1047,10 +1048,10 @@ const sons = (() => {
     basculer() {
       actif = !actif;
       localStorage.setItem('caron-son', actif ? 'on' : 'off');
-      if (actif) { unlock(); blip(880, 0.08); }
+      if (actif) { unlock(); arp([523, 659, 880], 0.07); }
       return actif;
     },
-    survol()   { blip(1800, 0.02, 'square', 0.18); },
+    survol()   { blip(1800, 0.025, 'square', 0.4); },
     clic()     { blip(660, 0.05); },
     tvOn()     { bruit(0.12, 0.6); blip(120, 0.3, 'sine', 1, 760); },
     tvOff()    { blip(620, 0.28, 'sine', 1, 70); },
@@ -1747,7 +1748,11 @@ function majSonToggle() {
   sonToggle.classList.toggle('coupe', !sons.actif);
   sonToggle.setAttribute('aria-pressed', sons.actif);
 }
-sonToggle.addEventListener('click', () => { sons.basculer(); majSonToggle(); });
+sonToggle.addEventListener('click', () => {
+  const on = sons.basculer();
+  majSonToggle();
+  afficherToastTrain(on ? '\u266a Son activ\u00e9 : bienvenue sur CARON\u00b7TV' : '\u266a Son coup\u00e9');
+});
 sonToggle.addEventListener('mouseenter', () => cursor.classList.add('hover'));
 sonToggle.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
 majSonToggle();

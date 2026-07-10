@@ -67,8 +67,10 @@ try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-i
       <div class="cta-row">
         <a class="btn btn-plein" href="/projets/" data-page="Projets">Voir mes projets →</a>
         <a class="btn btn-vide" href="/contact/" data-page="Contact">Me contacter</a>
-        <img class="otis otis-hero" src="/images/otis/salue.svg" alt="Otis, le chat mascotte, salue" width="88" height="110" loading="lazy">
       </div>
+    </div>
+    <div class="hero-cercle" aria-hidden="true">
+      <img class="otis otis-hero" src="/images/otis/salue.svg" alt="" width="88" height="110" loading="lazy">
     </div>
     <div class="hero-photo" id="hero-photo" style="display:none;">
       <img id="photo" src="" alt="Portrait de Charles Caron">
@@ -177,12 +179,17 @@ try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-i
 </div>
 
 <footer>
-  <span id="footer-gauche"></span>
-  <a class="footer-mail" id="footer-mail" href="#">contact</a>
-  <span class="clign">● Disponible</span>
-  <button class="footer-arcade" id="footer-arcade" aria-label="Ouvrir la chaîne arcade">🕹 CH 00</button>
-  <a class="footer-mentions" href="/mentions-legales/">Mentions légales</a>
-  <span id="footer-droite"></span>
+  <div class="footer-col">
+    <span id="footer-gauche"></span>
+    <span class="footer-tagline" id="footer-droite"></span>
+  </div>
+  <div class="footer-col footer-centre">
+    <a class="footer-mail" id="footer-mail" href="#">contact</a>
+    <span class="clign">● Disponible</span>
+  </div>
+  <div class="footer-col footer-fin">
+    <a class="footer-mentions" href="/mentions-legales/">Mentions légales</a>
+  </div>
 </footer>
 
 <script src="/assets/app.js"></script>
