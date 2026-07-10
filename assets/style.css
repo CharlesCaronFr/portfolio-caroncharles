@@ -512,13 +512,13 @@ footer .clign{animation:clignote 1.2s steps(2) infinite;color:var(--jaune);}
 .hero-inner{display:flex;gap:56px;align-items:center;}
 .hero-texte{flex:1.25;min-width:0;}
 .hero-photo{flex:.75;position:relative;max-width:380px;}
-.hero-photo img{
+.hero-photo img:not(.otis){
   width:100%;border:4px solid var(--encre);
   box-shadow:14px 14px 0 var(--klein);
   transform:rotate(2deg);
   transition:transform .25s cubic-bezier(.2,.9,.3,1.3),box-shadow .25s;
 }
-.hero-photo img:hover{transform:rotate(0) scale(1.02);box-shadow:8px 8px 0 var(--rouge);}
+.hero-photo img:not(.otis):hover{transform:rotate(0) scale(1.02);box-shadow:8px 8px 0 var(--rouge);}
 @media(max-width:900px){
   .hero-inner{flex-direction:column;align-items:flex-start;}
   .hero-photo{max-width:240px;margin-top:36px;}
@@ -842,13 +842,14 @@ html.px-in #mire{display:none;}
    le titre), mais fixé à un repère stable, donc au même endroit à toutes les largeurs */
 .otis-hero{
   position:absolute;
-  right:calc(100% + clamp(28px,5vw,90px));bottom:-2%;
-  width:clamp(200px,19vw,290px);height:auto;
+  right:calc(100% + clamp(28px,5vw,90px));bottom:-9%;
+  width:clamp(150px,14vw,215px);height:auto;
+  border:none;box-shadow:none;background:none;transform:none;
   animation:otis-coucou 3.2s ease-in-out infinite;
   transform-origin:50% 90%;
   pointer-events:none;z-index:1;
 }
-@media(max-width:1080px){.otis-hero{width:clamp(150px,16vw,210px);right:calc(100% + 24px);}}
+@media(max-width:1080px){.otis-hero{width:clamp(120px,13vw,170px);right:calc(100% + 24px);}}
 @media(max-width:900px){.otis-hero{display:none;}}
 @keyframes otis-coucou{
   0%,86%,100%{transform:rotate(0);}
