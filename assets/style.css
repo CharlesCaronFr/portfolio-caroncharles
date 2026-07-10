@@ -838,23 +838,23 @@ html.px-in #mire{display:none;}
 
 /* ============ OTIS, LA MASCOTTE ============ */
 .otis{image-rendering:auto;user-select:none;pointer-events:none;}
-/* Otis flotte dans le vide entre le texte et la photo : positionné en absolu,
-   il ne pousse jamais le titre (CHARLES et CARON restent entiers) */
+/* Otis est ancré au bord gauche de la photo : hors du flux (il ne pousse jamais
+   le titre), mais fixé à un repère stable, donc au même endroit à toutes les largeurs */
 .otis-hero{
-  position:absolute;left:51%;bottom:7%;
+  position:absolute;
+  right:calc(100% + clamp(28px,5vw,90px));bottom:-2%;
   width:clamp(200px,19vw,290px);height:auto;
-  transform:translateX(-50%);
   animation:otis-coucou 3.2s ease-in-out infinite;
   transform-origin:50% 90%;
   pointer-events:none;z-index:1;
 }
-@media(max-width:1080px){.otis-hero{left:56%;width:clamp(160px,17vw,220px);}}
+@media(max-width:1080px){.otis-hero{width:clamp(150px,16vw,210px);right:calc(100% + 24px);}}
 @media(max-width:900px){.otis-hero{display:none;}}
 @keyframes otis-coucou{
-  0%,86%,100%{transform:translateX(-50%) rotate(0);}
-  90%{transform:translateX(-50%) rotate(-4deg);}
-  94%{transform:translateX(-50%) rotate(3deg);}
-  97%{transform:translateX(-50%) rotate(-2deg);}
+  0%,86%,100%{transform:rotate(0);}
+  90%{transform:rotate(-4deg);}
+  94%{transform:rotate(3deg);}
+  97%{transform:rotate(-2deg);}
 }
 .competences{position:relative;}
 .otis-comp{
