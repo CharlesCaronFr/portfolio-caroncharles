@@ -356,7 +356,18 @@ function remplirTV(index) {
   }
 
   const lien = document.getElementById('tv-lien');
-  if (p.lien && p.lien !== '#') { lien.href = p.lien; lien.style.display = 'inline-block'; }
+  if (p.lien && p.lien !== '#') {
+    lien.href = p.lien;
+    /* lien interne (page du site) : même onglet ; lien externe : nouvel onglet */
+    if (p.lien.charAt(0) === '/') {
+      lien.removeAttribute('target'); lien.removeAttribute('rel');
+      lien.textContent = 'Découvrir la page ↗';
+    } else {
+      lien.setAttribute('target', '_blank'); lien.setAttribute('rel', 'noopener');
+      lien.textContent = 'Voir le projet ↗';
+    }
+    lien.style.display = 'inline-block';
+  }
   else { lien.style.display = 'none'; }
 }
 

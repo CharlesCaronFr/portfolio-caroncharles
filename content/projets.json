@@ -19,10 +19,22 @@
       "titre": "Omniscius : Jeu de 54 cartes",
       "description": "Co-création d'un jeu de 54 cartes au design entièrement revisité. 300 exemplaires vendus au profit de l'association « Les Clowns de l'Espoir », avant le lancement d'une campagne de financement.",
       "couleur": "rouge",
-      "lien": "https://omniscius.fr",
+      "lien": "/projets/omniscius/",
       "role": "Co-création, production et vente",
       "outils": "Illustrator, chaîne d'impression, omniscius.fr",
       "resultat": "300 exemplaires vendus au profit de l'association Les Clowns de l'Espoir"
+    },
+    {
+      "emoji": "🖼️",
+      "categorie": "Création & entrepreneuriat",
+      "tag": "E-commerce",
+      "titre": "MonCapy : Affiches design et éducatives",
+      "description": "Boutique en ligne d'affiches qui célèbrent métiers et personnages historiques, portées par Kap le capybara. Projet mené par trois étudiants arrageois : identité graphique, e-commerce Shopify et un arbre planté par commande.",
+      "couleur": "jaune",
+      "lien": "/projets/moncapy/",
+      "role": "Co-création : univers éducatif, communication et boutique",
+      "outils": "Shopify, design graphique, Instagram, TikTok, Pinterest",
+      "resultat": "Boutique lancée, plusieurs séries d'affiches imprimées en France, 1 commande = 1 arbre planté"
     },
     {
       "emoji": "📡",
