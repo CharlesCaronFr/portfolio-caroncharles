@@ -40,5 +40,50 @@
       "suffixe": "",
       "label": "ans et déjà plein d'idées"
     }
+  ],
+  "theme": {
+    "papier": "#F1EDE2",
+    "encre": "#141414",
+    "klein": "#2318E0",
+    "jaune": "#FFD400",
+    "rouge": "#FF3B00"
+  },
+  "ordre_accueil": [
+    "ce-que-je-fais",
+    "a-la-une",
+    "chiffres",
+    "competences"
+  ],
+  "masquer": [],
+  "offres": [
+    {
+      "emoji": "📡",
+      "titre": "Communication interne",
+      "texte": "Stratégie éditoriale, animation de communautés et rituels qui font circuler l'information : journal interne, intranet, Viva Engage. Deux ans de terrain chez SNCF Voyageurs, de la page blanche à une unité qui communique."
+    },
+    {
+      "emoji": "🎯",
+      "titre": "Pilotage de projet digital",
+      "texte": "Cadrage, planning, budget, qualité : je tiens le projet de l'idée à la livraison. Formé au pilotage en Bachelor CESI et rôdé sur des projets réels, du plan de communication d'une startup au lancement d'un produit physique."
+    },
+    {
+      "emoji": "⚡",
+      "titre": "Création no-code & IA",
+      "texte": "Prototypes fonctionnels en jours plutôt qu'en mois : apps no-code, automatisations et outils IA intégrés au quotidien. Assez technique pour parler aux développeurs, assez produit pour parler aux utilisateurs."
+    }
+  ],
+  "faq": [
+    {
+      "question": "Disponible à partir de quand ?",
+      "reponse": "Diplômé du Bachelor Chef de projet digital mi-2026. Disponible pour un CDI dès la fin de l'alternance, et ouvert aux échanges dès maintenant pour anticiper."
+    },
+    {
+      "question": "Quel type de poste ?",
+      "reponse": "Chef de projet digital, communication interne ou poste orienté produit. Ce qui me motive : piloter un projet de bout en bout, avec une vraie dimension créative et des outils modernes (no-code, IA)."
+    },
+    {
+      "question": "Où ?",
+      "reponse": "Lille et sa métropole en priorité, hybride possible. Déjà deux ans de terrain dans la région chez SNCF Voyageurs."
+    }
   ]
 }

@@ -56,5 +56,12 @@
         "Création multimédia"
       ]
     }
-  ]
+  ],
+  "voie": "59",
+  "etat": "A L'HEURE",
+  "destination": {
+    "titre": "CDI Chef de projet digital",
+    "texte": "Diplômé mi-2026, en quête du prochain terminus : pilotage de projets digitaux, communication et produit.",
+    "lien_texte": "Réserver un billet →"
+  }
 }

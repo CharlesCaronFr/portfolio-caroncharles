@@ -14,9 +14,11 @@
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="preload" href="/assets/fonts/archivo-black-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/space-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="theme-color" content="#141414">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Person", "name": "Charles Caron", "jobTitle": "Chef de projet digital", "url": "https://caroncharles.fr/", "email": "mailto:contact@caroncharles.fr", "address": {"@type": "PostalAddress", "addressLocality": "Lille", "addressCountry": "FR"}, "sameAs": ["https://www.linkedin.com/in/caroncharles"]}</script>
 <link rel="stylesheet" href="/assets/style.css">
 <script>/* arrivée par transition pixel : on couvre l'écran avant le premier rendu */
 try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-in');}catch(e){}</script>
@@ -41,6 +43,7 @@ try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-i
 <header>
   <div class="logo"><a href="/" data-page="Accueil" aria-label="Retour à l'accueil">CHARLES <span>CARON</span></a></div>
   <nav>
+    <a href="/" data-page="Accueil">Accueil</a>
     <a href="/projets/" data-page="Projets">Projets</a>
     <a href="/parcours/" data-page="Parcours">Parcours</a>
     <a href="/contact/" data-page="Contact">Contact</a>
@@ -64,6 +67,7 @@ try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-i
       <div class="cta-row">
         <a class="btn btn-plein" href="/projets/" data-page="Projets">Voir mes projets →</a>
         <a class="btn btn-vide" href="/contact/" data-page="Contact">Me contacter</a>
+        <img class="otis otis-hero" src="/images/otis/salue.svg" alt="Otis, le chat mascotte, salue" width="88" height="110" loading="lazy">
       </div>
     </div>
     <div class="hero-photo" id="hero-photo" style="display:none;">
@@ -123,6 +127,7 @@ try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-i
   <span class="num">04 / COMPÉTENCES</span>
   <h2 class="titre-section">Boîte à outils</h2>
   <div class="grille-comp" id="grille-comp"></div>
+  <img class="otis otis-comp" src="/images/otis/jongle.svg" alt="Otis jongle avec les outils" width="96" height="118" loading="lazy">
 </section>
 
 <!-- Fenêtre TV cathodique (disponible sur toutes les pages : projets, CH 00 arcade, CH 64 échecs) -->
@@ -176,6 +181,7 @@ try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-i
   <a class="footer-mail" id="footer-mail" href="#">contact</a>
   <span class="clign">● Disponible</span>
   <button class="footer-arcade" id="footer-arcade" aria-label="Ouvrir la chaîne arcade">🕹 CH 00</button>
+  <a class="footer-mentions" href="/mentions-legales/">Mentions légales</a>
   <span id="footer-droite"></span>
 </footer>
 

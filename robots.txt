@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /studio/
+Disallow: /admin/
+
+Sitemap: https://caroncharles.fr/sitemap.xml

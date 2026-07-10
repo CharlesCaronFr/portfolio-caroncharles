@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mentions légales — Charles Caron</title>
+<link rel="canonical" href="https://caroncharles.fr/mentions-legales/">
+<meta name="description" content="Mentions légales du site caroncharles.fr.">
+<meta property="og:title" content="Mentions légales — Charles Caron">
+<meta property="og:description" content="Mentions légales du site caroncharles.fr.">
+<meta property="og:url" content="https://caroncharles.fr/mentions-legales/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://caroncharles.fr/images/photo-charles.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/archivo-black-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/space-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="theme-color" content="#141414">
+<link rel="stylesheet" href="/assets/style.css">
+<script>/* arrivée par transition pixel : on couvre l'écran avant le premier rendu */
+try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-in');}catch(e){}</script>
+</head>
+<body>
+
+<div id="cursor" aria-hidden="true"></div>
+<div id="px-cover" aria-hidden="true"></div>
+<canvas id="px-canvas" aria-hidden="true"></canvas>
+
+<!-- Mire TV de chargement -->
+<div id="mire" aria-hidden="true">
+  <div class="mire-barres">
+    <div class="mire-b1"></div><div class="mire-b2"></div><div class="mire-b3"></div>
+    <div class="mire-b4"></div><div class="mire-b5"></div><div class="mire-b6"></div><div class="mire-b7"></div>
+  </div>
+  <div class="mire-info"><span>◉ CARON·TV</span><span class="clign">● CHARGEMENT</span><span>CANAL FR-59</span></div>
+</div>
+
+<div id="retro-scan" aria-hidden="true"></div>
+
+<header>
+  <div class="logo"><a href="/" data-page="Accueil" aria-label="Retour à l'accueil">CHARLES <span>CARON</span></a></div>
+  <nav>
+    <a href="/" data-page="Accueil">Accueil</a>
+    <a href="/projets/" data-page="Projets">Projets</a>
+    <a href="/parcours/" data-page="Parcours">Parcours</a>
+    <a href="/contact/" data-page="Contact">Contact</a>
+    <button id="son-toggle" aria-pressed="true" aria-label="Activer ou couper le son">♪ ON</button>
+  </nav>
+</header>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
+
+<meta name="robots" content="noindex, follow">
+<section class="mentions" id="mentions">
+  <span class="num">§ / MENTIONS LÉGALES</span>
+  <h2 class="titre-section">Mentions légales</h2>
+  <div class="mentions-corps">
+    <h3>Éditeur du site</h3>
+    <p>Charles Caron · Lille, France<br>Contact : <a href="mailto:contact@caroncharles.fr">contact@caroncharles.fr</a></p>
+    <h3>Hébergement</h3>
+    <p>Netlify, Inc. · 512 2nd Street, Suite 200 · San Francisco, CA 94107, États-Unis · <a href="https://www.netlify.com" target="_blank" rel="noopener">netlify.com</a></p>
+    <h3>Données personnelles</h3>
+    <p>Ce site ne dépose aucun cookie et n'embarque aucun traceur. Les polices sont hébergées sur ce site, aucune donnée n'est transmise à un tiers lors de la consultation. Les informations envoyées via le formulaire de contact (nom, email, message) sont transmises à l'éditeur via Netlify Forms, utilisées uniquement pour répondre, et jamais cédées. Vous pouvez demander leur suppression à l'adresse ci-dessus.</p>
+    <h3>Propriété intellectuelle</h3>
+    <p>L'ensemble des contenus (textes, illustrations, dont la mascotte Otis, et code) est la propriété de Charles Caron, sauf mention contraire. Toute reproduction sans autorisation est interdite.</p>
+  </div>
+</section>
+
+<footer>
+  <span id="footer-gauche"></span>
+  <a class="footer-mail" id="footer-mail" href="#">contact</a>
+  <span class="clign">● Disponible</span>
+  <button class="footer-arcade" id="footer-arcade" aria-label="Ouvrir la chaîne arcade">🕹 CH 00</button>
+  <a class="footer-mentions" href="/mentions-legales/">Mentions légales</a>
+  <span id="footer-droite"></span>
+</footer>
+
+<script src="/assets/app.js"></script>
+</body>
+</html>

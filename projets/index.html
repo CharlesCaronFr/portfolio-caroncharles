@@ -14,9 +14,10 @@
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="preload" href="/assets/fonts/archivo-black-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/space-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="theme-color" content="#141414">
 <link rel="stylesheet" href="/assets/style.css">
 <script>/* arrivée par transition pixel : on couvre l'écran avant le premier rendu */
 try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-in');}catch(e){}</script>
@@ -41,6 +42,7 @@ try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-i
 <header>
   <div class="logo"><a href="/" data-page="Accueil" aria-label="Retour à l'accueil">CHARLES <span>CARON</span></a></div>
   <nav>
+    <a href="/" data-page="Accueil">Accueil</a>
     <a href="/projets/" data-page="Projets">Projets</a>
     <a href="/parcours/" data-page="Parcours">Parcours</a>
     <a href="/contact/" data-page="Contact">Contact</a>
@@ -111,6 +113,7 @@ try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-i
   <a class="footer-mail" id="footer-mail" href="#">contact</a>
   <span class="clign">● Disponible</span>
   <button class="footer-arcade" id="footer-arcade" aria-label="Ouvrir la chaîne arcade">🕹 CH 00</button>
+  <a class="footer-mentions" href="/mentions-legales/">Mentions légales</a>
   <span id="footer-droite"></span>
 </footer>
 

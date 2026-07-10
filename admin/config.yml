@@ -1,9 +1,9 @@
 # Configuration Sveltia CMS, portfolio caroncharles.fr
-# ⚠️ À MODIFIER : remplace "TON-PSEUDO/portfolio-caroncharles" par ton dépôt GitHub
+# Dépôt configuré. Il reste à créer l'app OAuth GitHub dans Netlify (Site settings → Access control → OAuth) pour que /admin/ fonctionne.
 
 backend:
   name: github
-  repo: TON-PSEUDO/portfolio-caroncharles
+  repo: CharlesCaronFr/portfolio-caroncharles
   branch: main
   base_url: https://api.netlify.com # Netlify sert de passerelle OAuth (gratuit)
 

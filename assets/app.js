@@ -14,12 +14,40 @@ async function charger() {
     contact:     !!document.getElementById('mail')
   };
 
+  /* Mode Studio : quand la page est ouverte avec ?studio=1 (aperçu de l'admin),
+     les contenus viennent du brouillon localStorage au lieu des fichiers publiés */
+  let brouillon = null;
+  try {
+    if (new URLSearchParams(location.search).has('studio'))
+      brouillon = JSON.parse(localStorage.getItem('studio-contenus') || 'null');
+  } catch (e) {}
+  const lire = nom => (brouillon && brouillon[nom])
+    ? Promise.resolve(brouillon[nom])
+    : fetch('/content/' + nom + '.json').then(r => r.json());
+
   const [site, projets, competences, parcours] = await Promise.all([
-    fetch('/content/site.json').then(r => r.json()),
-    fetch('/content/projets.json').then(r => r.json()), // partout : la TV zappe sur toutes les pages
-    besoin.competences ? fetch('/content/competences.json').then(r => r.json()) : Promise.resolve(null),
-    besoin.parcours ? fetch('/content/parcours.json').then(r => r.json()) : Promise.resolve(null)
+    lire('site'),
+    lire('projets'), // partout : la TV zappe sur toutes les pages
+    besoin.competences ? lire('competences') : Promise.resolve(null),
+    besoin.parcours ? lire('parcours') : Promise.resolve(null)
   ]);
+
+  /* --- Thème : couleurs pilotées par site.json --- */
+  if (site.theme) Object.entries(site.theme).forEach(([k, v]) =>
+    document.documentElement.style.setProperty('--' + k, v));
+
+  /* --- Blocs de l'accueil : ordre et visibilité pilotés par site.json --- */
+  const ancre = document.querySelector('.tv-overlay');
+  if (Array.isArray(site.ordre_accueil) && document.getElementById('ce-que-je-fais') && ancre)
+    site.ordre_accueil.forEach(id => {
+      const bloc = document.getElementById(id);
+      if (bloc) document.body.insertBefore(bloc, ancre);
+    });
+  if (Array.isArray(site.masquer))
+    site.masquer.forEach(id => {
+      const bloc = document.getElementById(id);
+      if (bloc) bloc.style.display = 'none';
+    });
 
   /* --- Hero (accueil) --- */
   if (besoin.hero) {
@@ -46,10 +74,36 @@ async function charger() {
 
   /* --- Ticker (toutes les pages) --- */
   const ticker = document.getElementById('ticker');
-  if (ticker) {
-    const items = site.ticker.map(t =>
+  if (ticker && Array.isArray(site.ticker) && site.ticker.length) {
+    const sequence = site.ticker.map(t =>
       `<span>${esc(t)}</span><span class="dot">●</span>`).join('');
-    ticker.innerHTML = items + items; // dupliqué pour la boucle
+
+    const construire = () => {
+      /* une copie doit couvrir au moins la largeur de l'écran,
+         sinon le retour à -50% laisse un trou ou semble figé */
+      ticker.style.animation = 'none';
+      ticker.innerHTML = sequence;
+      const largeurConteneur = ticker.parentElement.offsetWidth || innerWidth;
+      let copie = sequence, garde = 0;
+      while (ticker.scrollWidth < largeurConteneur && garde++ < 30) {
+        copie += sequence;
+        ticker.innerHTML = copie;
+      }
+      ticker.innerHTML = copie + copie;               // x2 pour la boucle sans couture
+      ticker.style.animation = '';                    // on rend la main à la classe CSS…
+      void ticker.offsetWidth;                        // …en forçant un redémarrage propre
+      /* …puis on impose une vitesse constante : 70 px/s quelle que soit la longueur */
+      ticker.style.animationDuration = (ticker.scrollWidth / 2 / 70).toFixed(2) + 's';
+    };
+
+    construire();
+    /* les largeurs changent quand la police arrive ou à la rotation d'écran */
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(construire);
+    let attenteResize;
+    addEventListener('resize', () => {
+      clearTimeout(attenteResize);
+      attenteResize = setTimeout(construire, 250);
+    });
   }
 
   /* --- Projets --- */
@@ -67,6 +121,16 @@ async function charger() {
     initFiltres();
   }
 
+  /* --- Accueil : offres "Ce que je fais" (le HTML de la page sert de secours) --- */
+  const grilleOffres = document.querySelector('.grille-offres');
+  if (grilleOffres && Array.isArray(site.offres) && site.offres.length)
+    grilleOffres.innerHTML = site.offres.map(o => `
+      <article class="offre">
+        <div class="offre-emoji" aria-hidden="true">${esc(o.emoji)}</div>
+        <h3>${esc(o.titre)}</h3>
+        <p>${esc(o.texte)}</p>
+      </article>`).join('');
+
   /* --- Accueil : teaser "à la une" (3 premiers projets, cliquables vers la TV) --- */
   const teaser = document.getElementById('grille-teaser');
   if (teaser) teaser.innerHTML = listeProjets.slice(0, 3).map(carteHTML).join('');
@@ -75,6 +139,24 @@ async function charger() {
   if (besoin.competences) {
     document.getElementById('grille-comp').innerHTML =
       competences.competences.map(c => `<span class="pastille">${esc(c)}</span>`).join('');
+
+    /* Tamponnage en cascade quand la boîte à outils entre à l'écran */
+    const grilleComp = document.getElementById('grille-comp');
+    grilleComp.classList.add('prete');
+    const obsComp = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        obsComp.unobserve(e.target);
+        grilleComp.querySelectorAll('.pastille').forEach((p, i) => {
+          p.style.setProperty('--rot', (Math.random() * 7 - 3.5).toFixed(1) + 'deg');
+          setTimeout(() => {
+            p.classList.add('tamponnee');
+            if (i % 3 === 0) { try { sons.flap(); } catch (err) {} }
+          }, i * 55);
+        });
+      });
+    }, { threshold: 0.25 });
+    obsComp.observe(grilleComp);
 
     /* Easter egg : la pastille Échecs ouvre la chaîne CH 64 */
     document.querySelectorAll('#grille-comp .pastille').forEach(p => {
@@ -112,6 +194,19 @@ async function charger() {
       }).join('');
     initTrain();
     initGareBoard(parcours.parcours);
+
+    const voie = document.getElementById('gare-voie');
+    if (voie && parcours.voie) voie.textContent = parcours.voie;
+    const etat = document.getElementById('gare-etat');
+    if (etat && parcours.etat) etat.textContent = parcours.etat;
+
+    const dest = document.querySelector('.prochaine-dest');
+    if (dest && parcours.destination) {
+      dest.querySelector('h3').textContent = parcours.destination.titre || '';
+      const para = dest.querySelector('p');
+      para.innerHTML = esc(parcours.destination.texte || '') +
+        ' <a href="/contact/" data-page="Contact">' + esc(parcours.destination.lien_texte || 'Me contacter →') + '</a>';
+    }
   }
 
   /* --- Stats --- */
@@ -133,6 +228,8 @@ async function charger() {
     mail.href = 'mailto:' + site.email;
     document.getElementById('lien-linkedin').href = site.lien_linkedin;
     document.getElementById('lien-cv').href = site.lien_cv;
+    initFAQ(site);
+    initCarteVisite(site);
   }
 
   /* --- Footer (toutes les pages) --- */
@@ -270,22 +367,30 @@ function afficherArcade() {
   document.getElementById('tv-canal').textContent = 'CH 00';
   document.querySelector('.tv-contenu').style.display = 'none';
   document.getElementById('tv-arcade').style.display = '';
+  document.body.classList.add('arcade-en-cours');   // le curseur custom gêne la raquette
   arcade.start();
 }
 function masquerArcade() {
   if (document.getElementById('tv-arcade').style.display === 'none') return;
   arcade.stop();
+  document.body.classList.remove('arcade-en-cours');
   document.getElementById('tv-arcade').style.display = 'none';
   document.querySelector('.tv-contenu').style.display = '';
 }
 
+let fermetures = [];
 function ouvrirTV(index, carte) {
+  fermetures.forEach(clearTimeout); fermetures = [];   // une réouverture annule l'extinction en cours
+  tv.classList.remove('extinction', 'eteint');
+  tv.querySelectorAll('.tv-crt-off').forEach(f => f.remove());
   derniereCarte = carte || null;
   remplirTV(index);
   sons.tvOn();
   overlay.classList.add('ouvert');
   tv.classList.remove('eteint');
   tv.classList.add('allume');
+  const numOuverture = index === -1 ? 'CH 00' : index === -2 ? 'CH 64' : 'CH ' + String(index + 1).padStart(2, '0');
+  setTimeout(() => afficherOSD(numOuverture + ' \u25b8 SIGNAL OK'), 450);
   document.body.style.overflow = 'hidden';
   document.getElementById('tv-fermer').focus();
 }
@@ -294,14 +399,20 @@ function fermerTV() {
   sons.tvOff();
   masquerArcade();
   masquerEchecs();
-  tv.classList.remove('allume');
-  tv.classList.add('eteint');
-  setTimeout(() => {
+  /* extinction CRT : l'image s'écrase en ligne blanche qui se réduit en un point */
+  const ecran = tv.querySelector('.tv-ecran');
+  const flash = document.createElement('div');
+  flash.className = 'tv-crt-off';
+  ecran.appendChild(flash);
+  tv.classList.add('extinction');
+  fermetures.push(setTimeout(() => { tv.classList.remove('allume'); tv.classList.add('eteint'); }, 260));
+  fermetures.push(setTimeout(() => {
     overlay.classList.remove('ouvert');
-    tv.classList.remove('eteint');
+    tv.classList.remove('eteint', 'extinction');
+    flash.remove();
     document.body.style.overflow = '';
     if (derniereCarte) derniereCarte.focus();
-  }, 380);
+  }, 660));
 }
 
 let zapEnCours = false;
@@ -317,11 +428,36 @@ function changerCanal(delta) {
 
   sons.zap();
   statique.classList.add('actif');           // neige !
+  afficherOSD('CH --', true);                 // l'OSD cherche le signal
   setTimeout(() => remplirTV(cible), 140);    // on change de chaîne sous la neige
   setTimeout(() => {
     statique.classList.remove('actif');
     zapEnCours = false;
+    const num = cible === -1 ? 'CH 00' : 'CH ' + String(cible + 1).padStart(2, '0');
+    afficherOSD(num + ' \u25b8 SIGNAL OK');
+    /* saute d'image horizontale, comme un réglage de synchro */
+    const ecran = tv.querySelector('.tv-ecran');
+    ecran.classList.remove('hold');
+    void ecran.offsetWidth;
+    ecran.classList.add('hold');
   }, 320);
+}
+
+/* OSD vert incrusté en haut à droite de l'écran, comme sur une vraie télé */
+let osdChrono = null;
+function afficherOSD(texte, cherche) {
+  const ecran = tv.querySelector('.tv-ecran');
+  let osd = ecran.querySelector('.tv-osd');
+  if (!osd) {
+    osd = document.createElement('div');
+    osd.className = 'tv-osd';
+    osd.setAttribute('aria-hidden', 'true');
+    ecran.appendChild(osd);
+  }
+  osd.textContent = texte;
+  osd.classList.add('visible');
+  clearTimeout(osdChrono);
+  if (!cherche) osdChrono = setTimeout(() => osd.classList.remove('visible'), 1500);
 }
 
 document.getElementById('tv-fermer').addEventListener('click', fermerTV);
@@ -331,6 +467,14 @@ overlay.addEventListener('click', e => { if (e.target === overlay) fermerTV(); }
 addEventListener('keydown', e => {
   if (!overlay.classList.contains('ouvert')) return;
   if (e.key === 'Escape') { fermerTV(); return; }
+  if (e.key === 'Tab') {                              // le focus reste dans le dialogue
+    const focusables = [...tv.querySelectorAll('button, a[href]')].filter(el => el.offsetParent !== null);
+    if (!focusables.length) return;
+    const premier = focusables[0], dernier = focusables[focusables.length - 1];
+    if (e.shiftKey && document.activeElement === premier) { e.preventDefault(); dernier.focus(); }
+    else if (!e.shiftKey && document.activeElement === dernier) { e.preventDefault(); premier.focus(); }
+    return;
+  }
   if (canalCourant === -1 && (e.key === 'ArrowLeft' || e.key === 'ArrowRight')) {
     e.preventDefault();
     arcade.clavier(e.key === 'ArrowLeft' ? -1 : 1); // sur CH 00, les flèches pilotent la raquette
@@ -945,6 +1089,7 @@ function initCompteurs() {
   const nums = document.querySelectorAll('.stat-num');
   if (!nums.length) return;
   const reduit = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   const obsNum = new IntersectionObserver(entries => {
     entries.forEach(e => {
       if (!e.isIntersecting) return;
@@ -952,13 +1097,41 @@ function initCompteurs() {
       const cible = +e.target.dataset.cible;
       const suffixe = e.target.textContent.replace(/^0/, '');
       if (reduit) { e.target.textContent = cible + suffixe; return; }
-      const t0 = performance.now(), duree = 1000;
-      (function tick(t) {
-        const p = Math.min(1, (t - t0) / duree);
-        const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
-        e.target.textContent = Math.round(cible * eased) + suffixe;
-        if (p < 1) requestAnimationFrame(tick);
-      })(t0);
+
+      /* odomètre : une colonne 0-9 par chiffre, qui roule comme un compteur kilométrique */
+      const chiffres = String(cible).split('');
+      e.target.textContent = '';
+      const colonnes = chiffres.map((c, i) => {
+        const col = document.createElement('span');
+        col.className = 'odo-col';
+        const strip = document.createElement('span');
+        strip.className = 'odo-strip';
+        /* les colonnes de droite font plus de tours complets, comme en mécanique */
+        const tours = chiffres.length - i;
+        let suite = '';
+        for (let t = 0; t <= tours; t++)
+          for (let d = 0; d <= 9; d++) suite += `<span class="odo-d">${d}</span>`;
+        strip.innerHTML = suite;
+        col.appendChild(strip);
+        e.target.appendChild(col);
+        return { strip, arret: tours * 10 + (+c), delai: i * 90 };
+      });
+      if (suffixe) {
+        const s = document.createElement('span');
+        s.className = 'odo-suffixe';
+        s.textContent = suffixe;
+        e.target.appendChild(s);
+      }
+      /* départ au frame suivant pour que la transition parte de 0 */
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        colonnes.forEach(({ strip, arret, delai }, i) => {
+          strip.style.transitionDelay = delai + 'ms';
+          strip.style.transform = `translateY(-${arret}em)`;
+          strip.addEventListener('transitionend', () => {
+            try { sons.flap(); } catch (err) {}          // clac de calage, colonne par colonne
+          }, { once: true });
+        });
+      }));
     });
   }, { threshold: 0.5 });
   nums.forEach(n => obsNum.observe(n));
@@ -1174,6 +1347,8 @@ function initTrain() {
           desservies.add(i);
           nodes[i].classList.add('desservie', 'flash');
           sons.gare();
+          if (i === gares.length - 1)
+            afficherToastTrain('\u25c9 Terminus. Tout le monde descend !');
         }
       });
     }
@@ -1262,12 +1437,60 @@ function initGareBoard(etapes) {
   obsBoard.observe(board);
 }
 
-/* ===== Page contact : FAQ ===== */
+/* ===== Page contact : carte de visite (standard horaire + copie de l'email) ===== */
+function initCarteVisite(site) {
+  const pastille = document.getElementById('cv-pastille');
+  if (pastille) {
+    /* le standard suit les horaires de bureau à Paris */
+    let ouvert = true;
+    try {
+      const f = new Intl.DateTimeFormat('fr-FR', { timeZone: 'Europe/Paris', hour: 'numeric', weekday: 'short', hour12: false });
+      const parts = Object.fromEntries(f.formatToParts(new Date()).map(p => [p.type, p.value]));
+      const heure = parseInt(parts.hour, 10);
+      ouvert = !['sam.', 'dim.'].includes(parts.weekday) && heure >= 9 && heure < 19;
+    } catch (e) {}
+    pastille.classList.toggle('hors', !ouvert);
+    document.getElementById('cv-statut').textContent =
+      ouvert ? 'Disponible, réponse rapide' : 'Hors antenne · réponse sous 24h';
+  }
+
+  const copier = document.getElementById('copier-mail');
+  if (copier) {
+    copier.addEventListener('mouseenter', () => cursor.classList.add('hover'));
+    copier.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
+    copier.addEventListener('click', () => {
+      const faire = navigator.clipboard
+        ? navigator.clipboard.writeText(site.email)
+        : Promise.reject();
+      faire.then(() => {
+        copier.textContent = '✓ Copié';
+        copier.classList.add('copie');
+        try { sons.clic(); } catch (e) {}
+        setTimeout(() => { copier.textContent = '⧉ Copier'; copier.classList.remove('copie'); }, 1800);
+      }).catch(() => { location.href = 'mailto:' + site.email; });
+    });
+  }
+}
+
+/* ===== Page contact : FAQ (contenu depuis site.json, HTML en secours) ===== */
+function initFAQ(site) {
+  const zone = document.querySelector('.faq');
+  if (!zone || !Array.isArray(site.faq) || !site.faq.length) return;
+  zone.innerHTML = site.faq.map(f => `
+    <details class="faq-item">
+      <summary>${esc(f.question)}</summary>
+      <p>${esc(f.reponse)}</p>
+    </details>`).join('');
+  brancherFAQ();
+}
+function brancherFAQ() {
 document.querySelectorAll('.faq-item summary').forEach(s => {
   s.addEventListener('mouseenter', () => cursor.classList.add('hover'));
   s.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
   s.addEventListener('click', () => { try { sons.clic(); } catch (e) {} });
 });
+}
+brancherFAQ();
 
 /* ===== Page contact : formulaire Netlify en AJAX ===== */
 (function initFormulaire() {
@@ -1281,7 +1504,8 @@ document.querySelectorAll('.faq-item summary').forEach(s => {
   form.addEventListener('submit', e => {
     e.preventDefault();
     bouton.disabled = true;
-    bouton.textContent = 'Transmission...';
+    bouton.textContent = 'Transmission';
+    bouton.classList.add('envoi');
     statut.className = 'form-statut';
     fetch('/', {
       method: 'POST',
@@ -1294,27 +1518,36 @@ document.querySelectorAll('.faq-item summary').forEach(s => {
       statut.classList.add('ok');
       try { sons.gagne(); } catch (e) {}
       bouton.textContent = 'Envoyer le message ►';
+      bouton.classList.remove('envoi');
       bouton.disabled = false;
     }).catch(() => {
       statut.textContent = '✕ Interférences sur la ligne. Réessaie, ou écris-moi directement par mail.';
       statut.classList.add('ko');
       try { sons.perdu(); } catch (e) {}
       bouton.textContent = 'Envoyer le message ►';
+      bouton.classList.remove('envoi');
       bouton.disabled = false;
     });
   });
 })();
 
 /* ===== Transition 8-bit entre les pages : dissolution en pixels ===== */
+let signalerContenuPret;
+const contenuPret = new Promise(r => { signalerContenuPret = r; });
+
 const pxTransition = (() => {
   const reduit = matchMedia('(prefers-reduced-motion: reduce)').matches;
   const canvas = document.getElementById('px-canvas');
   if (!canvas) return { partir: null };
   const ctx = canvas.getContext('2d');
-  const ENCRE = '#141414', PAPIER = '#F1EDE2', JAUNE = '#FFD400', ROUGE = '#FF3B00', KLEIN = '#2318E0';
+  const _var = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const teinte = () => ({ ENCRE: _var('--encre') || '#141414', PAPIER: _var('--papier') || '#F1EDE2',
+    JAUNE: _var('--jaune') || '#FFD400', ROUGE: _var('--rouge') || '#FF3B00', KLEIN: _var('--klein') || '#2318E0' });
+  let { ENCRE, PAPIER, JAUNE, ROUGE, KLEIN } = teinte();
   let W, H, dpr, taille, cols, rows, ordre;
 
   function dimensionner() {
+    ({ ENCRE, PAPIER, JAUNE, ROUGE, KLEIN } = teinte());
     dpr = Math.min(2, window.devicePixelRatio || 1);
     W = innerWidth; H = innerHeight;
     canvas.width = W * dpr; canvas.height = H * dpr;
@@ -1411,7 +1644,10 @@ const pxTransition = (() => {
     if (document.fonts && document.fonts.ready) {
       document.fonts.ready.then(() => { if (label) { ctx.fillStyle = ENCRE; ctx.fillRect(0, 0, W, H); carte(label); } });
     }
-    setTimeout(partir, label ? 620 : 200);
+    /* on ne révèle pas une page vide : on attend les JSON (1,2 s max) */
+    const minimum = new Promise(r => setTimeout(r, label ? 620 : 200));
+    const contenus = Promise.race([contenuPret, new Promise(r => setTimeout(r, 1200))]);
+    Promise.all([minimum, contenus]).then(partir);
   }
 
   arriver();
@@ -1435,12 +1671,31 @@ const pxTransition = (() => {
 })();
 
 
+/* ===== Hero : signal faible, une lettre glitche de temps en temps ===== */
+(function initSignalFaible() {
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const nom = document.getElementById('nom');
+  if (!nom) return;
+  (function prochainGlitch() {
+    setTimeout(() => {
+      const lettres = nom.querySelectorAll('.lettre');
+      if (lettres.length && !document.hidden) {
+        const lettre = lettres[Math.random() * lettres.length | 0];
+        lettre.classList.add('glitche');
+        setTimeout(() => lettre.classList.remove('glitche'), 360);
+      }
+      prochainGlitch();
+    }, 10000 + Math.random() * 5000);   // toutes les 10 à 15 secondes
+  })();
+})();
+
 /* ===== Code secret global : haut haut bas gauche droite ===== */
 (function initCodeSecret() {
   const canvas = document.getElementById('px-canvas');
   if (!canvas) return;
   const SUITE = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
-  const COULEURS = ['#FFD400', '#FF3B00', '#2318E0', '#F1EDE2'];
+  const _v = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+  const COULEURS = () => [_v('--jaune') || '#FFD400', _v('--rouge') || '#FF3B00', _v('--klein') || '#2318E0', _v('--papier') || '#F1EDE2'];
   let position = 0, enCours = false;
 
   function pluie() {
@@ -1459,7 +1714,7 @@ const pxTransition = (() => {
       x: (Math.random() * W / t | 0) * t,
       y: -Math.random() * H,
       v: 4 + Math.random() * 7,
-      c: COULEURS[Math.random() * COULEURS.length | 0]
+      c: (c => c[Math.random() * c.length | 0])(COULEURS())
     }));
     const fin = performance.now() + 2200;
     (function tombe(now) {
@@ -1478,6 +1733,8 @@ const pxTransition = (() => {
 
   addEventListener('keydown', e => {
     if (overlay.classList.contains('ouvert')) return;            // pas pendant la TV (flèches = zapping)
+    const t = e.target;
+    if (e.isComposing || t.matches?.('input, textarea, select') || t.isContentEditable) return; // pas en pleine saisie
     position = e.key === SUITE[position] ? position + 1 : (e.key === SUITE[0] ? 1 : 0);
     if (position === SUITE.length) { position = 0; pluie(); }
   });
@@ -1498,4 +1755,4 @@ majSonToggle();
 charger()
   .then(() => { initCompteurs(); initMagnetisme(); })
   .catch(err => console.error('Erreur de chargement des contenus :', err))
-  .finally(cacherMire);
+  .finally(() => { cacherMire(); signalerContenuPret(); });

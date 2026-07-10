@@ -14,9 +14,10 @@
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="preload" href="/assets/fonts/archivo-black-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/space-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="theme-color" content="#141414">
 <link rel="stylesheet" href="/assets/style.css">
 <script>/* arrivée par transition pixel : on couvre l'écran avant le premier rendu */
 try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-in');}catch(e){}</script>
@@ -41,6 +42,7 @@ try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-i
 <header>
   <div class="logo"><a href="/" data-page="Accueil" aria-label="Retour à l'accueil">CHARLES <span>CARON</span></a></div>
   <nav>
+    <a href="/" data-page="Accueil">Accueil</a>
     <a href="/projets/" data-page="Projets">Projets</a>
     <a href="/parcours/" data-page="Parcours">Parcours</a>
     <a href="/contact/" data-page="Contact">Contact</a>
@@ -55,11 +57,35 @@ try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-i
 <section class="contact page-pleine" id="contact">
   <span class="num" style="color:var(--jaune);">01 / CONTACT</span>
   <h2 class="titre-section" id="titre-contact"></h2>
-  <div><a class="mail" id="mail" href="#"></a></div>
-  <div class="reseaux">
-    <a id="lien-linkedin" href="#" target="_blank" rel="noopener">LinkedIn ↗</a>
-    <a id="lien-cv" href="#">Télécharger le CV ↓</a>
-  </div>
+  <p class="contact-accroche">Un projet, une alternance qui se termine bien, une partie d'échecs ? La ligne est ouverte.</p>
+
+  <div class="contact-grille">
+    <aside class="carte-visite" aria-label="Carte de visite">
+      <div class="cv-tete">
+        <img class="otis" src="/images/otis/salue.svg" alt="" width="64" height="80" loading="lazy">
+        <div>
+          <span class="cv-nom">Charles Caron</span>
+          <span class="cv-role">Chef de projet digital</span>
+        </div>
+      </div>
+      <div class="cv-ligne">
+        <span class="cv-cle">Standard</span>
+        <span class="cv-val"><span class="cv-pastille" id="cv-pastille">●</span> <span id="cv-statut">Disponible</span></span>
+      </div>
+      <div class="cv-ligne">
+        <span class="cv-cle">Base</span>
+        <span class="cv-val">Lille · FR-59</span>
+      </div>
+      <div class="cv-ligne cv-ligne-mail">
+        <span class="cv-cle">Email</span>
+        <span class="cv-val"><a class="cv-mail" id="mail" href="#"></a>
+        <button class="btn-copier" id="copier-mail" type="button" aria-label="Copier l'adresse email">⧉ Copier</button></span>
+      </div>
+      <div class="reseaux">
+        <a id="lien-linkedin" href="#" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a id="lien-cv" href="#">CV ↓</a>
+      </div>
+    </aside>
 
   <form class="formulaire" id="formulaire" name="contact" method="POST" action="/" data-netlify="true" netlify-honeypot="champ-piege">
     <p class="cache-piege"><label>Ne pas remplir : <input name="champ-piege"></label></p>
@@ -81,6 +107,7 @@ try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-i
     </div>
     <p class="form-statut" id="form-statut" role="status" aria-live="polite"></p>
   </form>
+  </div>
 
   <div class="faq" aria-label="Questions fréquentes">
     <details class="faq-item">
@@ -149,6 +176,7 @@ try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-i
   <a class="footer-mail" id="footer-mail" href="#">contact</a>
   <span class="clign">● Disponible</span>
   <button class="footer-arcade" id="footer-arcade" aria-label="Ouvrir la chaîne arcade">🕹 CH 00</button>
+  <a class="footer-mentions" href="/mentions-legales/">Mentions légales</a>
   <span id="footer-droite"></span>
 </footer>
 

@@ -1,0 +1,13 @@
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=()
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'sha256-swOJgC1sg3OuMeSRqUl6bz5Oq61DOhksKF3VoD48ikU='; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self'; frame-src 'self'; frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
+
+/admin/*
+  X-Robots-Tag: noindex
+  Content-Security-Policy: default-src 'self'; script-src 'self' https://unpkg.com; style-src 'self' 'unsafe-inline' https://unpkg.com; img-src 'self' data: blob: https://avatars.githubusercontent.com; font-src 'self'; connect-src 'self' https://api.github.com https://api.netlify.com https://raw.githubusercontent.com; frame-ancestors 'self'; base-uri 'self'
+
+/studio/*
+  X-Robots-Tag: noindex

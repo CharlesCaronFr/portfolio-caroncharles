@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio — caroncharles.fr</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="preload" href="/assets/fonts/archivo-black-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/space-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="theme-color" content="#141414">
+<style>
+/* polices auto-hébergées */
+@font-face{font-family:'Archivo Black';font-style:normal;font-weight:400;font-display:swap;src:url('/assets/fonts/archivo-black-latin-400-normal.woff2') format('woff2');}
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:400;font-display:swap;src:url('/assets/fonts/space-mono-latin-400-normal.woff2') format('woff2');}
+@font-face{font-family:'Space Mono';font-style:normal;font-weight:700;font-display:swap;src:url('/assets/fonts/space-mono-latin-700-normal.woff2') format('woff2');}
+
+:root{
+  --papier:#F1EDE2;--encre:#141414;--klein:#2318E0;--jaune:#FFD400;--rouge:#FF3B00;--blanc:#FFFCF5;
+  --ombre:6px 6px 0 var(--encre);--ombre-sm:3px 3px 0 var(--encre);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  font-family:'Space Mono',monospace;background:var(--papier);color:var(--encre);
+  display:grid;grid-template-rows:auto 1fr;overflow:hidden;
+}
+
+/* ============ BARRE HAUTE ============ */
+.barre{
+  display:flex;align-items:center;gap:14px;flex-wrap:wrap;
+  background:var(--encre);color:var(--papier);padding:10px 16px;
+  border-bottom:4px solid var(--encre);
+}
+.barre .logo{font-family:'Archivo Black';font-size:1rem;letter-spacing:.02em;}
+.barre .logo span{color:var(--jaune);}
+.barre .etat-brouillon{font-size:.68rem;text-transform:uppercase;color:#8a8a8a;}
+.barre .etat-brouillon.modifie{color:var(--jaune);}
+.barre-actions{margin-left:auto;display:flex;gap:10px;flex-wrap:wrap;}
+.btn{
+  font-family:'Space Mono';font-weight:700;font-size:.72rem;text-transform:uppercase;
+  border:3px solid var(--encre);padding:8px 12px;cursor:pointer;
+  background:var(--papier);color:var(--encre);box-shadow:var(--ombre-sm);
+  transition:transform .1s,box-shadow .1s;
+}
+.btn:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--encre);}
+.btn-jaune{background:var(--jaune);}
+.btn-rouge{background:var(--rouge);color:var(--blanc);}
+.btn-mini{padding:4px 8px;font-size:.68rem;box-shadow:2px 2px 0 var(--encre);}
+
+/* ============ DISPOSITION ============ */
+.atelier{display:grid;grid-template-columns:290px 420px 1fr;min-height:0;}
+@media(max-width:1100px){
+  .atelier{grid-template-columns:1fr;grid-template-rows:auto auto 1fr;overflow:auto;}
+  body{overflow:auto;}
+}
+
+/* ============ NAVIGATION DES BLOCS ============ */
+.blocs{
+  background:var(--blanc);border-right:4px solid var(--encre);
+  overflow-y:auto;padding:16px;
+}
+.blocs h2{font-family:'Archivo Black';font-size:.8rem;text-transform:uppercase;margin:14px 0 8px;color:#888;}
+.blocs h2:first-child{margin-top:0;}
+.bloc-btn{
+  display:flex;align-items:center;gap:10px;width:100%;text-align:left;
+  font-family:'Space Mono';font-weight:700;font-size:.8rem;
+  background:var(--papier);border:3px solid var(--encre);box-shadow:var(--ombre-sm);
+  padding:10px 12px;margin-bottom:8px;cursor:pointer;
+  transition:transform .1s,box-shadow .1s,background .1s;
+}
+.bloc-btn:hover{transform:translate(2px,2px);box-shadow:1px 1px 0 var(--encre);}
+.bloc-btn.actif{background:var(--jaune);transform:translate(2px,2px);box-shadow:1px 1px 0 var(--encre);}
+.bloc-btn .em{font-size:1rem;}
+
+/* ============ PANNEAU D'ÉDITION ============ */
+.edition{
+  background:var(--papier);border-right:4px solid var(--encre);
+  overflow-y:auto;padding:20px;
+}
+.edition h1{font-family:'Archivo Black';font-size:1.15rem;text-transform:uppercase;margin-bottom:4px;}
+.edition .sous-titre{font-size:.72rem;color:#777;margin-bottom:18px;}
+.champ{margin-bottom:16px;}
+.champ > label{
+  display:block;font-weight:700;font-size:.68rem;text-transform:uppercase;margin-bottom:6px;
+}
+.champ input[type=text],.champ input[type=number],.champ textarea,.champ select{
+  width:100%;font-family:'Space Mono';font-size:.85rem;
+  border:3px solid var(--encre);background:var(--blanc);padding:9px 10px;resize:vertical;
+}
+.champ input:focus,.champ textarea:focus,.champ select:focus{outline:none;box-shadow:3px 3px 0 var(--klein);}
+.champ .aide{font-size:.66rem;color:#888;margin-top:4px;line-height:1.4;}
+.rang-couleur{display:flex;align-items:center;gap:10px;}
+.rang-couleur input[type=color]{
+  width:46px;height:38px;border:3px solid var(--encre);background:var(--blanc);padding:2px;cursor:pointer;
+}
+.rang-couleur input[type=text]{flex:1;}
+
+/* ---- listes d'items ---- */
+.item{
+  border:3px solid var(--encre);background:var(--blanc);box-shadow:var(--ombre-sm);
+  padding:12px;margin-bottom:12px;position:relative;
+}
+.item.glisse{opacity:.4;}
+.item-tete{
+  display:flex;align-items:center;gap:8px;margin-bottom:10px;
+  font-weight:700;font-size:.72rem;text-transform:uppercase;
+}
+.item-tete .poignee{cursor:grab;font-size:1rem;user-select:none;}
+.item-tete .titre-item{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.item-actions{display:flex;gap:6px;}
+.item .champ{margin-bottom:10px;}
+.item .champ:last-child{margin-bottom:0;}
+.ajouter{width:100%;border-style:dashed;background:transparent;box-shadow:none;}
+.ajouter:hover{background:var(--jaune);transform:none;}
+
+/* ---- image ---- */
+.champ-image .apercu-img{
+  width:100%;max-height:120px;object-fit:contain;border:3px solid var(--encre);
+  background:repeating-conic-gradient(#ddd 0 25%,#fff 0 50%) 0 0/16px 16px;margin-bottom:8px;display:none;
+}
+.champ-image .apercu-img.ok{display:block;}
+.champ-image .rang-img{display:flex;gap:8px;}
+.champ-image .rang-img input[type=text]{flex:1;}
+.champ-image input[type=file]{display:none;}
+
+/* ---- ordre / visibilité des sections ---- */
+.section-ordre .item-tete{margin-bottom:0;}
+.section-ordre .oeil{cursor:pointer;font-size:1rem;}
+.section-ordre .cache .titre-item{text-decoration:line-through;color:#999;}
+
+/* ============ APERÇU ============ */
+.apercu{display:grid;grid-template-rows:auto 1fr;min-height:0;background:#d8d3c5;}
+.apercu-barre{
+  display:flex;align-items:center;gap:10px;padding:8px 14px;flex-wrap:wrap;
+  background:var(--papier);border-bottom:4px solid var(--encre);
+}
+.apercu-barre .pages{display:flex;gap:6px;}
+.apercu-cadre{position:relative;min-height:0;display:grid;place-items:center;padding:14px;}
+.apercu-cadre iframe{
+  width:100%;height:100%;border:4px solid var(--encre);background:var(--blanc);
+  box-shadow:10px 10px 0 rgba(20,20,20,.35);transition:width .25s;
+}
+.apercu-cadre.mobile iframe{width:390px;}
+.badge-live{
+  font-size:.62rem;font-weight:700;text-transform:uppercase;
+  background:var(--rouge);color:var(--blanc);padding:3px 8px;
+  animation:clign 1.2s steps(2) infinite;
+}
+@keyframes clign{50%{opacity:.35;}}
+
+/* ============ MODALE EXPORT ============ */
+.voile{position:fixed;inset:0;background:rgba(20,20,20,.75);display:none;place-items:center;z-index:50;padding:20px;}
+.voile.ouvert{display:grid;}
+.modale{
+  background:var(--papier);border:4px solid var(--encre);box-shadow:12px 12px 0 var(--rouge);
+  max-width:640px;width:100%;max-height:85vh;overflow-y:auto;padding:26px;
+}
+.modale h2{font-family:'Archivo Black';text-transform:uppercase;margin-bottom:12px;}
+.modale ol{margin:0 0 16px 20px;font-size:.82rem;line-height:1.7;}
+.fichier-export{
+  display:flex;align-items:center;gap:10px;justify-content:space-between;
+  border:3px solid var(--encre);background:var(--blanc);padding:10px 12px;margin-bottom:10px;
+}
+.fichier-export .nom{font-weight:700;font-size:.8rem;}
+.fichier-export .puce{font-size:.62rem;font-weight:700;text-transform:uppercase;padding:2px 6px;}
+.fichier-export .puce.modif{background:var(--jaune);}
+.fichier-export .puce.intact{background:#ddd;color:#777;}
+.toast{
+  position:fixed;left:50%;bottom:24px;transform:translate(-50%,150%);
+  background:var(--encre);color:var(--jaune);font-weight:700;font-size:.78rem;
+  padding:12px 18px;border:3px solid var(--jaune);z-index:60;transition:transform .25s;
+}
+.toast.visible{transform:translate(-50%,0);}
+</style>
+</head>
+<body>
+
+<div class="barre">
+  <span class="logo">STUDIO <span>caroncharles.fr</span></span>
+  <span class="badge-live">● Aperçu live</span>
+  <span class="etat-brouillon" id="etat-brouillon">Aucune modification</span>
+  <div class="barre-actions">
+    <button class="btn" id="btn-annuler">↩ Annuler tout</button>
+    <button class="btn btn-jaune" id="btn-exporter">⬇ Publier (exporter)</button>
+  </div>
+</div>
+
+<div class="atelier">
+  <nav class="blocs" id="nav-blocs" aria-label="Blocs du site"></nav>
+  <main class="edition" id="edition"></main>
+  <section class="apercu">
+    <div class="apercu-barre">
+      <div class="pages" id="pages-apercu">
+        <button class="btn btn-mini btn-jaune" data-page="/">Accueil</button>
+        <button class="btn btn-mini" data-page="/projets/">Projets</button>
+        <button class="btn btn-mini" data-page="/parcours/">Parcours</button>
+        <button class="btn btn-mini" data-page="/contact/">Contact</button>
+      </div>
+      <button class="btn btn-mini" id="btn-mobile">📱 Mobile</button>
+      <button class="btn btn-mini" id="btn-recharger">↻ Recharger</button>
+    </div>
+    <div class="apercu-cadre" id="apercu-cadre">
+      <iframe id="iframe-apercu" src="/?studio=1" title="Aperçu du site"></iframe>
+    </div>
+  </section>
+</div>
+
+<div class="voile" id="voile-export">
+  <div class="modale">
+    <h2>Publier les modifications</h2>
+    <ol>
+      <li>Télécharge les fichiers modifiés ci-dessous.</li>
+      <li>Remplace-les dans le dossier <strong>content/</strong> du dépôt GitHub.</li>
+      <li>Un seul commit, Netlify redéploie, c'est en ligne.</li>
+    </ol>
+    <div id="liste-export"></div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:14px;">
+      <button class="btn btn-jaune" id="btn-tout-telecharger">⬇ Tout télécharger</button>
+      <button class="btn" id="btn-fermer-export">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="/studio/studio.js"></script>
+
+</body>
+</html>
