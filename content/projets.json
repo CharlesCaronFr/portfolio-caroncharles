@@ -1,16 +1,16 @@
 {
   "projets": [
     {
-      "image": "/images/Affiche - Ramiel (serie Evangelion)@4x.png",
+      "image": "",
       "categorie": "Produit digital",
       "tag": "Side project",
       "titre": "Zikk : Découverte musicale locale",
       "description": "Conception d'une app de découverte d'artistes émergents par ville : écoute à l'aveugle façon swipe, carte des concerts, gamification et abonnements créateurs. Design produit & prototypage no-code.",
+      "couleur": "jaune",
+      "lien": "",
       "role": "Design produit et prototypage",
       "outils": "Lovable, Supabase, Stripe, Figma",
-      "resultat": "MVP fonctionnel : écoute à l'aveugle, carte des concerts et trois offres d'abonnement artistes",
-      "lien": "",
-      "couleur": "jaune"
+      "resultat": "MVP fonctionnel : écoute à l'aveugle, carte des concerts et trois offres d'abonnement artistes"
     },
     {
       "image": "",
@@ -18,11 +18,11 @@
       "tag": "Jeu de cartes",
       "titre": "Omniscius : Jeu de 54 cartes",
       "description": "Co-création d'un jeu de 54 cartes au design entièrement revisité. 300 exemplaires vendus au profit de l'association « Les Clowns de l'Espoir », avant le lancement d'une campagne de financement.",
+      "couleur": "rouge",
+      "lien": "/projets/omniscius/",
       "role": "Co-création, production et vente",
       "outils": "Illustrator, chaîne d'impression, omniscius.fr",
-      "resultat": "300 exemplaires vendus au profit de l'association Les Clowns de l'Espoir",
-      "lien": "/projets/omniscius/",
-      "couleur": "rouge"
+      "resultat": "300 exemplaires vendus au profit de l'association Les Clowns de l'Espoir"
     },
     {
       "image": "",
@@ -30,11 +30,11 @@
       "tag": "E-commerce",
       "titre": "MonCapy : Affiches design et éducatives",
       "description": "Boutique en ligne d'affiches qui célèbrent métiers et personnages historiques, portées par Kap le capybara. Projet mené par trois étudiants arrageois : identité graphique, e-commerce Shopify et un arbre planté par commande.",
+      "couleur": "jaune",
+      "lien": "/projets/moncapy/",
       "role": "Co-création : univers éducatif, communication et boutique",
       "outils": "Shopify, design graphique, Instagram, TikTok, Pinterest",
-      "resultat": "Boutique lancée, plusieurs séries d'affiches imprimées en France, 1 commande = 1 arbre planté",
-      "lien": "/projets/moncapy/",
-      "couleur": "jaune"
+      "resultat": "Boutique lancée, plusieurs séries d'affiches imprimées en France, 1 commande = 1 arbre planté"
     },
     {
       "image": "",
@@ -42,11 +42,11 @@
       "tag": "Entreprise",
       "titre": "Stratégie de com' d'une nouvelle unité",
       "description": "Structuration de la communication interne d'une unité opérationnelle nouvellement créée : identité visuelle, communauté Viva Engage, refonte SharePoint et rituels managériaux hebdomadaires.",
+      "couleur": "rouge",
+      "lien": "",
       "role": "Chargé de communication interne",
       "outils": "Canva Pro, Viva Engage, SharePoint",
-      "resultat": "Identité visuelle, communauté interne active et rituel hebdomadaire installés en moins d'un an",
-      "lien": "",
-      "couleur": "rouge"
+      "resultat": "Identité visuelle, communauté interne active et rituel hebdomadaire installés en moins d'un an"
     },
     {
       "image": "",
@@ -54,11 +54,11 @@
       "tag": "Expérimentation",
       "titre": "Workspace IA en local",
       "description": "Mise en place d'un espace de travail IA auto-hébergé : Docker, modèles locaux via Ollama, exploration des usages IA au quotidien pour la productivité et la création de contenu.",
+      "couleur": "blanc",
+      "lien": "",
       "role": "Installation et administration",
       "outils": "Docker, Ollama, modèles open source",
-      "resultat": "Assistant IA 100 % local : aucune donnée n'en sort, usage quotidien pour produire plus vite",
-      "lien": "",
-      "couleur": "blanc"
+      "resultat": "Assistant IA 100 % local : aucune donnée n'en sort, usage quotidien pour produire plus vite"
     },
     {
       "image": "",
@@ -66,11 +66,11 @@
       "tag": "Étude",
       "titre": "Marketplace de produits régionaux",
       "description": "Étude d'un concept de marketplace dédiée aux produits du terroir français : analyse concurrentielle, positionnement et feuille de route en trois phases (validation, build, croissance).",
+      "couleur": "jaune",
+      "lien": "",
       "role": "Étude de marché et cadrage",
       "outils": "Analyse concurrentielle, business model canvas",
-      "resultat": "Feuille de route en trois phases : validation, build, croissance",
-      "lien": "",
-      "couleur": "jaune"
+      "resultat": "Feuille de route en trois phases : validation, build, croissance"
     }
   ]
 }

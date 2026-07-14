@@ -198,7 +198,7 @@ section{padding:80px 24px;border-bottom:4px solid var(--encre);}
 .carte h3{font-size:1.5rem;padding:20px 18px 8px;}
 .carte p{padding:0 18px 20px;font-size:.88rem;line-height:1.55;}
 .carte .visuel{
-  height:120px;border-bottom:4px solid var(--encre);
+  height:160px;border-bottom:4px solid var(--encre);
   display:grid;place-items:center;
   overflow:hidden;position:relative;
 }
@@ -210,11 +210,17 @@ section{padding:80px 24px;border-bottom:4px solid var(--encre);}
 .visuel.rouge{background:var(--rouge);}
 .visuel.blanc{background:var(--blanc);}
 
-/* Banniere avec image : la photo couvre tout le cadre */
+/* Banniere avec image : l'image s'affiche en entier, encadree sur le fond de couleur */
+.visuel.avec-image{padding:12px;}
 .visuel.avec-image img{
-  position:absolute;inset:0;width:100%;height:100%;
-  object-fit:cover;display:block;
+  position:relative;display:block;
+  max-width:100%;max-height:100%;width:auto;height:auto;
+  border:3px solid var(--encre);
+  box-shadow:var(--ombre-sm);
+  background:var(--blanc);
+  transform:rotate(-1.5deg);
 }
+.tv-contenu .visuel.avec-image{padding:16px;}
 /* Banniere sans image : mire de barres, memes couleurs que la mire de demarrage */
 .visuel.mire{
   background:linear-gradient(90deg,
@@ -380,10 +386,12 @@ footer .clign{animation:clignote 1.2s steps(2) infinite;color:var(--jaune);}
   position:fixed;inset:0;z-index:500;
   background:rgba(10,10,10,.82);
   display:none;place-items:center;padding:20px;
+  overflow-y:auto;
 }
 .tv-overlay.ouvert{display:grid;}
 .tv{
   width:min(760px,100%);
+  margin:auto;
   background:var(--encre);
   border:6px solid var(--encre);
   box-shadow:0 0 0 4px var(--papier),18px 18px 0 rgba(0,0,0,.5);
@@ -478,7 +486,7 @@ footer .clign{animation:clignote 1.2s steps(2) infinite;color:var(--jaune);}
   98%{opacity:.93;}
 }
 .tv-contenu .visuel{
-  height:150px;border-bottom:4px solid var(--encre);
+  height:clamp(180px,34vh,260px);border-bottom:4px solid var(--encre);
   display:grid;place-items:center;position:relative;overflow:hidden;
 }
 .tv-contenu .visuel::before{

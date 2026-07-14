@@ -61,7 +61,7 @@ collections:
             widget: list
             summary: "{{fields.titre}}"
             fields:
-              - { name: image, label: "Image du visuel", widget: image, required: false, hint: "Bannière du projet, idéalement au format paysage (≈ 1200×500 px). Laisse vide pour afficher la mire NO SIGNAL." }
+              - { name: image, label: "Image du visuel", widget: image, required: false, hint: "N’importe quel format convient (affiche, capture, logo) : l’image s’affiche en entier dans un cadre, sans recadrage. Laisse vide pour afficher la mire NO SIGNAL." }
               - { name: categorie, label: "Catégorie", widget: string }
               - { name: tag, label: "Étiquette (coin droit)", widget: string }
               - { name: titre, label: "Titre du projet", widget: string }
