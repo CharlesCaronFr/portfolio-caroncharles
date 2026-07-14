@@ -64,7 +64,6 @@ const BLOCS = [
     champs: [
       { type: 'liste', chemin: 'site.offres', label: 'Offres', singulier: 'offre', titreItem: 'titre',
         sousChamps: [
-          { type: 'texte', cle: 'emoji', label: 'Emoji' },
           { type: 'texte', cle: 'titre', label: 'Titre' },
           { type: 'long', cle: 'texte', label: 'Texte' },
         ]},
@@ -90,7 +89,7 @@ const BLOCS = [
     champs: [
       { type: 'liste', chemin: 'projets.projets', label: 'Projets', singulier: 'projet', titreItem: 'titre',
         sousChamps: [
-          { type: 'texte', cle: 'emoji', label: 'Emoji du visuel' },
+          { type: 'texte', cle: 'image', label: 'Image du visuel (chemin /images/…, vide = mire NO SIGNAL)' },
           { type: 'select', cle: 'couleur', label: 'Couleur du visuel', options: ['jaune', 'rouge', 'blanc'] },
           { type: 'texte', cle: 'categorie', label: 'Catégorie (sert aux filtres)' },
           { type: 'texte', cle: 'tag', label: 'Étiquette' },

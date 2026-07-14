@@ -108,10 +108,14 @@ async function charger() {
 
   /* --- Projets --- */
   listeProjets = projets.projets;
+  /* Bannière d'un projet : l'image si elle existe, sinon une mire NO SIGNAL */
+  const visuelHTML = p => p.image
+    ? `<div class="visuel avec-image ${esc(p.couleur)}"><img src="${esc(p.image)}" alt="" loading="lazy" decoding="async"></div>`
+    : `<div class="visuel mire ${esc(p.couleur)}"><span class="mire-etiquette">No signal</span></div>`;
   const carteHTML = (p, i) => `
     <article class="carte" data-index="${i}" tabindex="0" role="button"
              aria-label="Ouvrir le projet ${esc(p.titre)}">
-      <div class="visuel ${esc(p.couleur)}">${esc(p.emoji)}</div>
+      ${visuelHTML(p)}
       <div class="carte-tete"><span>${esc(p.categorie)}</span><span class="tag">${esc(p.tag)}</span></div>
       <h3>${esc(p.titre)}</h3>
       <p>${esc(p.description)}</p>
@@ -124,9 +128,9 @@ async function charger() {
   /* --- Accueil : offres "Ce que je fais" (le HTML de la page sert de secours) --- */
   const grilleOffres = document.querySelector('.grille-offres');
   if (grilleOffres && Array.isArray(site.offres) && site.offres.length)
-    grilleOffres.innerHTML = site.offres.map(o => `
+    grilleOffres.innerHTML = site.offres.map((o, i) => `
       <article class="offre">
-        <div class="offre-emoji" aria-hidden="true">${esc(o.emoji)}</div>
+        <div class="offre-num" aria-hidden="true">${String(i + 1).padStart(2, '0')}</div>
         <h3>${esc(o.titre)}</h3>
         <p>${esc(o.texte)}</p>
       </article>`).join('');
@@ -179,7 +183,7 @@ async function charger() {
       parcours.parcours.map((p, i) => {
         const type = p.type === 'travail' ? 'travail' : 'ecole';
         const cote = i % 2 ? 'droite' : 'gauche';
-        const badge = type === 'travail' ? '💼 Expérience' : '🎓 École';
+        const badge = type === 'travail' ? 'Expérience' : 'École';
         return `
         <div class="parcours-item ${type} ${cote}">
           <div>
@@ -337,8 +341,13 @@ function remplirTV(index) {
 
   document.getElementById('tv-canal').textContent = 'CH ' + String(index + 1).padStart(2, '0');
   const visuel = document.getElementById('tv-visuel');
-  visuel.className = 'visuel ' + (p.couleur || 'jaune');
-  visuel.textContent = p.emoji || '★';
+  if (p.image) {
+    visuel.className = 'visuel avec-image ' + (p.couleur || 'jaune');
+    visuel.innerHTML = `<img src="${esc(p.image)}" alt="" decoding="async">`;
+  } else {
+    visuel.className = 'visuel mire ' + (p.couleur || 'jaune');
+    visuel.innerHTML = '<span class="mire-etiquette">No signal</span>';
+  }
   document.getElementById('tv-categorie').textContent = p.categorie || '';
   document.getElementById('tv-tag').textContent = p.tag || '';
   document.getElementById('tv-titre').textContent = p.titre || '';
@@ -1177,7 +1186,7 @@ function modeRetro() {
   const centre = document.getElementById('badge-centre');
   document.documentElement.classList.add('retro');
   scan.classList.add('actif');
-  if (centre) centre.textContent = '📼';
+  if (centre) centre.textContent = '●';
   setTimeout(() => {
     document.documentElement.classList.remove('retro');
     scan.classList.remove('actif');

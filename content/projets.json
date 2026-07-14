@@ -1,7 +1,7 @@
 {
   "projets": [
     {
-      "emoji": "🎧",
+      "image": "",
       "categorie": "Produit digital",
       "tag": "Side project",
       "titre": "Zikk : Découverte musicale locale",
@@ -13,7 +13,7 @@
       "resultat": "MVP fonctionnel : écoute à l'aveugle, carte des concerts et trois offres d'abonnement artistes"
     },
     {
-      "emoji": "🃏",
+      "image": "",
       "categorie": "Création & entrepreneuriat",
       "tag": "Jeu de cartes",
       "titre": "Omniscius : Jeu de 54 cartes",
@@ -25,7 +25,7 @@
       "resultat": "300 exemplaires vendus au profit de l'association Les Clowns de l'Espoir"
     },
     {
-      "emoji": "🖼️",
+      "image": "",
       "categorie": "Création & entrepreneuriat",
       "tag": "E-commerce",
       "titre": "MonCapy : Affiches design et éducatives",
@@ -37,7 +37,7 @@
       "resultat": "Boutique lancée, plusieurs séries d'affiches imprimées en France, 1 commande = 1 arbre planté"
     },
     {
-      "emoji": "📡",
+      "image": "",
       "categorie": "Communication interne",
       "tag": "Entreprise",
       "titre": "Stratégie de com' d'une nouvelle unité",
@@ -49,7 +49,7 @@
       "resultat": "Identité visuelle, communauté interne active et rituel hebdomadaire installés en moins d'un an"
     },
     {
-      "emoji": "🧠",
+      "image": "",
       "categorie": "IA & outils",
       "tag": "Expérimentation",
       "titre": "Workspace IA en local",
@@ -61,7 +61,7 @@
       "resultat": "Assistant IA 100 % local : aucune donnée n'en sort, usage quotidien pour produire plus vite"
     },
     {
-      "emoji": "🛒",
+      "image": "",
       "categorie": "Concept e-commerce",
       "tag": "Étude",
       "titre": "Marketplace de produits régionaux",
