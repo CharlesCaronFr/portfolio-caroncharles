@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boîte à outils · Charles Caron</title>
+<link rel="canonical" href="https://caroncharles.fr/outils/">
+<meta name="description" content="Convertisseur de documents, fusion de PDF et outils texte, directement dans le navigateur.">
+<meta property="og:title" content="Boîte à outils · Charles Caron">
+<meta property="og:description" content="Convertisseur de documents, fusion de PDF et outils texte, directement dans le navigateur.">
+<meta property="og:url" content="https://caroncharles.fr/outils/">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://caroncharles.fr/images/photo-charles.jpg">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="/assets/fonts/archivo-black-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/space-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<meta name="theme-color" content="#141414">
+<link rel="stylesheet" href="/assets/style.css">
+<link rel="stylesheet" href="/assets/outils.css">
+<script>/* arrivée par transition pixel : on couvre l'écran avant le premier rendu */
+try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-in');}catch(e){}</script>
+</head>
+<body>
+
+<div id="cursor" aria-hidden="true"></div>
+<div id="px-cover" aria-hidden="true"></div>
+<canvas id="px-canvas" aria-hidden="true"></canvas>
+
+<!-- Mire TV de chargement -->
+<div id="mire" aria-hidden="true">
+  <div class="mire-barres">
+    <div class="mire-b1"></div><div class="mire-b2"></div><div class="mire-b3"></div>
+    <div class="mire-b4"></div><div class="mire-b5"></div><div class="mire-b6"></div><div class="mire-b7"></div>
+  </div>
+  <div class="mire-info"><span>◉ CARON·TV</span><span class="clign">● CHARGEMENT</span><span>CANAL FR-59</span></div>
+</div>
+
+<div id="retro-scan" aria-hidden="true"></div>
+
+<header>
+  <div class="logo"><a href="/" data-page="Accueil" aria-label="Retour à l'accueil">CHARLES <span>CARON</span></a></div>
+  <nav>
+    <a href="/" data-page="Accueil">Accueil</a>
+    <a href="/projets/" data-page="Projets">Projets</a>
+    <a href="/parcours/" data-page="Parcours">Parcours</a>
+    <a href="/outils/" data-page="Outils">Outils</a>
+    <a href="/contact/" data-page="Contact">Contact</a>
+    <button id="son-toggle" aria-pressed="true" aria-label="Activer ou couper le son">♪ ON</button>
+  </nav>
+</header>
+
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-inner" id="ticker"></div>
+</div>
+
+<section class="outils page-pleine" id="outils">
+  <span class="num">01 / ATELIER</span>
+  <h2 class="titre-section">Boîte à outils</h2>
+  <p class="outils-accroche">Les outils dont je me sers au travail, réunis au même endroit. Tout se passe dans ton navigateur : aucun fichier ne quitte ton appareil.</p>
+
+  <div class="onglets" role="tablist" aria-label="Outils">
+    <button class="onglet" role="tab" id="t-conv" aria-controls="p-conv" aria-selected="true" type="button">Convertir</button>
+    <button class="onglet" role="tab" id="t-fus" aria-controls="p-fus" aria-selected="false" type="button">Fusionner / extraire</button>
+    <button class="onglet" role="tab" id="t-txt" aria-controls="p-txt" aria-selected="false" type="button">Texte</button>
+  </div>
+
+  <div class="panneau" id="p-conv" role="tabpanel" aria-labelledby="t-conv">
+    <label class="depot" id="conv-depot">
+      <input type="file" multiple accept=".pdf,application/pdf,image/*">
+      <strong>Dépose tes fichiers ici</strong>
+      <span>ou clique pour les choisir. PDF, PNG, JPG, WebP, GIF.</span>
+    </label>
+    <ul class="fichiers" id="conv-liste"></ul>
+    <div class="options">
+      <label>Convertir en<select id="conv-format"></select></label>
+      <label data-pour="pdf-img">Résolution
+        <select id="conv-dpi"><option value="72">72 dpi, écran et léger</option><option value="150" selected>150 dpi, standard</option><option value="300">300 dpi, impression</option></select>
+      </label>
+      <label data-pour="pdf-img pdf-txt">Pages<input id="conv-pages" type="text" placeholder="Toutes, ou 1-3,5"></label>
+      <label data-pour="img-img">Largeur max (px)<input id="conv-largeur" type="number" min="16" placeholder="Taille d'origine"></label>
+      <label data-pour="pdf-img img-img" id="o-qualite">Qualité JPG et WebP<input id="conv-qualite" type="range" min="40" max="100" value="90"></label>
+      <label data-pour="img-pdf">Format de page
+        <select id="conv-page"><option value="a4">A4, image centrée</option><option value="image">Taille de l'image</option></select>
+      </label>
+    </div>
+    <button class="btn btn-plein" id="conv-go" type="button" disabled>Convertir</button>
+    <p class="statut" id="conv-statut" role="status" aria-live="polite"></p>
+    <div id="conv-sortie" hidden>
+      <ul class="fichiers" id="conv-res"></ul>
+      <p style="margin-top:14px"><button class="btn btn-vide" id="conv-zip" type="button" hidden>Tout télécharger (.zip)</button></p>
+    </div>
+  </div>
+
+  <div class="panneau" id="p-fus" role="tabpanel" aria-labelledby="t-fus" hidden>
+    <label class="depot" id="fus-depot">
+      <input type="file" multiple accept=".pdf,application/pdf">
+      <strong>Dépose tes PDF ici</strong>
+      <span>Réordonne avec les flèches. Pour ne garder que certaines pages d'un fichier, indique une plage (1-3,5).</span>
+    </label>
+    <ul class="fichiers" id="fus-liste"></ul>
+    <p style="margin-top:18px"><button class="btn btn-plein" id="fus-go" type="button" disabled>Créer le PDF</button></p>
+    <p class="statut" id="fus-statut" role="status" aria-live="polite"></p>
+    <div id="fus-sortie" hidden><span id="fus-info"></span><button class="btn btn-vide" id="fus-dl" type="button">Télécharger</button></div>
+  </div>
+
+  <div class="panneau" id="p-txt" role="tabpanel" aria-labelledby="t-txt" hidden>
+    <textarea id="txt" rows="9" aria-label="Texte à analyser" placeholder="Colle ici un post Viva Engage, un article du journal interne, un mail..."></textarea>
+    <dl class="stats-txt">
+      <div><dt>Caractères</dt><dd id="s-car">0</dd></div>
+      <div><dt>Sans espaces</dt><dd id="s-sans">0</dd></div>
+      <div><dt>Mots</dt><dd id="s-mots">0</dd></div>
+      <div><dt>Phrases</dt><dd id="s-phr">0</dd></div>
+      <div><dt>Lecture</dt><dd id="s-lec">0 s</dd></div>
+    </dl>
+    <div class="boutons">
+      <button class="btn btn-plein" id="txt-net" type="button">Corriger la typographie</button>
+      <button class="btn btn-vide" id="txt-undo" type="button" disabled>Annuler</button>
+      <button class="btn btn-vide" id="txt-copy" type="button">Copier</button>
+    </div>
+    <p class="note-txt">La correction remplace les guillemets droits par des « », les trois points par …, et ajoute les espaces insécables avant ; : ? ! (temps de lecture calculé sur 230 mots par minute).</p>
+    <p class="statut" id="txt-statut" role="status" aria-live="polite"></p>
+  </div>
+</section>
+
+<!-- Fenêtre TV cathodique (disponible sur toutes les pages : projets, CH 00 arcade, CH 64 échecs) -->
+<div class="tv-overlay" id="tv-overlay">
+  <div class="tv" id="tv" role="dialog" aria-modal="true" aria-labelledby="tv-titre">
+    <div class="tv-barre">
+      <div class="tv-zap">
+        <button class="tv-canal-btn" id="tv-prec" aria-label="Projet précédent">‹ CH</button>
+        <span class="canal" id="tv-canal">CH 01</span>
+        <button class="tv-canal-btn" id="tv-suiv" aria-label="Projet suivant">CH ›</button>
+      </div>
+      <span>◉ CARON·TV</span>
+      <button class="tv-fermer" id="tv-fermer" aria-label="Fermer">Éteindre ✕</button>
+    </div>
+    <div class="tv-ecran">
+      <div class="tv-scanlines" aria-hidden="true"></div>
+      <div class="tv-balayage" aria-hidden="true"></div>
+      <div class="tv-vignette" aria-hidden="true"></div>
+      <div class="tv-statique" id="tv-statique" aria-hidden="true"></div>
+      <div class="tv-contenu">
+        <div class="visuel" id="tv-visuel"></div>
+        <div class="tv-meta"><span id="tv-categorie"></span><span class="tag" id="tv-tag"></span></div>
+        <h3 id="tv-titre"></h3>
+        <p id="tv-description"></p>
+        <dl class="tv-fiche" id="tv-fiche">
+          <div><dt>Rôle</dt><dd id="tv-role"></dd></div>
+          <div><dt>Outils</dt><dd id="tv-outils"></dd></div>
+          <div><dt>Résultat</dt><dd id="tv-resultat"></dd></div>
+        </dl>
+        <div class="tv-actions"><a class="btn-projet" id="tv-lien" href="#" target="_blank" rel="noopener">Voir le projet ↗</a></div>
+      </div>
+      <div id="tv-arcade" style="display:none;">
+        <div class="arcade-tete"><span>▸ CARON·TV ARCADE</span><span id="arcade-score">SCORE 000</span></div>
+        <canvas id="arcade-canvas"></canvas>
+        <div class="arcade-msg" id="arcade-msg">Touche ou clique<br>pour jouer</div>
+      </div>
+      <div id="tv-echecs" style="display:none;">
+        <div class="echecs-tete"><span>♟ CARON·CHESS</span><span id="echecs-statut">À toi de jouer (blancs)</span></div>
+        <div class="echecs-plateau" id="echecs-plateau" aria-label="Échiquier, tu joues les blancs contre l'IA"></div>
+        <div class="echecs-pied">
+          <span id="echecs-coups">COUP 001</span>
+          <button class="echecs-btn" id="echecs-reset">↺ Nouvelle partie</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-col">
+    <span id="footer-gauche"></span>
+    <span class="footer-tagline" id="footer-droite"></span>
+  </div>
+  <div class="footer-col footer-centre">
+    <a class="footer-mail" id="footer-mail" href="#">contact</a>
+    <span class="clign">● Disponible</span>
+  </div>
+  <div class="footer-col footer-fin">
+    <a class="footer-mentions" href="/mentions-legales/">Mentions légales</a>
+  </div>
+</footer>
+
+<script src="/assets/app.js"></script>
+<script src="/assets/outils.js"></script>
+</body>
+</html>
