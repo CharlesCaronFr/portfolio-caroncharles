@@ -285,6 +285,14 @@ $('#txt-copy').addEventListener('click', async () => {
   catch (e) { ta.select(); dire($('#txt-statut'), 'Copie impossible ici : le texte est sélectionné, utilise Ctrl+C.', true); }
 });
 
+/* Passerelle pour les autres outils (outils2.js) */
+window.OUTILS = { $, $$, echapper, taille, base, dire, versBlob, canevas, bitmap, telecharger, libZip, charge, depot, liste,
+  texte(fn, msg) {
+    avant = ta.value; const n = fn(avant); ta.value = n;
+    $('#txt-undo').disabled = false; ta.dispatchEvent(new Event('input'));
+    dire($('#txt-statut'), avant === n ? 'Rien à changer.' : msg);
+  } };
+
 /* ================= ONGLETS ================= */
 const onglets = $$('[role=tab]');
 function choisir(id) {
@@ -292,6 +300,6 @@ function choisir(id) {
   $$('.panneau').forEach(p => { p.hidden = p.id !== id; });
 }
 onglets.forEach(b => b.addEventListener('click', () => { choisir(b.getAttribute('aria-controls')); history.replaceState(null, '', '#' + b.getAttribute('aria-controls').slice(2)); }));
-if (['conv', 'fus', 'txt'].includes(location.hash.slice(1))) choisir('p-' + location.hash.slice(1));
+if (location.hash.length > 1 && document.getElementById('p-' + location.hash.slice(1))) choisir('p-' + location.hash.slice(1));
 majConv(); statsTexte();
 })();

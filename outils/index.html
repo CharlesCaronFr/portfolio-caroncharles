@@ -64,7 +64,13 @@ try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-i
   <div class="onglets" role="tablist" aria-label="Outils">
     <button class="onglet" role="tab" id="t-conv" aria-controls="p-conv" aria-selected="true" type="button">Convertir</button>
     <button class="onglet" role="tab" id="t-fus" aria-controls="p-fus" aria-selected="false" type="button">Fusionner / extraire</button>
+    <button class="onglet" role="tab" id="t-img" aria-controls="p-img" aria-selected="false" type="button">Formats d'images</button>
+    <button class="onglet" role="tab" id="t-qr" aria-controls="p-qr" aria-selected="false" type="button">Liens et QR</button>
     <button class="onglet" role="tab" id="t-txt" aria-controls="p-txt" aria-selected="false" type="button">Texte</button>
+    <button class="onglet" role="tab" id="t-col" aria-controls="p-col" aria-selected="false" type="button">Couleurs</button>
+    <button class="onglet" role="tab" id="t-retro" aria-controls="p-retro" aria-selected="false" type="button">Rétroplanning</button>
+    <button class="onglet" role="tab" id="t-sig" aria-controls="p-sig" aria-selected="false" type="button">Signature mail</button>
+    <button class="onglet" role="tab" id="t-kpi" aria-controls="p-kpi" aria-selected="false" type="button">Indicateurs</button>
   </div>
 
   <div class="panneau" id="p-conv" role="tabpanel" aria-labelledby="t-conv">
@@ -114,14 +120,171 @@ try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-i
       <div><dt>Mots</dt><dd id="s-mots">0</dd></div>
       <div><dt>Phrases</dt><dd id="s-phr">0</dd></div>
       <div><dt>Lecture</dt><dd id="s-lec">0 s</dd></div>
+      <div><dt>Parole</dt><dd id="s-par">0 s</dd></div>
+      <div><dt>Lisibilité</dt><dd id="s-lis" style="font-size:1rem">n/a</dd></div>
     </dl>
     <div class="boutons">
       <button class="btn btn-plein" id="txt-net" type="button">Corriger la typographie</button>
       <button class="btn btn-vide" id="txt-undo" type="button" disabled>Annuler</button>
       <button class="btn btn-vide" id="txt-copy" type="button">Copier</button>
     </div>
+    <p class="sous-titre suite">Longueur par canal</p>
+    <div class="canaux" id="canaux"></div>
+    <p class="sous-titre">Mots répétés</p>
+    <div class="mots" id="top-mots"></div>
+    <p class="sous-titre">Transformer</p>
+    <div class="boutons">
+      <button class="btn btn-vide" type="button" data-t="maj">MAJUSCULES</button>
+      <button class="btn btn-vide" type="button" data-t="min">minuscules</button>
+      <button class="btn btn-vide" type="button" data-t="titre">Chaque Mot</button>
+      <button class="btn btn-vide" type="button" data-t="phrase">Phrase</button>
+      <button class="btn btn-vide" type="button" data-t="lignes">Recoller les lignes</button>
+      <button class="btn btn-vide" type="button" data-t="slug">Slug d'URL</button>
+    </div>
+    <p class="note-txt">Recoller les lignes sert aux textes copiés d'un PDF. Lisibilité : indice de Kandel et Moles (plus le score est haut, plus c'est facile), à lire comme une estimation. Parole : 130 mots par minute.</p>
     <p class="note-txt">La correction remplace les guillemets droits par des « », les trois points par …, et ajoute les espaces insécables avant ; : ? ! (temps de lecture calculé sur 230 mots par minute).</p>
     <p class="statut" id="txt-statut" role="status" aria-live="polite"></p>
+  </div>
+
+  <div class="panneau" id="p-img" role="tabpanel" aria-labelledby="t-img" hidden>
+    <label class="depot" id="img-depot">
+      <input type="file" multiple accept="image/*">
+      <strong>Dépose tes images ici</strong>
+      <span>Elles sont recadrées ou ajustées au format choisi : réseaux sociaux ou impression.</span>
+    </label>
+    <ul class="fichiers" id="img-liste"></ul>
+    <div class="options">
+      <label>Format<select id="img-preset"></select></label>
+      <label data-perso hidden>Largeur (px)<input id="img-w" type="number" min="16" max="8000" value="1200"></label>
+      <label data-perso hidden>Hauteur (px)<input id="img-h" type="number" min="16" max="8000" value="630"></label>
+      <label>Mode<select id="img-mode"><option value="remplir">Remplir, recadrer au centre</option><option value="ajuster">Ajuster, image entière sur fond uni</option></select></label>
+      <label>Couleur de fond<input id="img-fond" type="color" value="#ffffff"></label>
+      <label>Enregistrer en<select id="img-sortie"><option value="png">PNG</option><option value="jpg">JPG</option><option value="webp">WebP</option></select></label>
+    </div>
+    <button class="btn btn-plein" id="img-go" type="button" disabled>Exporter</button>
+    <p class="statut" id="img-statut" role="status" aria-live="polite"></p>
+    <ul class="fichiers" id="img-res" hidden></ul>
+    <p style="margin-top:14px"><button class="btn btn-vide" id="img-zip" type="button" hidden>Tout télécharger (.zip)</button></p>
+  </div>
+
+  <div class="panneau" id="p-qr" role="tabpanel" aria-labelledby="t-qr" hidden>
+    <p class="sous-titre">Lien suivi (UTM)</p>
+    <div class="options">
+      <label class="large">Adresse de la page<input id="utm-url" type="text" inputmode="url" placeholder="https://exemple.fr/page"></label>
+      <label>Source<input id="utm-source" type="text" list="l-source" placeholder="linkedin"></label>
+      <label>Support<input id="utm-medium" type="text" list="l-medium" placeholder="social"></label>
+      <label>Campagne<input id="utm-campagne" type="text" placeholder="journal-interne-janvier"></label>
+      <label>Contenu (option)<input id="utm-contenu" type="text"></label>
+      <label>Terme (option)<input id="utm-terme" type="text"></label>
+      <label class="large">Lien obtenu<textarea id="utm-sortie" rows="2" readonly></textarea></label>
+    </div>
+    <datalist id="l-source"><option value="linkedin"><option value="newsletter"><option value="intranet"><option value="viva-engage"><option value="affiche"><option value="mail"></datalist>
+    <datalist id="l-medium"><option value="social"><option value="email"><option value="qr"><option value="print"><option value="intranet"></datalist>
+    <div class="boutons">
+      <button class="btn btn-plein" id="utm-copy" type="button">Copier le lien</button>
+      <button class="btn btn-vide" id="utm-qr" type="button">En faire un QR code</button>
+    </div>
+    <p class="statut" id="utm-statut" role="status" aria-live="polite"></p>
+
+    <p class="sous-titre suite">QR code</p>
+    <div class="options">
+      <label class="large">Contenu du code<textarea id="qr-texte" rows="2" placeholder="Une adresse, un texte, un numéro..."></textarea></label>
+      <label>Correction d'erreur<select id="qr-niveau"><option value="L">Faible, code simple</option><option value="M" selected>Moyenne</option><option value="Q">Élevée</option><option value="H">Maximale, pour un logo ou l'impression abîmée</option></select></label>
+      <label>Taille du PNG<select id="qr-taille"><option value="512">Environ 512 px</option><option value="1024" selected>Environ 1024 px</option><option value="2048">Environ 2048 px</option></select></label>
+      <label>Couleur du code<input id="qr-fg" type="color" value="#141414"></label>
+      <label>Couleur du fond<input id="qr-bg" type="color" value="#ffffff"></label>
+    </div>
+    <div class="qr-zone"><canvas id="qr-canvas" width="1" height="1" role="img" aria-label="Aperçu du QR code"></canvas></div>
+    <div class="boutons">
+      <button class="btn btn-plein" id="qr-png" type="button" disabled>Télécharger en PNG</button>
+      <button class="btn btn-vide" id="qr-svg" type="button" disabled>Télécharger en SVG</button>
+    </div>
+    <p class="statut" id="qr-statut" role="status" aria-live="polite"></p>
+    <p class="note-txt">Le SVG reste net à toutes les tailles : à préférer pour une affiche ou un document imprimé. Les noms de source et de campagne sont passés en minuscules pour garder des statistiques propres.</p>
+  </div>
+
+  <div class="panneau" id="p-col" role="tabpanel" aria-labelledby="t-col" hidden>
+    <p class="sous-titre">Contraste texte et fond</p>
+    <div class="options">
+      <label>Couleur du texte<span class="duo"><input type="color" id="col-t-c" value="#141414"><input type="text" id="col-t" value="#141414" maxlength="7" aria-label="Code de la couleur du texte"></span></label>
+      <label>Couleur du fond<span class="duo"><input type="color" id="col-f-c" value="#ffffff"><input type="text" id="col-f" value="#ffffff" maxlength="7" aria-label="Code de la couleur du fond"></span></label>
+    </div>
+    <div class="echantillon" id="col-ech">Exemple de texte, tel qu'il apparaîtra sur le visuel.</div>
+    <ul class="verdicts" id="col-res"></ul>
+    <p style="margin-top:14px"><button class="btn btn-vide" id="col-inv" type="button">Inverser</button></p>
+
+    <p class="sous-titre suite">Palette d'une image</p>
+    <label class="depot" id="pal-depot">
+      <input type="file" accept="image/*">
+      <strong>Dépose une image</strong>
+      <span>Je repère ses couleurs dominantes, par exemple depuis un logo ou une charte.</span>
+    </label>
+    <div class="pastilles" id="pal-res"></div>
+    <p class="statut" id="col-statut" role="status" aria-live="polite"></p>
+  </div>
+
+  <div class="panneau" id="p-retro" role="tabpanel" aria-labelledby="t-retro" hidden>
+    <div class="options">
+      <label>Opération<input id="retro-titre" type="text" placeholder="Journal interne de janvier"></label>
+      <label>Date de diffusion<input id="retro-date" type="date"></label>
+      <label class="large">Étapes (une par ligne, au format J-14 | Libellé)<textarea id="retro-etapes" rows="8">J-30 | Cadrage et objectifs
+J-21 | Rédaction des contenus
+J-14 | Validation hiérarchique
+J-7 | Mise en page et bon à tirer
+J-3 | Relecture finale
+J-0 | Diffusion
+J+7 | Bilan et indicateurs</textarea></label>
+      <label class="coche"><input type="checkbox" id="retro-ouvres" checked> Ramener les étapes sur un jour ouvré</label>
+    </div>
+    <button class="btn btn-plein" id="retro-go" type="button">Calculer le planning</button>
+    <p class="statut" id="retro-statut" role="status" aria-live="polite"></p>
+    <div id="retro-sortie" hidden>
+      <div class="tableau"><table class="retro"><tbody id="retro-res"></tbody></table></div>
+      <div class="boutons">
+        <button class="btn btn-vide" id="retro-ics" type="button">Télécharger (.ics)</button>
+        <button class="btn btn-vide" id="retro-copy" type="button">Copier en texte</button>
+      </div>
+      <p class="note-txt">Le fichier .ics s'ouvre dans Outlook, Google Agenda ou Apple Calendrier. Les jours fériés ne sont pas pris en compte.</p>
+    </div>
+  </div>
+
+  <div class="panneau" id="p-sig" role="tabpanel" aria-labelledby="t-sig" hidden>
+    <div class="options">
+      <label>Prénom et nom<input id="sig-nom" type="text" autocomplete="off" placeholder="Prénom Nom"></label>
+      <label>Fonction<input id="sig-fonction" type="text" placeholder="Chargé de communication"></label>
+      <label>Entité ou service<input id="sig-entite" type="text"></label>
+      <label>Téléphone<input id="sig-tel" type="tel"></label>
+      <label>Email<input id="sig-mail" type="email"></label>
+      <label>Site web<input id="sig-site" type="text" inputmode="url"></label>
+      <label>LinkedIn (adresse du profil)<input id="sig-linkedin" type="text" inputmode="url"></label>
+      <label>Couleur des liens<input id="sig-couleur" type="color" value="#2318E0"></label>
+    </div>
+    <div class="apercu" id="sig-apercu" aria-label="Aperçu de la signature"></div>
+    <div class="boutons">
+      <button class="btn btn-plein" id="sig-copy" type="button">Copier la signature</button>
+      <button class="btn btn-vide" id="sig-html" type="button">Copier le code HTML</button>
+    </div>
+    <p class="statut" id="sig-statut" role="status" aria-live="polite"></p>
+  </div>
+
+  <div class="panneau" id="p-kpi" role="tabpanel" aria-labelledby="t-kpi" hidden>
+    <div class="options">
+      <label>Impressions ou portée<input id="kpi-imp" type="number" min="0" step="any"></label>
+      <label>Interactions (réactions, commentaires, partages)<input id="kpi-inter" type="number" min="0" step="any"></label>
+      <label>Clics<input id="kpi-clics" type="number" min="0" step="any"></label>
+      <label>Mails envoyés (délivrés)<input id="kpi-env" type="number" min="0" step="any"></label>
+      <label>Mails ouverts<input id="kpi-ouv" type="number" min="0" step="any"></label>
+      <label>Valeur précédente<input id="kpi-av" type="number" step="any"></label>
+      <label>Valeur actuelle<input id="kpi-ap" type="number" step="any"></label>
+    </div>
+    <dl class="stats-txt">
+      <div><dt>Taux d'engagement</dt><dd id="k-eng">n/a</dd></div>
+      <div><dt>Taux de clic</dt><dd id="k-ctr">n/a</dd></div>
+      <div><dt>Taux d'ouverture</dt><dd id="k-ouv">n/a</dd></div>
+      <div><dt>Clics sur ouvertures</dt><dd id="k-ctor">n/a</dd></div>
+      <div><dt>Évolution</dt><dd id="k-evo">n/a</dd></div>
+    </dl>
+    <p class="note-txt">Engagement = interactions / impressions. Taux de clic = clics / impressions. Taux d'ouverture = ouvertures / envois. Clics sur ouvertures = clics / ouvertures. Évolution = (actuelle - précédente) / précédente. Les formules varient selon les plateformes : précise laquelle tu retiens dans tes bilans.</p>
   </div>
 </section>
 
@@ -187,5 +350,6 @@ try{if(sessionStorage.getItem('px'))document.documentElement.classList.add('px-i
 
 <script src="/assets/app.js"></script>
 <script src="/assets/outils.js"></script>
+<script src="/assets/outils2.js"></script>
 </body>
 </html>
