@@ -1,7 +1,6 @@
 (() => {
 'use strict';
-const { $, $$, echapper, dire, versBlob, canevas, bitmap, base, telecharger, libZip, charge, depot, liste, texte } = window.OUTILS;
-const MIME = { png: 'image/png', jpg: 'image/jpeg', webp: 'image/webp' };
+const { $, $$, echapper, dire, versBlob, canevas, bitmap, base, telecharger, charge, depot, liste, resultats, prog, pause, montrer, MIME } = window.OUTILS;
 const copier = async (t, st, ok) => {
   try { await navigator.clipboard.writeText(t); dire(st, ok || 'Copié.'); }
   catch (e) { dire(st, 'Copie impossible ici : sélectionne le texte à la main.', true); }
@@ -11,74 +10,140 @@ const lum = ([r, g, b]) => { const f = v => { v /= 255; return v <= .03928 ? v /
 const ratio = (a, b) => { const [x, y] = [lum(hex2rgb(a)), lum(hex2rgb(b))].sort((p, q) => q - p); return (x + .05) / (y + .05); };
 const hexOk = h => /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.test(h.trim());
 const virg = (n, d = 1) => n.toFixed(d).replace('.', ',');
+const val = id => $('#' + id).value.trim();
 
-function resultats(ul, zipBtn, nomZip) {
-  let res = [];
-  const rendre = () => {
-    ul.innerHTML = res.map((r, i) => `<li><span class="f-nom">${echapper(r.nom)}</span><button type="button" class="mini" data-i="${i}">Télécharger</button></li>`).join('');
-    ul.hidden = !res.length; zipBtn.hidden = res.length < 2;
-  };
-  ul.addEventListener('click', e => { const b = e.target.closest('.mini'); if (b) telecharger(res[+b.dataset.i].blob, res[+b.dataset.i].nom); });
-  zipBtn.addEventListener('click', async () => {
-    await libZip(); const z = new JSZip(); res.forEach(r => z.file(r.nom, r.blob));
-    telecharger(await z.generateAsync({ type: 'blob' }), nomZip);
-  });
-  return {
-    vider() { res = []; rendre(); },
-    ajouter(nom, blob) { let n = nom, k = 1; while (res.some(r => r.nom === n)) n = nom.replace(/(\.[^.]+)$/, '-' + (++k) + '$1'); res.push({ nom: n, blob }); rendre(); }
-  };
+/* ================= AMELIORER UNE IMAGE (agrandir et rendre plus net) ================= */
+const net = { fichiers: [], bmp: null, premier: null };
+const netRes = resultats($('#net-res'), $('#net-zip'), 'images-ameliorees.zip', $('#net-sortie'));
+const FINESSE = { fine: .7, std: 1.2, large: 2.2 };
+const params = () => {
+  const k = +$('#net-k').value;
+  return { k, amount: +$('#net-force').value / 100 * 1.6, sigma: FINESSE[$('#net-finesse').value] * (1 + (k - 1) * .5) };
+};
+/* Agrandissement progressif par paliers de x2, lissage de haute qualité du navigateur */
+function agrandir(src, sx, sy, sw, sh, k) {
+  let [c] = canevas(sw, sh, false);
+  c.getContext('2d').drawImage(src, sx, sy, sw, sh, 0, 0, sw, sh);
+  const tw = sw * k, th = sh * k;
+  while (c.width < tw) {
+    const nw = Math.min(tw, c.width * 2), nh = Math.min(th, c.height * 2), [c2, x2] = canevas(nw, nh, false);
+    x2.imageSmoothingEnabled = true; x2.imageSmoothingQuality = 'high';
+    x2.drawImage(c, 0, 0, nw, nh); c = c2;
+  }
+  return c;
 }
-
-/* ================= IMAGES : formats réseaux et impression ================= */
-const PRESETS = [
-  ['Réseaux sociaux', [['LinkedIn, publication (1200 x 627)', 1200, 627], ['LinkedIn, bannière de profil (1584 x 396)', 1584, 396], ['LinkedIn ou Instagram, carré (1080 x 1080)', 1080, 1080], ['Instagram, portrait (1080 x 1350)', 1080, 1350], ['Story ou Reel (1080 x 1920)', 1080, 1920], ['Facebook, partage (1200 x 630)', 1200, 630], ['X, publication (1600 x 900)', 1600, 900], ['YouTube, miniature (1280 x 720)', 1280, 720]]],
-  ['Impression', [['A4 à 150 dpi (1240 x 1754)', 1240, 1754], ['A4 à 300 dpi (2480 x 3508)', 2480, 3508], ['A5 à 300 dpi (1748 x 2480)', 1748, 2480]]]
-];
-const imgPre = $('#img-preset');
-imgPre.innerHTML = PRESETS.map(([g, it]) => `<optgroup label="${g}">${it.map(([l, w, h]) => `<option value="${w},${h}">${l}</option>`).join('')}</optgroup>`).join('') + '<option value="perso">Dimensions personnalisées</option>';
-const img = { fichiers: [] };
-const imgRes = resultats($('#img-res'), $('#img-zip'), 'images.zip');
-const majImg = liste($('#img-liste'), img.fichiers, false, () => { $('#img-go').disabled = !img.fichiers.length; });
-depot($('#img-depot'), fs => { img.fichiers.push(...fs.filter(f => /^image\//.test(f.type)).map(file => ({ file, plage: '' }))); majImg(); });
-imgPre.addEventListener('change', () => $$('[data-perso]').forEach(l => { l.hidden = imgPre.value !== 'perso'; }));
-$('#img-go').addEventListener('click', async () => {
-  const st = $('#img-statut'), go = $('#img-go');
-  go.disabled = true; imgRes.vider();
-  try {
-    const [W, H] = imgPre.value === 'perso' ? [+$('#img-w').value, +$('#img-h').value] : imgPre.value.split(',').map(Number);
-    if (!(W >= 16 && H >= 16 && W <= 8000 && H <= 8000)) throw new Error('Les dimensions doivent être comprises entre 16 et 8000 px.');
-    const sortie = $('#img-sortie').value, fond = $('#img-fond').value, rempl = $('#img-mode').value === 'remplir';
-    for (const { file: f } of img.fichiers) {
-      dire(st, 'Traitement de ' + f.name + '…');
-      const b = await bitmap(f), [c, ctx] = canevas(W, H, false);
-      ctx.fillStyle = fond; ctx.fillRect(0, 0, W, H);
-      const k = (rempl ? Math.max : Math.min)(W / b.width, H / b.height), dw = b.width * k, dh = b.height * k;
-      ctx.drawImage(b, (W - dw) / 2, (H - dh) / 2, dw, dh); b.close();
-      imgRes.ajouter(`${base(f.name)}-${W}x${H}.${sortie}`, await versBlob(c, MIME[sortie], .92));
+function boite(s, d, n, lignes, r, pas, pasLigne) {
+  const D = 2 * r + 1;
+  for (let l = 0; l < lignes; l++) {
+    const o = l * pasLigne;
+    for (let c = 0; c < 3; c++) {
+      let sum = 0;
+      for (let i = -r; i <= r; i++) sum += s[o + Math.min(n - 1, Math.max(0, i)) * pas + c];
+      for (let x = 0; x < n; x++) {
+        d[o + x * pas + c] = sum / D;
+        sum += s[o + Math.min(n - 1, x + r + 1) * pas + c] - s[o + Math.max(0, x - r) * pas + c];
+      }
     }
-    dire(st, img.fichiers.length > 1 ? 'Images prêtes.' : 'Image prête.');
-  } catch (e) { console.error(e); dire(st, e.message || 'Export impossible.', true); }
-  go.disabled = false;
+  }
+}
+function flou(src, w, h, sigma) {
+  const n = sigma < 1.3 ? 1 : 3, r = Math.max(1, Math.floor((Math.floor(Math.sqrt(12 * sigma * sigma / n + 1)) - 1) / 2));
+  let a = new Uint8ClampedArray(src), b = new Uint8ClampedArray(src);
+  for (let i = 0; i < n; i++) { boite(a, b, w, h, r, 4, w * 4); boite(b, a, h, w, r, w * 4, 4); }
+  return a;
+}
+/* Masque flou : renforce l'écart entre chaque pixel et sa version floutée */
+function nettete(c, amount, sigma) {
+  if (amount <= 0) return;
+  const ctx = c.getContext('2d'), w = c.width, h = c.height, img = ctx.getImageData(0, 0, w, h), o = img.data, b = flou(o, w, h, sigma);
+  for (let i = 0; i < o.length; i += 4) for (let j = 0; j < 3; j++) { const d = o[i + j] - b[i + j]; if (d > 2 || d < -2) o[i + j] += amount * d; }
+  ctx.putImageData(img, 0, 0);
+}
+function majInfo() {
+  const info = $('#net-info'), go = $('#net-go'), n = net.fichiers.length;
+  go.textContent = n ? `Améliorer ${n} image${n > 1 ? 's' : ''}` : 'Améliorer';
+  go.disabled = !n;
+  if (!net.bmp) return dire(info, n ? '' : 'Ajoute une image pour commencer.');
+  const { k } = params(), w = net.bmp.width * k, h = net.bmp.height * k, mp = w * h / 1e6, trop = Math.max(w, h) > 8000 || mp > 24;
+  dire(info, `${net.bmp.width} x ${net.bmp.height} px devient ${w} x ${h} px (${virg(mp)} millions de pixels).` + (trop ? " C'est trop grand pour le navigateur : choisis un agrandissement plus faible." : ''), trop);
+  if (trop) go.disabled = true;
+}
+async function apercu() {
+  if (!net.bmp) { $('#net-apercu').hidden = true; return; }
+  const { k, amount, sigma } = params(), W = net.bmp.width, H = net.bmp.height;
+  const cw = Math.min(W, Math.ceil(480 / k)), ch = Math.min(H, Math.ceil(320 / k));
+  const x0 = Math.floor((W - cw) / 2), y0 = Math.floor((H - ch) / 2), pad = Math.ceil(sigma * 3 / k) + 2;
+  const sx = Math.max(0, x0 - pad), sy = Math.max(0, y0 - pad), ex = Math.min(W, x0 + cw + pad), ey = Math.min(H, y0 + ch + pad);
+  const r = agrandir(net.bmp, sx, sy, ex - sx, ey - sy, k); nettete(r, amount, sigma);
+  const apres = $('#net-apres'), avant = $('#net-avant');
+  apres.width = avant.width = cw * k; apres.height = avant.height = ch * k;
+  apres.getContext('2d').drawImage(r, (x0 - sx) * k, (y0 - sy) * k, cw * k, ch * k, 0, 0, cw * k, ch * k);
+  avant.getContext('2d').drawImage(net.bmp, x0, y0, cw, ch, 0, 0, cw * k, ch * k);
+  $('#net-apercu').hidden = false;
+}
+let minuteur;
+const planifier = () => { clearTimeout(minuteur); minuteur = setTimeout(() => apercu().catch(console.error), 150); };
+async function majNet() {
+  const f = net.fichiers[0] && net.fichiers[0].file;
+  majInfo();
+  if (f === net.premier) return;
+  net.premier = f; if (net.bmp) net.bmp.close(); net.bmp = null;
+  if (f) { try { net.bmp = await bitmap(f); } catch (e) { dire($('#net-statut'), e.message, true); } }
+  majInfo(); planifier();
+}
+const rendreNet = liste($('#net-liste'), net.fichiers, false, majNet, $('#net-vider'));
+depot($('#net-depot'), fs => {
+  const bons = fs.filter(f => /^image\//.test(f.type)), neufs = bons.filter(f => !net.fichiers.some(e => e.file.name === f.name && e.file.size === f.size));
+  net.fichiers.push(...neufs.map(file => ({ file, plage: '' }))); rendreNet();
+  dire($('#net-statut'), bons.length < fs.length ? (fs.length - bons.length) + ' fichier(s) ignoré(s) : seules les images sont acceptées.' : '', bons.length < fs.length);
+}, $('#p-net'));
+$$('#net-k,#net-force,#net-finesse').forEach(i => i.addEventListener('input', () => { majInfo(); planifier(); }));
+const vue = $('.compar-vue');
+const pos = v => { v = Math.max(0, Math.min(100, v)); $('#net-pos').value = v; $('#net-apres').style.clipPath = `inset(0 0 0 ${v}%)`; $('#net-ligne').style.left = v + '%'; };
+const depuisPointeur = e => { const r = vue.getBoundingClientRect(); pos((e.clientX - r.left) / r.width * 100); };
+$('#net-pos').addEventListener('input', e => pos(+e.target.value));
+vue.addEventListener('pointerdown', e => { vue.setPointerCapture(e.pointerId); depuisPointeur(e); });
+vue.addEventListener('pointermove', e => { if (e.buttons) depuisPointeur(e); });
+$('#net-go').addEventListener('click', async () => {
+  const st = $('#net-statut'), go = $('#net-go'), pg = $('#net-prog'), { k, amount, sigma } = params(), fmt = $('#net-format').value, label = go.textContent;
+  netRes.vider(); go.disabled = true; prog(pg, 0);
+  try {
+    for (const [i, { file: f }] of net.fichiers.entries()) {
+      dire(st, `Traitement de ${f.name} (${i + 1} sur ${net.fichiers.length}) : agrandissement`); prog(pg, i / net.fichiers.length); await pause();
+      const b = await bitmap(f), w = b.width * k, h = b.height * k;
+      if (Math.max(w, h) > 8000 || w * h > 24e6) { b.close(); throw new Error(`${f.name} serait trop grande une fois agrandie (${w} x ${h} px). Choisis un agrandissement plus faible.`); }
+      let c = agrandir(b, 0, 0, b.width, b.height, k); b.close();
+      dire(st, `Traitement de ${f.name} (${i + 1} sur ${net.fichiers.length}) : netteté`); await pause();
+      nettete(c, amount, sigma);
+      if (fmt === 'jpg') { const [c2, x2] = canevas(c.width, c.height, true); x2.drawImage(c, 0, 0); c = c2; }
+      const blob = await versBlob(c, MIME[fmt], .93);
+      if (!blob) throw new Error('Export impossible : image trop grande pour ce navigateur.');
+      await netRes.ajouter(`${base(f.name)}-${k > 1 ? 'x' + k + '-' : ''}nette.${fmt}`, blob);
+    }
+    dire(st, netRes.nombre + (netRes.nombre > 1 ? ' images prêtes : télécharge-les ci-dessous.' : ' image prête : télécharge-la ci-dessous.'));
+    montrer($('#net-sortie'));
+  } catch (e) { console.error(e); dire(st, e.message || 'Traitement impossible.', true); }
+  prog(pg, null); go.textContent = label; majInfo();
 });
 
 /* ================= LIENS SUIVIS (UTM) ET QR CODE ================= */
-const val = id => $('#' + id).value.trim();
 function majUtm() {
   const u = val('utm-url'), st = $('#utm-statut'), sortie = $('#utm-sortie');
-  sortie.value = '';
+  sortie.value = ''; $('#utm-copy').disabled = $('#utm-qr').disabled = true;
   if (!u) return dire(st, '');
   let url;
-  try { url = new URL(/^https?:\/\//i.test(u) ? u : 'https://' + u); } catch (e) { return dire(st, 'Adresse invalide.', true); }
+  try { url = new URL(/^https?:\/\//i.test(u) ? u : 'https://' + u); } catch (e) { return dire(st, 'Cette adresse ne semble pas valide.', true); }
   dire(st, '');
   [['utm_source', 'utm-source'], ['utm_medium', 'utm-medium'], ['utm_campaign', 'utm-campagne'], ['utm_content', 'utm-contenu'], ['utm_term', 'utm-terme']].forEach(([k, id]) => {
     const v = val(id).toLowerCase().replace(/\s+/g, '-');
     if (v) url.searchParams.set(k, v); else url.searchParams.delete(k);
   });
-  sortie.value = url.toString();
+  sortie.value = url.toString(); $('#utm-copy').disabled = $('#utm-qr').disabled = false;
 }
 $$('#utm-url,#utm-source,#utm-medium,#utm-campagne,#utm-contenu,#utm-terme').forEach(i => i.addEventListener('input', majUtm));
-$('#utm-copy').addEventListener('click', () => { if ($('#utm-sortie').value) copier($('#utm-sortie').value, $('#utm-statut'), 'Lien copié.'); });
-$('#utm-qr').addEventListener('click', () => { if ($('#utm-sortie').value) { $('#qr-texte').value = $('#utm-sortie').value; majQr(); } });
+$('#utm-copy').addEventListener('click', () => copier($('#utm-sortie').value, $('#utm-statut'), 'Lien copié.'));
+$('#utm-qr').addEventListener('click', () => { $('#qr-texte').value = $('#utm-sortie').value; majQr(); montrer($('#qr-canvas')); });
+majUtm();
 
 let qrActuel = null;
 function qrCanvas(q, px, fg, bg) {
@@ -97,7 +162,7 @@ async function majQr() {
   const st = $('#qr-statut'), t = $('#qr-texte').value.trim(), cv = $('#qr-canvas');
   const fg = $('#qr-fg').value, bg = $('#qr-bg').value;
   qrActuel = null; $('#qr-png').disabled = $('#qr-svg').disabled = true;
-  if (!t) { cv.width = cv.height = 1; return dire(st, ''); }
+  if (!t) { cv.width = cv.height = 1; return dire(st, 'Saisis un texte ou une adresse pour générer le code.'); }
   try {
     await charge('qrcode.js'); qrcode.stringToBytes = qrcode.stringToBytesFuncs['UTF-8'];
     const q = qrcode(0, $('#qr-niveau').value); q.addData(t); q.make(); qrActuel = q;
@@ -105,52 +170,13 @@ async function majQr() {
     $('#qr-png').disabled = $('#qr-svg').disabled = false;
     const r = ratio(fg, bg), inverse = lum(hex2rgb(fg)) > lum(hex2rgb(bg));
     dire(st, inverse ? 'Code plus clair que le fond : certains lecteurs ne le lisent pas. Préfère un code foncé sur fond clair.'
-      : r < 4 ? 'Contraste faible : teste le scan avant de diffuser.' : 'Teste toujours le scan avec ton téléphone avant impression.', inverse || r < 4);
+      : r < 4 ? 'Contraste faible : teste le scan avant de diffuser.' : 'Teste le scan avec ton téléphone avant impression.', inverse || r < 4);
   } catch (e) { dire(st, /overflow|too long|length/i.test(e.message) ? 'Texte trop long pour un QR code.' : (e.message || 'Génération impossible.'), true); }
 }
 $$('#qr-texte,#qr-niveau,#qr-fg,#qr-bg').forEach(i => i.addEventListener('input', majQr));
 $('#qr-png').addEventListener('click', async () => { if (qrActuel) telecharger(await versBlob(qrCanvas(qrActuel, +$('#qr-taille').value, $('#qr-fg').value, $('#qr-bg').value), 'image/png'), 'qr-code.png'); });
 $('#qr-svg').addEventListener('click', () => { if (qrActuel) telecharger(new Blob([qrSvg(qrActuel, $('#qr-fg').value, $('#qr-bg').value)], { type: 'image/svg+xml' }), 'qr-code.svg'); });
-
-/* ================= TEXTE : lisibilité, canaux, casse ================= */
-const ta = $('#txt');
-const CANAUX = [['X, publication', 280], ['LinkedIn, publication', 3000], ['Instagram, légende', 2200], ['Objet de mail (conseillé)', 60], ['Titre SEO (conseillé)', 60], ['Description SEO (conseillé)', 160], ['SMS, un message', 160]];
-const VIDES = new Set('dans avec sans sous pour par sur que qui quoi dont cette cela ceux elle elles nous vous ils leur leurs mais donc car est sont être avoir ont ainsi aussi plus très tout tous toute toutes fait faire comme entre vers chez même ces ses son sera été'.split(' '));
-const syllabes = m => {
-  m = m.toLowerCase().replace(/[^a-zàâäéèêëîïôöùûüÿœæç]/g, ''); if (!m) return 0;
-  let s = (m.match(/[aeiouyàâäéèêëîïôöùûüÿœæ]+/g) || []).length;
-  if (s > 1 && /[^aeiouyàâäéèêëîïôöùûüÿœæ](es?|ent)$/.test(m)) s--;
-  return Math.max(1, s);
-};
-function analyseTexte() {
-  const t = ta.value, mots = t.match(/[\p{L}\p{N}’'-]+/gu) || [], n = mots.length;
-  const phrases = (t.match(/[^.!?…]+[.!?…]+(\s|$)/g) || []).length || (t.trim() ? 1 : 0);
-  const sec = n / 130 * 60;
-  $('#s-par').textContent = !n ? '0 s' : sec < 60 ? Math.max(1, Math.round(sec)) + ' s' : Math.round(sec / 60) + ' min';
-  let lis = 'n/a';
-  if (n >= 20 && phrases) {
-    const sy = mots.reduce((a, m) => a + syllabes(m), 0), s = 207 - 1.015 * (n / phrases) - 73.6 * (sy / n);
-    lis = Math.round(s) + (s >= 90 ? ' (très facile)' : s >= 80 ? ' (facile)' : s >= 70 ? ' (assez facile)' : s >= 60 ? ' (standard)' : s >= 50 ? ' (assez difficile)' : s >= 30 ? ' (difficile)' : ' (très difficile)');
-  }
-  $('#s-lis').textContent = lis;
-  $('#canaux').innerHTML = CANAUX.map(([nom, max]) => { const d = t.length - max;
-    return `<div class="canal${d > 0 ? ' depasse' : ''}"><span>${nom}</span><b>${t.length} / ${max}${d > 0 ? ' (+' + d + ')' : ''}</b></div>`; }).join('');
-  const f = {};
-  mots.forEach(m => { const k = m.toLowerCase().replace(/^[’'-]+|[’'-]+$/g, ''); if (k.length >= 4 && !VIDES.has(k)) f[k] = (f[k] || 0) + 1; });
-  const top = Object.entries(f).filter(e => e[1] >= 2).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).slice(0, 8);
-  $('#top-mots').innerHTML = top.length ? top.map(([k, c]) => `<span>${echapper(k)} x${c}</span>`).join('') : '<span>Aucune répétition notable</span>';
-}
-ta.addEventListener('input', analyseTexte); analyseTexte();
-const U = s => s.toLocaleUpperCase('fr'), L = s => s.toLocaleLowerCase('fr');
-const TRANSF = {
-  maj: [U, 'Texte en majuscules.'],
-  min: [L, 'Texte en minuscules.'],
-  titre: [t => L(t).replace(/(^|[\s\-(«])(\p{L})/gu, (m, a, b) => a + U(b)), 'Majuscule à chaque mot.'],
-  phrase: [t => L(t).replace(/(^|[.!?…]\s+|\n)(\p{L})/gu, (m, a, b) => a + U(b)), 'Majuscule en début de phrase.'],
-  lignes: [t => t.replace(/\r/g, '').replace(/([^\n])\n(?!\n)/g, '$1 ').replace(/[ \t]{2,}/g, ' '), 'Retours à la ligne parasites supprimés.'],
-  slug: [t => t.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, ''), 'Texte converti en slug.']
-};
-$$('[data-t]').forEach(b => b.addEventListener('click', () => texte(...TRANSF[b.dataset.t])));
+majQr();
 
 /* ================= COULEURS ================= */
 function lierCouleur(cid, tid) {
@@ -165,7 +191,7 @@ function lierCouleur(cid, tid) {
 function majContraste() {
   const fg = $('#col-t-c').value, bg = $('#col-f-c').value, r = ratio(fg, bg);
   const e = $('#col-ech'); e.style.color = fg; e.style.background = bg;
-  const v = [['Texte courant, niveau AA (4,5 minimum)', r >= 4.5], ['Texte courant, niveau AAA (7 minimum)', r >= 7], ['Grand texte, niveau AA (3 minimum)', r >= 3], ['Éléments d\'interface (3 minimum)', r >= 3]];
+  const v = [['Texte courant, niveau AA (4,5 minimum)', r >= 4.5], ['Texte courant, niveau AAA (7 minimum)', r >= 7], ['Grand texte, niveau AA (3 minimum)', r >= 3], ["Éléments d'interface (3 minimum)", r >= 3]];
   $('#col-res').innerHTML = `<li><span>Rapport de contraste</span><b>${virg(r, 2)} : 1</b></li>` + v.map(([l, ok]) => `<li><span>${l}</span><b>${ok ? 'Réussi' : 'Échec'}</b></li>`).join('');
 }
 lierCouleur('col-t-c', 'col-t'); lierCouleur('col-f-c', 'col-f'); majContraste();
@@ -193,85 +219,14 @@ depot($('#pal-depot'), async fs => {
   try {
     const cols = await palette(f);
     $('#pal-res').innerHTML = cols.map(h => `<button type="button" class="pastille" data-hex="${h}" style="background:${h};color:${lum(hex2rgb(h)) > .4 ? '#141414' : '#ffffff'}">${h}</button>`).join('');
-    dire(st, 'Clique sur une pastille pour copier le code.');
+    dire(st, 'Clique sur une pastille pour copier son code.');
   } catch (e) { dire(st, e.message || 'Image illisible.', true); }
-});
+}, $('#p-col'));
 $('#pal-res').addEventListener('click', e => { const b = e.target.closest('.pastille'); if (b) copier(b.dataset.hex, $('#col-statut'), b.dataset.hex + ' copié.'); });
 
-/* ================= RETROPLANNING ================= */
-let planning = [];
-const p2 = n => String(n).padStart(2, '0'), ymd = d => `${d.getFullYear()}${p2(d.getMonth() + 1)}${p2(d.getDate())}`;
-const longue = d => d.toLocaleDateString('fr-FR', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-function calculerPlanning() {
-  const d0 = $('#retro-date').value; if (!d0) throw new Error('Choisis une date de diffusion.');
-  const [y, m, j] = d0.split('-').map(Number), ouvres = $('#retro-ouvres').checked;
-  return $('#retro-etapes').value.split('\n').map(l => l.trim()).filter(Boolean).map(l => {
-    const r = l.match(/^J\s*(?:([+-])\s*(\d+)|0)\s*[|:;]\s*(.+)$/i);
-    if (!r) throw new Error('Ligne non comprise : « ' + l + ' ». Format attendu : J-14 | Validation');
-    const n = r[1] ? (r[1] === '-' ? -1 : 1) * (+r[2]) : 0, d = new Date(y, m - 1, j + n);
-    if (ouvres) { const w = d.getDay(); if (w === 6) d.setDate(d.getDate() + (n > 0 ? 2 : -1)); if (w === 0) d.setDate(d.getDate() + (n > 0 ? 1 : -2)); }
-    return { d, txt: r[3].trim() };
-  }).sort((a, b) => a.d - b.d);
-}
-$('#retro-go').addEventListener('click', () => {
-  const st = $('#retro-statut');
-  try {
-    planning = calculerPlanning();
-    $('#retro-res').innerHTML = planning.map(e => `<tr><td>${echapper(longue(e.d))}</td><td>${echapper(e.txt)}</td></tr>`).join('');
-    $('#retro-sortie').hidden = !planning.length; dire(st, planning.length + ' étapes calculées.');
-  } catch (e) { $('#retro-sortie').hidden = true; dire(st, e.message, true); }
+/* ---------- Valeur affichée à côté des curseurs ---------- */
+$$('.outils input[type=range]').forEach(r => {
+  const o = r.parentElement.querySelector('output'); if (!o) return;
+  const maj = () => { o.textContent = r.value; }; r.addEventListener('input', maj); maj();
 });
-$('#retro-copy').addEventListener('click', () => copier(planning.map(e => longue(e.d) + ' : ' + e.txt).join('\n'), $('#retro-statut'), 'Planning copié.'));
-$('#retro-ics').addEventListener('click', () => {
-  const titre = val('retro-titre'), maintenant = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d+/, '');
-  const esc = s => s.replace(/[\\;,]/g, '\\$&');
-  const l = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//caroncharles.fr//Retroplanning//FR', 'CALSCALE:GREGORIAN'];
-  planning.forEach((e, i) => { const fin = new Date(e.d); fin.setDate(fin.getDate() + 1);
-    l.push('BEGIN:VEVENT', `UID:${i}-${ymd(e.d)}-${maintenant}@caroncharles.fr`, 'DTSTAMP:' + maintenant, 'DTSTART;VALUE=DATE:' + ymd(e.d), 'DTEND;VALUE=DATE:' + ymd(fin), 'SUMMARY:' + esc(titre ? titre + ' : ' + e.txt : e.txt), 'END:VEVENT'); });
-  l.push('END:VCALENDAR');
-  telecharger(new Blob([l.join('\r\n')], { type: 'text/calendar;charset=utf-8' }), 'retroplanning.ics');
-});
-
-/* ================= SIGNATURE MAIL ================= */
-function htmlSignature() {
-  const g = id => echapper(val(id)), acc = $('#sig-couleur').value;
-  const nom = g('sig-nom') || 'Prénom Nom', fonction = [g('sig-fonction'), g('sig-entite')].filter(Boolean).join(' | ');
-  const tel = val('sig-tel'), mail = val('sig-mail'), lien = u => { try { const x = new URL(/^https?:\/\//i.test(u) ? u : 'https://' + u); return x.protocol.startsWith('http') ? x.href : ''; } catch (e) { return ''; } };
-  const a = (href, txt) => `<a href="${echapper(href)}" style="color:${acc};text-decoration:none;">${echapper(txt)}</a>`;
-  const lignes = [];
-  if (tel) lignes.push(a('tel:' + tel.replace(/[^\d+]/g, ''), tel));
-  if (mail) lignes.push(a('mailto:' + mail, mail));
-  const site = val('sig-site'), li = val('sig-linkedin');
-  if (site && lien(site)) lignes.push(a(lien(site), site.replace(/^https?:\/\//i, '').replace(/\/$/, '')));
-  if (li && lien(li)) lignes.push(a(lien(li), 'LinkedIn'));
-  return `<table cellpadding="0" cellspacing="0" style="font-family:Arial,Helvetica,sans-serif;font-size:13px;line-height:1.5;color:#333333;border-collapse:collapse;"><tr><td style="border-left:4px solid ${acc};padding-left:12px;">`
-    + `<div style="font-size:16px;font-weight:bold;color:#111111;">${nom}</div>`
-    + (fonction ? `<div style="color:#555555;">${fonction}</div>` : '')
-    + (lignes.length ? `<div style="margin-top:6px;">${lignes.join('<span style="color:#999999;"> &nbsp;|&nbsp; </span>')}</div>` : '')
-    + '</td></tr></table>';
-}
-const majSig = () => { $('#sig-apercu').innerHTML = htmlSignature(); };
-$$('#p-sig input').forEach(i => i.addEventListener('input', majSig)); majSig();
-$('#sig-copy').addEventListener('click', async () => {
-  const st = $('#sig-statut'), html = htmlSignature();
-  try {
-    await navigator.clipboard.write([new ClipboardItem({ 'text/html': new Blob([html], { type: 'text/html' }), 'text/plain': new Blob([$('#sig-apercu').innerText], { type: 'text/plain' }) })]);
-    dire(st, 'Signature copiée, colle-la dans les réglages de ta messagerie.');
-  } catch (e) {
-    const r = document.createRange(); r.selectNodeContents($('#sig-apercu')); const s = getSelection(); s.removeAllRanges(); s.addRange(r);
-    dire(st, 'Signature sélectionnée : copie-la avec Ctrl+C.', true);
-  }
-});
-$('#sig-html').addEventListener('click', () => copier(htmlSignature(), $('#sig-statut'), 'Code HTML copié.'));
-
-/* ================= INDICATEURS ================= */
-const nb = id => { const v = parseFloat($('#' + id).value.replace(',', '.')); return Number.isFinite(v) ? v : null; };
-const pct = (a, b) => (a === null || b === null || b === 0) ? 'n/a' : virg(a / b * 100, 2) + ' %';
-function majKpi() {
-  const imp = nb('kpi-imp'), inter = nb('kpi-inter'), clics = nb('kpi-clics'), env = nb('kpi-env'), ouv = nb('kpi-ouv'), av = nb('kpi-av'), ap = nb('kpi-ap');
-  $('#k-eng').textContent = pct(inter, imp); $('#k-ctr').textContent = pct(clics, imp);
-  $('#k-ouv').textContent = pct(ouv, env); $('#k-ctor').textContent = pct(clics, ouv);
-  $('#k-evo').textContent = (av === null || ap === null || av === 0) ? 'n/a' : (ap >= av ? '+' : '') + virg((ap - av) / av * 100, 1) + ' %';
-}
-$$('#p-kpi input').forEach(i => i.addEventListener('input', majKpi)); majKpi();
 })();
